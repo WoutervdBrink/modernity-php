@@ -1,0 +1,38 @@
+# PHP/Composer
+/vendor
+composer.lock
+composer.phar
+
+# PHPUnit/Pest cache
+.phpunit.result.cache
+.pest-results/
+.pest-snapshot-temp/
+
+# Coverage reports
+coverage/
+.clover.xml
+coverage.xml
+html/
+reports/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.cache
+*.bak
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# PhpStorm and other IDEs/editors
+/.idea
+/.vscode
+/.vagrant
+
+# Other development artifacts
+build/
+dist/
+tmp/
+.cache/
