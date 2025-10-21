@@ -24,15 +24,18 @@ Feature::for(Node\AttributeGroup::class);
 Feature::for(Node\ClosureUse::class);
 Feature::for(Node\Const_::class)->sinceWhen(function (Node\Const_ $node): ?PhpVersion {
     // As of PHP 5.6, scalar expressions are allowed in constant declarations.
-    if ($node->value instanceof Node\Scalar) {
+    // If $node->value is instanceof Scalar, then it is a scalar, *not* a scalar expression.
+
+    if (! $node->value instanceof Node\Scalar) {
+        // As of PHP 8.1, 'new' initializers can be used in defaults of const values.
+        if ($node->value instanceof Node\Expr\New_) {
+            return PhpVersion::PHP_8_1;
+        }
+
         return PhpVersion::PHP_5_6;
     }
 
-    // As of PHP 8.1, 'new' initializers can be used in defaults of const values.
-    if ($node->value instanceof Node\Expr\New_) {
-        return PhpVersion::PHP_8_1;
-    }
-
+    // The expression is a scalar value; it has no minimum version.
     return null;
 });
 Feature::for(Node\DeclareItem::class);
