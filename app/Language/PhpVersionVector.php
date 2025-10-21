@@ -73,24 +73,68 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
 
     public function add(self $other): self
     {
-        /** @var Vector<float> $newVector */
-        $newVector = new Vector;
+        $new = clone $this;
 
-        for ($i = 0; $i < PhpVersion::count(); $i++) {
-            $newVector[$i] = (float) ($this->values[$i] + $other->values[$i]);
+        foreach (PhpVersion::orderedCases() as $key) {
+            $new[$key] += $other[$key];
         }
 
-        return new self($newVector);
+        return $new;
+    }
+
+    public function addFactor(float $factor): self
+    {
+        $new = clone $this;
+
+        foreach (PhpVersion::orderedCases() as $key) {
+            $new[$key] += $factor;
+        }
+
+        return $new;
+    }
+
+    public function subFactor(float $factor): self
+    {
+        return $this->addFactor(-$factor);
     }
 
     public function min(): float
     {
-        return $this->values->reduce(fn (float $carry, mixed $value): mixed => min($carry, $value), 0.0);
+        return min($this->values->toArray());
     }
 
-    public function normalize(): self
+    /**
+     * Rescale the vector, so that its values lie between 0.0 and 1.0 (inclusive).
+     *
+     * There is one catch to this method: when all values are equal, the values are <b>clipped</b>, e.g.:
+     *
+     * <ul>
+     *     <li><code>[-2.0, ...]</code> is clipped to <code>[0.0, ...]</code></li>
+     *     <li><code>[2.0, ...]</code> is clipped to <code>[1.0, ...]</code></li>
+     *     <li><code>[0.0, ...]</code> remains unchanged.</li>
+     *     <li><code>[1.0, ...]</code> remains unchanged.</li>
+     * </ul>
+     */
+    public function rescale(): self
     {
-        return $this->scale($this->max());
+        $min = $this->min();
+        $max = $this->max();
+
+        if ($min === $max) {
+            $value = min(1.0, max(0.0, $min));
+
+            return $this->subFactor($min)->addFactor($value);
+        }
+
+        $range = $max - $min;
+
+        $vector = $this->subFactor($min);
+
+        if ($range !== 0.0) {
+            $vector = $vector->scale(1 / $range);
+        }
+
+        return $vector;
     }
 
     public function scale(int|float $factor): self
@@ -100,7 +144,7 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
 
     public function max(): float
     {
-        return $this->values->reduce(fn (float $carry, mixed $value): mixed => max($carry, $value), 0.0);
+        return max($this->values->toArray());
     }
 
     #[Override]
