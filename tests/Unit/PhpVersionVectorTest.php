@@ -30,19 +30,16 @@ describe('array access', function () {
     it('iterates in ordered index order', function () {
         $vector = PhpVersionVector::zero();
 
-        $cursor = null;
+        $keys = [];
 
         /**
          * @var PhpVersion $key
          * @var float $value
          */
         foreach ($vector as $key => $value) {
-            if ($cursor === null) {
-                expect($key)->toBe(PhpVersion::orderedCases()[0]);
-            } else {
-                expect($key->isNewerThan($cursor))->toBeTrue();
-                $cursor = $key;
-            }
+            $keys[] = $key;
         }
+
+        expect($keys)->toBe(PhpVersion::orderedCases());
     });
 });
