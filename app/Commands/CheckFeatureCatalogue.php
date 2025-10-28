@@ -5,10 +5,8 @@ namespace App\Commands;
 use App\Feature;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Collection;
 use LaravelZero\Framework\Commands\Command;
-use Override;
 use ReflectionClass;
 
 final class CheckFeatureCatalogue extends Command
@@ -79,14 +77,5 @@ final class CheckFeatureCatalogue extends Command
                 $this->warn(' - '.$class);
             });
         });
-    }
-
-    /**
-     * Define the command's schedule.
-     */
-    #[Override]
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

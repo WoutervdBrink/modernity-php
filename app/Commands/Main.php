@@ -5,7 +5,6 @@ namespace App\Commands;
 use App\Language\PhpVersionConstraint;
 use App\Parser\Visitors\ASTFeatureConstraintMergingVisitor;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Override;
 use PhpParser\Error;
@@ -111,14 +110,5 @@ CODE;
         } catch (Error $e) {
             $this->error($e->getMessage());
         }
-    }
-
-    /**
-     * Define the command's schedule.
-     */
-    #[Override]
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

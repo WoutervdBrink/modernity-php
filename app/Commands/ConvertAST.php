@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\Parser\Visitors\ASTToXMLConvertingVisitor;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
@@ -85,13 +84,5 @@ class ConvertAST extends Command
         file_put_contents($output, $out);
 
         $this->info('Written XML output to '.$output);
-    }
-
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }
