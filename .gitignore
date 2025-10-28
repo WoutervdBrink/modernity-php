@@ -13,7 +13,7 @@ coverage/
 .clover.xml
 coverage.xml
 html/
-reports/
+/reports/
 
 # Logs and temporary files
 *.log
