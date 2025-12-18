@@ -12,6 +12,7 @@ final class CatalogueServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->loadCatalogue('expressions');
+        $this->loadCatalogue('functions');
         $this->loadCatalogue('names');
         $this->loadCatalogue('scalars');
         $this->loadCatalogue('statements');

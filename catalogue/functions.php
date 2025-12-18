@@ -1,0 +1,57 @@
+<?php
+
+use App\Feature;
+use App\Func;
+use App\FunctionCall;
+use App\Language\PhpVersion;
+use App\Language\PhpVersionConstraint;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+
+Feature::for(FuncCall::class)->rule(function (FuncCall $node): PhpVersionConstraint {
+    $name = $node->name instanceof Name ? $node->name->name : null;
+
+    $call = new FunctionCall($name, null, count($node->args));
+
+    return Func::constraintFor($call);
+});
+
+Feature::for(StaticCall::class)->rule(function (StaticCall $node): PhpVersionConstraint {
+    $name = match (true) {
+        $node->name instanceof Identifier => $node->name->name,
+        default => null,
+    };
+
+    /** @var ?class-string $className */
+    $className = $node->class instanceof Name ? $node->class->name : null;
+
+    $call = new FunctionCall($name, $className, count($node->args));
+
+    return Func::constraintFor($call);
+});
+
+Func::for('createFromMutable', 'DateTimeImmutable')->since(PhpVersion::PHP_5_6);
+Func::for('gmp_root')->since(PhpVersion::PHP_5_6);
+Func::for('gmp_rootrem')->since(PhpVersion::PHP_5_6);
+Func::for('hash_equals')->since(PhpVersion::PHP_5_6);
+Func::for('ldap_escape')->since(PhpVersion::PHP_5_6);
+Func::for('ldap_modify_batch')->since(PhpVersion::PHP_5_6);
+Func::for('mysqli_get_links_stats')->since(PhpVersion::PHP_5_6);
+Func::for('oci_get_implicit_resultset')->since(PhpVersion::PHP_5_6);
+Func::for('openssl_get_cert_locations')->since(PhpVersion::PHP_5_6);
+Func::for('openssl_x509_fingerprint')->since(PhpVersion::PHP_5_6);
+Func::for('openssl_spki_new')->since(PhpVersion::PHP_5_6);
+Func::for('openssl_spki_verify')->since(PhpVersion::PHP_5_6);
+Func::for('openssl_spki_export_challenge')->since(PhpVersion::PHP_5_6);
+Func::for('openssl_spki_export')->since(PhpVersion::PHP_5_6);
+Func::for('pg_connect_poll')->since(PhpVersion::PHP_5_6);
+Func::for('pg_consume_input')->since(PhpVersion::PHP_5_6);
+Func::for('pg_flush')->since(PhpVersion::PHP_5_6);
+Func::for('pg_socket')->since(PhpVersion::PHP_5_6);
+Func::for('pgsqlGetNotify', 'PDO')->since(PhpVersion::PHP_5_6);
+Func::for('pgsqlGetPid', 'PDO')->since(PhpVersion::PHP_5_6);
+Func::for('session_abort')->since(PhpVersion::PHP_5_6);
+Func::for('session_reset')->since(PhpVersion::PHP_5_6);
+Func::for('setPassword', 'ZipArchive')->since(PhpVersion::PHP_5_6);
