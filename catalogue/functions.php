@@ -32,6 +32,7 @@ Feature::for(StaticCall::class)->rule(function (StaticCall $node): PhpVersionCon
     return Func::constraintFor($call);
 });
 
+// New functions in PHP 5.6.
 Func::for('createFromMutable', 'DateTimeImmutable')->since(PhpVersion::PHP_5_6);
 Func::for('gmp_root')->since(PhpVersion::PHP_5_6);
 Func::for('gmp_rootrem')->since(PhpVersion::PHP_5_6);
@@ -55,3 +56,16 @@ Func::for('pgsqlGetPid', 'PDO')->since(PhpVersion::PHP_5_6);
 Func::for('session_abort')->since(PhpVersion::PHP_5_6);
 Func::for('session_reset')->since(PhpVersion::PHP_5_6);
 Func::for('setPassword', 'ZipArchive')->since(PhpVersion::PHP_5_6);
+
+// New phpdbg_ functions in PHP 5.6.
+Func::for('phpdbg_break_file')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_break_function')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_break_method')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_break_next')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_clear')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_color')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_end_oplog')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_exec')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_get_executable')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_prompt')->since(PhpVersion::PHP_5_6);
+Func::for('phpdbg_start_oplog')->since(PhpVersion::PHP_5_6);
