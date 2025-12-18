@@ -55,6 +55,8 @@ return [
 
     'providers' => [
         App\Providers\AppServiceProvider::class,
+        App\Providers\CatalogueServiceProvider::class,
+        App\Providers\ParserServiceProvider::class,
     ],
 
 ];

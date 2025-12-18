@@ -4,13 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use InvalidArgumentException;
-use Override;
 
 final class CatalogueServiceProvider extends ServiceProvider
 {
-    #[Override]
-    public function register(): void
+    public function boot(): void
     {
+        $this->loadCatalogue('constants');
         $this->loadCatalogue('expressions');
         $this->loadCatalogue('functions');
         $this->loadCatalogue('names');
