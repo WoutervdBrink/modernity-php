@@ -57,6 +57,10 @@ Func::for('session_abort')->since(PhpVersion::PHP_5_6);
 Func::for('session_reset')->since(PhpVersion::PHP_5_6);
 Func::for('setPassword', 'ZipArchive')->since(PhpVersion::PHP_5_6);
 
+// Changed functions in PHP 5.6.
+Func::for('stream_socket_enable_crypto')
+    ->sinceWhen(fn (FunctionCall $call): ?PhpVersion => $call->arguments === 2 ? PhpVersion::PHP_5_6 : null);
+
 // New phpdbg_ functions in PHP 5.6.
 Func::for('phpdbg_break_file')->since(PhpVersion::PHP_5_6);
 Func::for('phpdbg_break_function')->since(PhpVersion::PHP_5_6);

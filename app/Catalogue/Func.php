@@ -87,7 +87,7 @@ final class Func
     }
 
     /**
-     * @param  callable(FunctionCall): PhpVersion  $rule
+     * @param  callable(FunctionCall): ?PhpVersion  $rule
      * @return $this
      */
     public function sinceWhen(callable $rule): self
@@ -96,7 +96,7 @@ final class Func
     }
 
     /**
-     * @param  callable(FunctionCall): PhpVersion  $rule
+     * @param  callable(FunctionCall): ?PhpVersion  $rule
      * @return $this
      */
     public function untilWhen(callable $rule): self
