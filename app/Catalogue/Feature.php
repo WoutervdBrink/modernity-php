@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Catalogue;
 
 use App\Inspectors\Inspector;
 use App\Language\PhpVersion;

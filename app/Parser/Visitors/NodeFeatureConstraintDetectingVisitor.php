@@ -2,7 +2,7 @@
 
 namespace App\Parser\Visitors;
 
-use App\Feature;
+use App\Catalogue\Feature;
 use Override;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

@@ -1,6 +1,6 @@
 <?php
 
-use App\Feature;
+use App\Catalogue\Feature;
 use App\Inspectors\FunctionOrMethodInspector;
 use App\Language\PhpVersion;
 use App\Language\Quirks;

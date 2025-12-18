@@ -2,8 +2,8 @@
 
 namespace App\Commands;
 
+use App\Catalogue\Feature;
 use App\Commands\Support\FeatureCatalogueStatusReport;
-use App\Feature;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Support\Facades\Storage;

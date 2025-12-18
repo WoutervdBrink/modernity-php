@@ -1,8 +1,8 @@
 <?php
 
-use App\Feature;
-use App\Func;
-use App\FunctionCall;
+use App\Catalogue\Feature;
+use App\Catalogue\Func;
+use App\Catalogue\FunctionCall;
 use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;
 use PhpParser\Node\Expr\FuncCall;

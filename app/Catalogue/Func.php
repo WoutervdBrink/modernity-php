@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Catalogue;
 
 use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;

@@ -1,6 +1,6 @@
 <?php
 
-use App\Feature;
+use App\Catalogue\Feature;
 use App\Language\PhpVersion;
 use PhpParser\Node;
 
