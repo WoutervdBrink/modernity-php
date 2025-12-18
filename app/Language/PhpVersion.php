@@ -30,6 +30,8 @@ enum PhpVersion: int
     case PHP_8_4 = 80400;
 
     /**
+     * Get the amount of registered PHP versions.
+     *
      * @return int<0,max>
      */
     public static function count(): int
@@ -40,6 +42,8 @@ enum PhpVersion: int
     }
 
     /**
+     * Get the registered PHP versions, ordered by version number.
+     *
      * @return list<self>
      */
     public static function orderedCases(): array
@@ -54,6 +58,16 @@ enum PhpVersion: int
         return $orderedCases;
     }
 
+    /**
+     * Get the ordered key for this version.
+     *
+     * The ordered key is a value, such that:
+     *
+     * <ul>
+     *     <li>Any version older than this version will have a lower ordered key.</li>
+     *     <li>Any version newer than this version will have a higher ordered key.</li>
+     * </ul>
+     */
     public function getOrderedKey(): int
     {
         static $orderedKeys = [];
@@ -65,6 +79,15 @@ enum PhpVersion: int
         return $orderedKeys[$this->value];
     }
 
+    /**
+     * Get the next version after this version.
+     *
+     * The next version is the oldest version which is newer than this version.
+     * Formally, it is the version with an ordered key that is 1 higher than the ordered key of this version.
+     * If this version is the newest version, the result of this call will be <code>null</code>.
+     *
+     * @see PhpVersion::getOrderedKey()
+     */
     public function next(): ?PhpVersion
     {
         $key = $this->getOrderedKey() + 1;
@@ -73,6 +96,15 @@ enum PhpVersion: int
 
     }
 
+    /**
+     * Get the previous version before this version.
+     *
+     * The previous version is the newest version which is older than this version.
+     * Formally, it is the version with an ordered key that is 1 lower than the ordered key of this version.
+     * If this version is the oldest version, the result of this call will be <code>null</code>.
+     *
+     * @see PhpVersion::getOrderedKey()
+     */
     public function previous(): ?PhpVersion
     {
         $key = $this->getOrderedKey() - 1;
@@ -80,6 +112,17 @@ enum PhpVersion: int
         return isset(self::orderedCases()[$key]) ? self::orderedCases()[$key] : null;
     }
 
+    /**
+     * Get the oldest version of the two given versions.
+     *
+     * @template T1 of ?PhpVersion
+     * @template T2 of ?PhpVersion
+     *
+     * @psalm-param  T1  $version1
+     * @psalm-param  T2  $version2
+     *
+     * @psalm-return (T1 is null ? T2 : (T2 is null ? T1 : PhpVersion))
+     */
     public static function min(?PhpVersion $version1, ?PhpVersion $version2): ?PhpVersion
     {
         if ($version1 === null) {
@@ -93,6 +136,17 @@ enum PhpVersion: int
         return $version1->isOlderThan($version2) ? $version1 : $version2;
     }
 
+    /**
+     * Get the newest version of the two given versions.
+     *
+     * @template T1 of ?PhpVersion
+     * @template T2 of ?PhpVersion
+     *
+     * @psalm-param  T1  $version1
+     * @psalm-param  T2  $version2
+     *
+     * @psalm-return (T1 is null ? T2 : (T2 is null ? T1 : PhpVersion))
+     */
     public static function max(?PhpVersion $version1, ?PhpVersion $version2): ?PhpVersion
     {
         if ($version1 === null) {

@@ -11,11 +11,15 @@ use App\Language\PhpVersionConstraint;
 final class Constant
 {
     /**
+     * Registrations of minimum PHP versions for constants.
+     *
      * @var array<string, PhpVersion>
      */
     private static array $min = [];
 
     /**
+     * Registrations of maximum PHP versions for constants.
+     *
      * @var array<string, PhpVersion>
      */
     private static array $max = [];
@@ -45,7 +49,6 @@ final class Constant
         $current = self::$min[$this->name] ?? PhpVersion::getNewestSupported();
 
         $next = PhpVersion::min($min, $current);
-        assert($next !== null);
         self::$min[$this->name] = $next;
 
         return $this;
@@ -65,12 +68,14 @@ final class Constant
         $current = self::$max[$this->name] ?? PhpVersion::getOldestSupported();
 
         $next = PhpVersion::max($max, $current);
-        assert($next !== null);
         self::$max[$this->name] = $next;
 
         return $this;
     }
 
+    /**
+     * Get the {@link PhpVersionConstraint} for the given constant.
+     */
     public static function constraintFor(string $name): PhpVersionConstraint
     {
         $min = self::$min[$name] ?? null;
