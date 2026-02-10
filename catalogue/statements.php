@@ -99,7 +99,16 @@ Feature::for(Node\Stmt\Continue_::class)->untilWhen(function (Node\Stmt\Continue
 
     return null;
 });
-Feature::for(Node\Stmt\Declare_::class);
+Feature::for(Node\Stmt\Declare_::class)->sinceWhen(function (Node\Stmt\Declare_ $node): ?PhpVersion {
+    // declare(strict_types=1) was introduced in PHP 7.0.
+    foreach ($node->declares as $declare) {
+        if ($declare->key->name === 'strict_types') {
+            return PhpVersion::PHP_7_0;
+        }
+    }
+
+    return null;
+});
 Feature::for(Node\Stmt\Do_::class);
 Feature::for(Node\Stmt\Echo_::class);
 Feature::for(Node\Stmt\ElseIf_::class);

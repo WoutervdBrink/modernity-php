@@ -48,8 +48,19 @@ final class FunctionOrMethodInspector implements Inspector
         /** @var array<string, bool> $paramMap */
         $paramMap = [];
 
-        // As of PHP 7.0, it is no longer possible to define two or more function parameters with the same name.
         foreach ($node->params as $param) {
+            // Scalar type declarations were introduced in PHP 7.0.
+            if ($param->type instanceof Node\Identifier) {
+                if (
+                    $param->type->name === 'string' ||
+                    $param->type->name === 'int' ||
+                    $param->type->name === 'float' ||
+                    $param->type->name === 'bool'
+                ) {
+                    $since = PhpVersion::max($since, PhpVersion::PHP_7_0);
+                }
+            }
+
             if ($param->var instanceof Error) {
                 continue;
             }
@@ -59,6 +70,7 @@ final class FunctionOrMethodInspector implements Inspector
                 continue;
             }
 
+            // As of PHP 7.0, it is no longer possible to define two or more function parameters with the same name.
             if ($paramMap[$paramName] ?? null) {
                 $until = PhpVersion::PHP_5_6;
                 break;

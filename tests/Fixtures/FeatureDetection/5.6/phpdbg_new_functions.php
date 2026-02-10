@@ -7,9 +7,6 @@ Min: 5.6
 gmp_root();
 ?>
 
-
-
-
 #Test
 Description: the phpdbg_break_file() function was introduced in PHP 5.6.
 Parser: 5.6

@@ -33,7 +33,29 @@ Feature::for(Node\Expr\ArrowFunction::class)
     ->inspector(FunctionOrMethodInspector::class)
     ->since(PhpVersion::PHP_7_4);
 Feature::for(Node\Expr\Assign::class);
+Feature::for(Node\Expr\AssignOp::class)->untilWhen(function (Node\Expr\AssignOp $node): ?PhpVersion {
+    if ($node instanceof Node\Expr\AssignOp\ShiftLeft || $node instanceof Node\Expr\AssignOp\ShiftRight) {
+        if ($node->expr instanceof Node\Expr\UnaryMinus && $node->expr->expr instanceof Node\Scalar\Int_) {
+            // As of PHP 7.0, negative bitshifts are no longer allowed.
+            // We can only detect this for literals.
+            return PhpVersion::PHP_5_6;
+        }
+    }
+
+    return null;
+});
 Feature::for(Node\Expr\AssignRef::class);
+Feature::for(Node\Expr\BinaryOp::class)->untilWhen(function (Node\Expr\BinaryOp $node): ?PhpVersion {
+    if ($node instanceof Node\Expr\BinaryOp\ShiftLeft || $node instanceof Node\Expr\BinaryOp\ShiftRight) {
+        if ($node->right instanceof Node\Expr\UnaryMinus && $node->right->expr instanceof Node\Scalar\Int_) {
+            // As of PHP 7.0, negative bitshifts are no longer allowed.
+            // We can only detect this for literals.
+            return PhpVersion::PHP_5_6;
+        }
+    }
+
+    return null;
+});
 Feature::for(Node\Expr\BitwiseNot::class);
 Feature::for(Node\Expr\BooleanNot::class);
 Feature::for(Node\Expr\ClassConstFetch::class)
@@ -107,6 +129,11 @@ Feature::for(Node\Expr\List_::class)
     });
 Feature::for(Node\Expr\Match_::class);
 Feature::for(Node\Expr\MethodCall::class)->sinceWhen(function (Node\Expr\MethodCall $node): ?PhpVersion {
+    // As of PHP 7.0, class members can be accessed on cloning.
+    if ($node->var instanceof Node\Expr\Clone_) {
+        return PhpVersion::PHP_7_0;
+    }
+
     // As of PHP 7.0, semi-reserved keywords can be used as method names.
     // https://wiki.php.net/rfc/context_sensitive_lexer
     if (
@@ -144,7 +171,14 @@ Feature::for(Node\Expr\PostInc::class);
 Feature::for(Node\Expr\PreDec::class);
 Feature::for(Node\Expr\PreInc::class);
 Feature::for(Node\Expr\Print_::class);
-Feature::for(Node\Expr\PropertyFetch::class);
+Feature::for(Node\Expr\PropertyFetch::class)->sinceWhen(function (Node\Expr\PropertyFetch $node) {
+    // As of PHP 7.0, class members can be accessed on cloning.
+    if ($node->var instanceof Node\Expr\Clone_) {
+        return PhpVersion::PHP_7_0;
+    }
+
+    return null;
+});
 Feature::for(Node\Expr\ShellExec::class);
 Feature::for(Node\Expr\StaticCall::class);
 Feature::for(Node\Expr\StaticPropertyFetch::class);

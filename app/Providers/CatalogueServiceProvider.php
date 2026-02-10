@@ -9,6 +9,7 @@ final class CatalogueServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        $this->loadCatalogue('classes');
         $this->loadCatalogue('constants');
         $this->loadCatalogue('expressions');
         $this->loadCatalogue('functions');

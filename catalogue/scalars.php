@@ -32,7 +32,7 @@ Feature::for(Node\Scalar\Int_::class)
 
         return null;
     })->untilWhen(function (Node\Scalar\Int_ $node): ?PhpVersion {
-        // As of PHP 5.6, integer octal literals may no longer contain invalid numbers.
+        // As of PHP 7.0, integer octal literals may no longer contain invalid numbers.
         /** @var string $rawValue */
         $rawValue = $node->getAttribute('rawValue', '');
         $kind = $node->getAttribute('kind');
@@ -49,6 +49,14 @@ Feature::for(Node\Scalar\Float_::class)->sinceWhen(function (Node\Scalar\Float_ 
     $rawValue = $node->getAttribute('rawValue', '');
     if (str_contains($rawValue, '_')) {
         return PhpVersion::PHP_7_4;
+    }
+
+    return null;
+});
+
+Feature::for(Node\Scalar\String_::class)->sinceWhen(function (Node\Scalar\String_ $node) {
+    if (preg_match('/u\{([0-9a-fA-F]+)}/', $node->getAttribute('rawValue'))) {
+        return PhpVersion::PHP_7_0;
     }
 
     return null;

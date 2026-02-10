@@ -90,7 +90,8 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-DateTimeImmutable::createFromMutable();
+(clone $foo)->bar();
+(clone $foo)->bar;
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];

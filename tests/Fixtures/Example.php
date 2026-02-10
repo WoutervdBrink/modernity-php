@@ -14,6 +14,7 @@ readonly class Example
         public ?string $description,
         public ?PhpVersion $minVersion,
         public ?PhpVersion $maxVersion,
+        public bool $everyLine,
     ) {
         //
     }
@@ -72,12 +73,15 @@ readonly class Example
             $maxVersion = null;
         }
 
+        $everyLine = ! empty($properties['EveryLine']) && $properties['EveryLine'] === 'true';
+
         return new self(
             $parserVersion,
             $code,
             $properties['Description'],
             $minVersion,
             $maxVersion,
+            $everyLine,
         );
     }
 
