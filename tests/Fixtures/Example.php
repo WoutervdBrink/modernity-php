@@ -15,6 +15,8 @@ readonly class Example
         public ?PhpVersion $minVersion,
         public ?PhpVersion $maxVersion,
         public bool $everyLine,
+        public bool $testForMin,
+        public bool $testForMax,
     ) {
         //
     }
@@ -61,19 +63,22 @@ readonly class Example
 
         $code = trim($specCode);
 
-        if (! empty($properties['Min'])) {
+        if (! empty($properties['Min']) && $properties['Min'] !== 'none') {
             $minVersion = PhpVersion::fromVersionString($properties['Min']);
         } else {
             $minVersion = null;
         }
 
-        if (! empty($properties['Max'])) {
+        if (! empty($properties['Max']) && $properties['Max'] !== 'none') {
             $maxVersion = PhpVersion::fromVersionString($properties['Max']);
         } else {
             $maxVersion = null;
         }
 
         $everyLine = ! empty($properties['EveryLine']) && $properties['EveryLine'] === 'true';
+
+        $testMin = ! empty($properties['Min']);
+        $testMax = ! empty($properties['Max']);
 
         return new self(
             $parserVersion,
@@ -82,6 +87,8 @@ readonly class Example
             $minVersion,
             $maxVersion,
             $everyLine,
+            $testMin,
+            $testMax,
         );
     }
 

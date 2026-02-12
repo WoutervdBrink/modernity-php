@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 
 Func::loadFromCatalogue('functions');
@@ -56,3 +57,24 @@ Func::for('setlocale')->argumentType(0, String_::class, until: PhpVersion::PHP_5
 // substr() and iconv_substr() now return an empty string, if string is equal to start characters long.
 Func::for('unserialize')->option(1, 'allowed_classes', since: PhpVersion::PHP_7_0);
 //  xml_parser_free() is no longer sufficient to free the parser resource, ...
+
+// Changed functions in PHP 7.1.
+// file_get_contents() now accepts a negative seek offset if the stream is seekable.
+Func::for('getopt')->arguments(fn (int $args): bool => $args > 2, since: PhpVersion::PHP_7_1);
+Func::for('getenv')->arguments(fn (int $args): bool => $args === 0, since: PhpVersion::PHP_7_1);
+Func::for('get_headers')->arguments(fn (int $args): bool => $args > 2, since: PhpVersion::PHP_7_1);
+Func::for('long2ip')->argumentType(0, String_::class, until: PhpVersion::PHP_7_0)
+    ->argumentType(0, Int_::class, since: PhpVersion::PHP_7_1);
+// mb_ereg() now rejects illegal byte sequences.
+// mb_ereg_replace() now rejects illegal byte sequences.
+Func::for('openssl_decrypt')->arguments(fn (int $args): bool => $args > 5, since: PhpVersion::PHP_7_1);
+Func::for('openssl_encrypt')->arguments(fn (int $args): bool => $args > 5, since: PhpVersion::PHP_7_1);
+// output_reset_rewrite_vars() no longer resets session URL rewrite variables.
+// parse_url() is now more restrictive and supports RFC3986.
+// PDO::lastInsertId() for PostgreSQL will now trigger an error when nextval has not been called for the current session (the postgres connection).
+Func::for('pg_last_notice')->arguments(fn (int $args): bool => $args > 1, since: PhpVersion::PHP_7_1);
+Func::for('pg_fetch_all')->arguments(fn (int $args): bool => $args > 1, since: PhpVersion::PHP_7_1);
+Func::for('pg_select')->arguments(fn (int $args): bool => $args > 3, since: PhpVersion::PHP_7_1);
+// session_start() now returns false and no longer initializes $_SESSION when it failed to start the session.
+// tempnam() now emits a notice when falling back to the system's temp directory.
+Func::for('unpack')->arguments(fn (int $args): bool => $args > 2, since: PhpVersion::PHP_7_1);

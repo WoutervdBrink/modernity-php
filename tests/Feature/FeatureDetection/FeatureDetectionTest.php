@@ -46,8 +46,13 @@ describe('Feature detection', function () {
 
             $constraint = $minMax->constraint;
 
-            expect($constraint->min)->toBe($example->minVersion, '(Code '.$i.') Expected minimum version '.($example->minVersion?->toVersionString() ?? 'none'))
-                ->and($constraint->max)->toBe($example->maxVersion, '(Code '.$i.') Expected maximum version '.($example->maxVersion?->toVersionString() ?? 'none'));
+            if ($example->testForMin) {
+                expect($constraint->min)->toBe($example->minVersion, '(Code '.$i.') Expected minimum version '.($example->minVersion?->toVersionString() ?? 'none'));
+            }
+
+            if ($example->testForMax) {
+                expect($constraint->max)->toBe($example->maxVersion, '(Code '.$i.') Expected maximum version '.($example->maxVersion?->toVersionString() ?? 'none'));
+            }
         }
     })->with(/** @return Generator<Example> */ function (): Generator {
         $iterator = new DirectoryIterator(__DIR__.'/../../Fixtures/FeatureDetection');

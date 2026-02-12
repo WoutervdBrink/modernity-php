@@ -135,7 +135,13 @@ Feature::for(Node\Stmt\Foreach_::class)->sinceWhen(function (Node\Stmt\Foreach_ 
     return null;
 });
 Feature::for(Node\Stmt\Function_::class)->inspector(FunctionOrMethodInspector::class);
-Feature::for(Node\Stmt\Global_::class);
+Feature::for(Node\Stmt\Global_::class)->untilWhen(function (Node\Stmt\Global_ $node) {
+    if (array_any($node->vars, fn ($var) => $var instanceof Node\Expr\Variable && $var->name === 'this')) {
+        return PhpVersion::PHP_7_0;
+    }
+
+    return null;
+});
 Feature::for(Node\Stmt\Goto_::class)->since(PhpVersion::PHP_5_3);
 Feature::for(Node\Stmt\GroupUse::class)->since(PhpVersion::PHP_7_0);
 Feature::for(Node\Stmt\HaltCompiler::class);

@@ -90,8 +90,9 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-(clone $foo)->bar();
-(clone $foo)->bar;
+$foo = function () use ($_SERVER) {};
+$foo = function () use ($this) {};
+$foo = function ($param) use ($param) {};
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];

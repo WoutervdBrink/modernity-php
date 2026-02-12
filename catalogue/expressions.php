@@ -5,17 +5,23 @@ use App\Inspectors\FunctionOrMethodInspector;
 use App\Language\PhpVersion;
 use App\Language\Quirks;
 use PhpParser\Node;
+use PhpParser\Node\Expr\List_;
 
 Feature::for(Node\Expr\ArrayDimFetch::class)
     ->sinceWhen(function (Node\Expr\ArrayDimFetch $node): ?PhpVersion {
-        // https://wiki.php.net/rfc/functionarraydereferencing
-        if ($node->var instanceof Node\Expr\CallLike) {
-            return PhpVersion::PHP_5_4;
+        // Negative string offsets (PHP 7.1)
+        if ($node->var instanceof Node\Scalar\String_ && $node->dim instanceof Node\Expr\UnaryMinus) {
+            return PhpVersion::PHP_7_1;
         }
 
         // https://wiki.php.net/rfc/constdereference
         if ($node->var instanceof Node\Expr\Array_ || $node->var instanceof Node\Scalar\String_) {
             return PhpVersion::PHP_5_5;
+        }
+
+        // https://wiki.php.net/rfc/functionarraydereferencing
+        if ($node->var instanceof Node\Expr\CallLike) {
+            return PhpVersion::PHP_5_4;
         }
 
         return null;
@@ -32,8 +38,27 @@ Feature::for(Node\Expr\Array_::class)
 Feature::for(Node\Expr\ArrowFunction::class)
     ->inspector(FunctionOrMethodInspector::class)
     ->since(PhpVersion::PHP_7_4);
-Feature::for(Node\Expr\Assign::class);
+Feature::for(Node\Expr\Assign::class)
+    ->sinceWhen(function (Node\Expr\Assign $node): ?PhpVersion {
+        // Symmetric array destructuring ([$foo, $bar] = $baz) was introduced in PHP 7.1.
+        if ($node->var instanceof Node\Expr\List_ && $node->var->getAttribute('kind', List_::KIND_LIST) === List_::KIND_ARRAY) {
+            return PhpVersion::PHP_7_1;
+        }
+
+        return null;
+    })
+    ->untilWhen(function (Node\Expr\Assign $node): ?PhpVersion {
+        if ($node->var instanceof Node\Expr\Variable && $node->var->name === 'this') {
+            return PhpVersion::PHP_7_0;
+        }
+
+        return null;
+    });
 Feature::for(Node\Expr\AssignOp::class)->untilWhen(function (Node\Expr\AssignOp $node): ?PhpVersion {
+    if ($node->var instanceof Node\Expr\Variable && $node->var->name === 'this') {
+        return PhpVersion::PHP_7_0;
+    }
+
     if ($node instanceof Node\Expr\AssignOp\ShiftLeft || $node instanceof Node\Expr\AssignOp\ShiftRight) {
         if ($node->expr instanceof Node\Expr\UnaryMinus && $node->expr->expr instanceof Node\Scalar\Int_) {
             // As of PHP 7.0, negative bitshifts are no longer allowed.
@@ -70,6 +95,31 @@ Feature::for(Node\Expr\ClassConstFetch::class)
 Feature::for(Node\Expr\Clone_::class);
 Feature::for(Node\Expr\Closure::class)
     ->inspector(FunctionOrMethodInspector::class)
+    ->untilWhen(function (Node\Expr\Closure $node): ?PhpVersion {
+        // Lexically bound variables cannot reuse names as of PHP 7.1.
+
+        $parameterNames = [];
+
+        foreach ($node->params as $param) {
+            if ($param->var instanceof Node\Expr\Variable) {
+                $parameterNames[] = $param->var->name;
+            }
+        }
+
+        foreach ($node->uses as $use) {
+            if (is_string($use->var->name)) {
+                if (
+                    $use->var->name === 'this' ||
+                    Quirks::isSuperglobal($use->var->name) ||
+                    in_array($use->var->name, $parameterNames)
+                ) {
+                    return PhpVersion::PHP_7_0;
+                }
+            }
+        }
+
+        return null;
+    })
     ->since(PhpVersion::PHP_5_3);
 Feature::for(Node\Expr\ConstFetch::class)->sinceWhen(function (Node\Expr\ConstFetch $node): ?PhpVersion {
     // The E_USER_DEPRECATED and E_USER_DEPRECATED constants were introduced in PHP 5.3.

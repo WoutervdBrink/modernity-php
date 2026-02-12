@@ -1,6 +1,7 @@
 #Test
 Description: Simple constants were always allowed
 Parser: 5.6
+Min: none
 
 <?php
 const A = 5;
@@ -9,6 +10,7 @@ const A = 5;
 #Test
 Description: Simple class constants were always allowed
 Parser: 5.6
+Min: none
 
 <?php
 class Foo

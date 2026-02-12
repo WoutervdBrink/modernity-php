@@ -44,7 +44,7 @@ Feature::for(Node\InterpolatedStringPart::class);
 Feature::for(Node\IntersectionType::class);
 Feature::for(Node\MatchArm::class);
 Feature::for(Node\Name::class);
-Feature::for(Node\NullableType::class);
+Feature::for(Node\NullableType::class)->since(PhpVersion::PHP_7_1);
 Feature::for(Node\Param::class)->sinceWhen(function (Node\Param $node): ?PhpVersion {
     // As of PHP 5.6, scalar expressions are allowed in default function arguments.
     if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {

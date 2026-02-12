@@ -38,6 +38,11 @@ final class FunctionOrMethodInspector implements Inspector
                 $since = PhpVersion::PHP_7_2;
             }
 
+            // As of PHP 7.1, the 'void' and 'iterable' types were introduced as return types.
+            if ($returnType === 'void' || $returnType === 'iterable') {
+                $since = PhpVersion::PHP_7_1;
+            }
+
             // In any case, having a return type at all was introduced in PHP 7.0.
             $since = $since ?? PhpVersion::PHP_7_0;
         }
@@ -49,8 +54,8 @@ final class FunctionOrMethodInspector implements Inspector
         $paramMap = [];
 
         foreach ($node->params as $param) {
-            // Scalar type declarations were introduced in PHP 7.0.
             if ($param->type instanceof Node\Identifier) {
+                // Scalar type declarations were introduced in PHP 7.0.
                 if (
                     $param->type->name === 'string' ||
                     $param->type->name === 'int' ||
@@ -58,6 +63,11 @@ final class FunctionOrMethodInspector implements Inspector
                     $param->type->name === 'bool'
                 ) {
                     $since = PhpVersion::max($since, PhpVersion::PHP_7_0);
+                }
+
+                // The 'iterable' type declaration was introduced in PHP 7.1.
+                if ($param->type->name === 'iterable') {
+                    $since = PhpVersion::max($since, PhpVersion::PHP_7_1);
                 }
             }
 
@@ -70,9 +80,14 @@ final class FunctionOrMethodInspector implements Inspector
                 continue;
             }
 
+            // As of PHP 7.1, it is no longer possible to use $this as a parameter.
+            if ($paramName === 'this') {
+                $until = PhpVersion::min($until, PhpVersion::PHP_7_0);
+            }
+
             // As of PHP 7.0, it is no longer possible to define two or more function parameters with the same name.
             if ($paramMap[$paramName] ?? null) {
-                $until = PhpVersion::PHP_5_6;
+                $until = PhpVersion::min($until, PhpVersion::PHP_5_6);
                 break;
             }
 
