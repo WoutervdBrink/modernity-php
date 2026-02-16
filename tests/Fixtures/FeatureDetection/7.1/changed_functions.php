@@ -2,7 +2,7 @@
 Description: Changed functions in PHP 7.1 - functionality that is possible from 7.1.
 Parser: 7.1
 Min: 7.1
-PerLine: true
+EveryLine: true
 
 <?php
 getopt(1, 2, 3);

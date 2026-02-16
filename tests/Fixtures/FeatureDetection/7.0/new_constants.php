@@ -2,11 +2,10 @@
 Description: New constants in PHP 7.0.
 Parser: 7.0
 Min: 7.0
-PerLine: true
+EveryLine: true
 
 <?php
 echo PHP_INT_MIN;
-echo IMG_WEBP;
 echo JSON_ERROR_INVALID_PROPERTY_NAME;
 echo JSON_ERROR_UTF16;
 echo LIBXML_BIGLINES;

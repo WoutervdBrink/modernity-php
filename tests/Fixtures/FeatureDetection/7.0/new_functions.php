@@ -2,7 +2,7 @@
 Description: New functions in PHP 7.0.
 Parser: 7.0
 Min: 7.0
-PerLine: true
+EveryLine: true
 
 <?php
 random_bytes();

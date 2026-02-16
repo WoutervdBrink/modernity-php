@@ -2,7 +2,7 @@
 Description: New classes and interfaces in PHP 7.0.
 Parser: 7.0
 Min: 7.0
-PerLine: true
+EveryLine: true
 
 <?php
 IntlChar::BLOCK_CODE_AEGEAN_NUMBERS;

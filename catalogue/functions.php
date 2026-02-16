@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 
@@ -78,3 +79,16 @@ Func::for('pg_select')->arguments(fn (int $args): bool => $args > 3, since: PhpV
 // session_start() now returns false and no longer initializes $_SESSION when it failed to start the session.
 // tempnam() now emits a notice when falling back to the system's temp directory.
 Func::for('unpack')->arguments(fn (int $args): bool => $args > 2, since: PhpVersion::PHP_7_1);
+
+// Changed functions in PHP 7.2.
+Func::for('count')->argumentIsNull(0, until: PhpVersion::PHP_7_1);
+Func::for('count')->argumentType(0, Int_::class, until: PhpVersion::PHP_7_1);
+Func::for('count')->argumentType(0, Float_::class, until: PhpVersion::PHP_7_1);
+Func::for('count')->argumentType(0, String_::class, until: PhpVersion::PHP_7_1);
+Func::for('get_class')->argumentIsNull(0, until: PhpVersion::PHP_7_1);
+Func::for('mail')->argumentType(3, Array_::class, since: PhpVersion::PHP_7_2);
+Func::for('mb_send_mail')->argumentType(3, Array_::class, since: PhpVersion::PHP_7_2);
+Func::for('sizeof')->argumentIsNull(0, until: PhpVersion::PHP_7_1);
+Func::for('sizeof')->argumentType(0, Int_::class, until: PhpVersion::PHP_7_1);
+Func::for('sizeof')->argumentType(0, Float_::class, until: PhpVersion::PHP_7_1);
+Func::for('sizeof')->argumentType(0, String_::class, until: PhpVersion::PHP_7_1);

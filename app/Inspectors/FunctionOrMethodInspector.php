@@ -69,6 +69,11 @@ final class FunctionOrMethodInspector implements Inspector
                 if ($param->type->name === 'iterable') {
                     $since = PhpVersion::max($since, PhpVersion::PHP_7_1);
                 }
+
+                // The 'object' type declaration was introduced in PHP 7.2.
+                if ($param->type->name === 'object') {
+                    $since = PhpVersion::max($since, PhpVersion::PHP_7_2);
+                }
             }
 
             if ($param->var instanceof Error) {

@@ -36,7 +36,7 @@ final class Main extends Command
      */
     public function handle(ParserFactory $factory, NodeTraverser $traverser): void
     {
-        $parser = $factory->createForVersion(PhpVersion::fromString('8.4'));
+        $parser = $factory->createForVersion(PhpVersion::fromString('7.0'));
 
         $prettyPrinter = new PrettyPrinter\Standard;
 
@@ -90,9 +90,7 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-$foo = function () use ($_SERVER) {};
-$foo = function () use ($this) {};
-$foo = function ($param) use ($param) {};
+[&$foo] = $bar;
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];

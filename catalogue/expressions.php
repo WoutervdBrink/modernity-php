@@ -38,11 +38,31 @@ Feature::for(Node\Expr\Array_::class)
 Feature::for(Node\Expr\ArrowFunction::class)
     ->inspector(FunctionOrMethodInspector::class)
     ->since(PhpVersion::PHP_7_4);
+
+/**
+ * Returns <code>true</code> if any of the variables in a list are assigned by reference.
+ */
+function hasReferenceAssignment(List_ $node): bool
+{
+    foreach ($node->items as $item) {
+        if ($item !== null) {
+            if ($item->byRef) {
+                return true;
+            }
+            if ($item->value instanceof List_) {
+                return hasReferenceAssignment($item->value);
+            }
+        }
+    }
+
+    return false;
+}
+
 Feature::for(Node\Expr\Assign::class)
     ->sinceWhen(function (Node\Expr\Assign $node): ?PhpVersion {
         // Symmetric array destructuring ([$foo, $bar] = $baz) was introduced in PHP 7.1.
-        if ($node->var instanceof Node\Expr\List_ && $node->var->getAttribute('kind', List_::KIND_LIST) === List_::KIND_ARRAY) {
-            return PhpVersion::PHP_7_1;
+        if ($node->var instanceof List_ && $node->var->getAttribute('kind', List_::KIND_LIST) === List_::KIND_ARRAY) {
+            return hasReferenceAssignment($node->var) ? PhpVersion::PHP_7_3 : PhpVersion::PHP_7_1;
         }
 
         return null;
@@ -69,7 +89,14 @@ Feature::for(Node\Expr\AssignOp::class)->untilWhen(function (Node\Expr\AssignOp 
 
     return null;
 });
-Feature::for(Node\Expr\AssignRef::class);
+Feature::for(Node\Expr\AssignRef::class)->untilWhen(function (Node\Expr\AssignRef $node): ?PhpVersion {
+    // https://www.php.net/manual/en/migration70.incompatible.php#migration70.incompatible.other.new-by-ref
+    if ($node->expr instanceof Node\Expr\New_) {
+        return PhpVersion::PHP_5_6;
+    }
+
+    return null;
+});
 Feature::for(Node\Expr\BinaryOp::class)->untilWhen(function (Node\Expr\BinaryOp $node): ?PhpVersion {
     if ($node instanceof Node\Expr\BinaryOp\ShiftLeft || $node instanceof Node\Expr\BinaryOp\ShiftRight) {
         if ($node->right instanceof Node\Expr\UnaryMinus && $node->right->expr instanceof Node\Scalar\Int_) {
@@ -151,8 +178,8 @@ Feature::for(Node\Expr\Instanceof_::class)->sinceWhen(function (Node\Expr\Instan
     return null;
 });
 Feature::for(Node\Expr\Isset_::class);
-Feature::for(Node\Expr\List_::class)
-    ->sinceWhen(function (Node\Expr\List_ $node): ?PhpVersion {
+Feature::for(List_::class)
+    ->sinceWhen(function (List_ $node): ?PhpVersion {
         foreach ($node->items as $item) {
             // In PHP 7.3, new syntax was introduced, allowing reference assignment using list().
             // https://wiki.php.net/rfc/list_reference_assignment
@@ -169,7 +196,7 @@ Feature::for(Node\Expr\List_::class)
 
         return null;
     })
-    ->untilWhen(function (Node\Expr\List_ $node): ?PhpVersion {
+    ->untilWhen(function (List_ $node): ?PhpVersion {
         // As of PHP 7.0, list() constructs can no longer be empty.
         if (! empty($node->items) && $node->items[0] === null) {
             return PhpVersion::PHP_5_6;

@@ -4,19 +4,18 @@ namespace App\Catalogue;
 
 use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;
-use Override;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
-use UnexpectedValueException;
 
 /**
  * Registration of version information for a certain function.
  *
  * N.B. <code>function</code> is a keyword. Consequently, this class could not have been named <code>Function</code>.
  */
-final class Func extends IdentifierCatalogue
+final class Func extends IdentifierWithParentClassCatalogue
 {
     /**
      * @var array<string, list<callable(FunctionCall): PhpVersionConstraint>>
@@ -29,66 +28,9 @@ final class Func extends IdentifierCatalogue
      */
     protected function __construct(string $name, ?string $className = null)
     {
-        parent::__construct(self::key($name, $className));
+        parent::__construct($name, $className);
 
         self::$rules[$this->name] ??= [];
-    }
-
-    private static function key(string $name, ?string $className): string
-    {
-        if (! empty($className)) {
-            return $className.'::'.$name;
-        }
-
-        return $name;
-    }
-
-    /**
-     * Process a row from the catalogue and load it.
-     *
-     * @param  string[]  $row
-     */
-    #[Override]
-    protected static function processFromCatalogue(array $row): void
-    {
-        if (count($row) < 3) {
-            throw new UnexpectedValueException('A row in the constants database should have at least 3 columns; it has '.count($row).'.');
-        }
-
-        if (count($row) < 4) {
-            $row[] = '';
-        }
-
-        [$name, $class, $since, $until] = $row;
-
-        if ($class === '') {
-            $func = self::for($name);
-        } else {
-            /** @var class-string $class */
-            $func = self::forClass($name, $class);
-        }
-
-        if (! empty($since)) {
-            $func->since(PhpVersion::fromVersionString($since));
-        }
-        if (! empty($until)) {
-            $func->until(PhpVersion::fromVersionString($until));
-        }
-    }
-
-    /**
-     * Construct a new registration of version information for a certain static method.
-     *
-     * @param  string  $name  Name of the function.
-     * @param  class-string  $className  Name of the class.
-     *
-     * @see static::for() to register plain functions.
-     *
-     * @example <code>Func::forClass('connect', 'MySQL')</code>: Say something about the <code>MySQL::connect()</code> method.
-     */
-    public static function forClass(string $name, string $className): self
-    {
-        return new self($name, $className);
     }
 
     /**
@@ -124,12 +66,14 @@ final class Func extends IdentifierCatalogue
     }
 
     /**
+     * @template T of Expr
+     *
      * Register minimum/maximum versions depending on the type of an argument passed to a function.
      *
      * Whether the argument is of the requested type is compared using <code>instanceof</code>.
      *
      * @param  int  $argumentIndex  Index of the argument in the function signature. Starts at zero.
-     * @param  class-string<Expr>  $argumentType  Type of the argument.
+     * @param  class-string<T>  $argumentType  Type of the argument.
      * @param  PhpVersion|null  $since  Minimum version if the given argument is of type <code>$argumentType</code>.
      * @param  PhpVersion|null  $until  Maximum version if the given argument is of type <code>$argumentType</code>.
      * @param  PhpVersion|null  $sinceOtherwise  Minimum version if the given argument is not of type <code>$argumentType</code>.
@@ -143,14 +87,41 @@ final class Func extends IdentifierCatalogue
         ?PhpVersion $until = null,
         ?PhpVersion $sinceOtherwise = null,
         ?PhpVersion $untilOtherwise = null,
-    ) {
-        return $this->rule(fn (FunctionCall $call): PhpVersionConstraint => (
-            $call->arguments[$argumentIndex] instanceof Arg &&
-            $call->arguments[$argumentIndex]->value instanceof $argumentType
-        )
+    ): self {
+        return $this->rule(function (FunctionCall $call) use ($argumentIndex, $argumentType, $since, $until, $sinceOtherwise, $untilOtherwise): PhpVersionConstraint {
+            $arg = $call->arguments[$argumentIndex] ?? null;
+
+            return ($arg instanceof Arg ? $arg->value : null) instanceof $argumentType
                 ? PhpVersionConstraint::between($since, $until)
-                : PhpVersionConstraint::between($sinceOtherwise, $untilOtherwise)
-        );
+                : PhpVersionConstraint::between($sinceOtherwise, $untilOtherwise);
+        });
+    }
+
+    /**
+     * Register minimum/maximum versions depending on whether an argument is null.
+     *
+     * @param  int  $argumentIndex  Index of the argument in the function signature. Starts at zero.
+     * @param  PhpVersion|null  $since  Minimum version if the given argument is <code>null</code>.
+     * @param  PhpVersion|null  $until  Maximum version if the given argument is <code>null</code>.
+     * @param  PhpVersion|null  $sinceOtherwise  Minimum version if the given argument is not <code>null</code>.
+     * @param  PhpVersion|null  $untilOtherwise  Maximum version if the given argument is not <code>null</code>.
+     * @return $this
+     */
+    public function argumentIsNull(
+        int $argumentIndex,
+        ?PhpVersion $since = null,
+        ?PhpVersion $until = null,
+        ?PhpVersion $sinceOtherwise = null,
+        ?PhpVersion $untilOtherwise = null,
+    ): self {
+        return $this->rule(function (FunctionCall $call) use ($argumentIndex, $since, $until, $sinceOtherwise, $untilOtherwise): PhpVersionConstraint {
+            $arg = $call->arguments[$argumentIndex];
+            $value = $arg->value ?? null;
+
+            return $value instanceof ConstFetch && $value->name->name === 'null'
+                ? PhpVersionConstraint::between($since, $until)
+                : PhpVersionConstraint::between($sinceOtherwise, $untilOtherwise);
+        });
     }
 
     /**
@@ -215,15 +186,6 @@ final class Func extends IdentifierCatalogue
     public function untilWhen(callable $rule): self
     {
         return $this->rule(static fn (FunctionCall $call): PhpVersionConstraint => PhpVersionConstraint::until($rule($call)));
-    }
-
-    /**
-     * @param  callable(int): ?PhpVersion  $argumentsRule
-     * @return $this
-     */
-    public function untilWhenArguments(callable $argumentsRule): self
-    {
-        return $this->untilWhen(static fn (FunctionCall $call): ?PhpVersion => $argumentsRule($call->amountOfArguments));
     }
 
     /**

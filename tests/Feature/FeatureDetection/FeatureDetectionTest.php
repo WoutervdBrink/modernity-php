@@ -7,6 +7,7 @@ use App\Parser\Visitors\ASTFeatureConstraintMergingVisitor;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
 use DirectoryIterator;
 use Generator;
+use InvalidArgumentException;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
@@ -33,7 +34,9 @@ describe('Feature detection', function () {
             // Shift '<?php' from the start of the code.
             $start = array_shift($codes);
             // Pop '? >' from the end of the code.
-            array_pop($codes);
+            if (trim(array_pop($codes)) !== '?>') {
+                throw new InvalidArgumentException('Last line in an EveryLine example MUST be the PHP closing tag!');
+            }
             // Zip the starting line to every line in the example.
             $codes = array_map(fn (string $code): string => $start."\n".$code, $codes);
         } else {
@@ -47,11 +50,27 @@ describe('Feature detection', function () {
             $constraint = $minMax->constraint;
 
             if ($example->testForMin) {
-                expect($constraint->min)->toBe($example->minVersion, '(Code '.$i.') Expected minimum version '.($example->minVersion?->toVersionString() ?? 'none'));
+                expect($constraint->min)
+                    ->toBe(
+                        $example->minVersion,
+                        sprintf(
+                            '%sExpected minimum version %s',
+                            $example->everyLine ? '(Line '.($i + 1).') ' : '',
+                            $example->minVersion?->toVersionString() ?? 'none'
+                        ),
+                    );
             }
 
             if ($example->testForMax) {
-                expect($constraint->max)->toBe($example->maxVersion, '(Code '.$i.') Expected maximum version '.($example->maxVersion?->toVersionString() ?? 'none'));
+                expect($constraint->max)
+                    ->toBe(
+                        $example->maxVersion,
+                        sprintf(
+                            '%sExpected maximum version %s',
+                            $example->everyLine ? '(Line '.($i + 1).') ' : '',
+                            $example->maxVersion?->toVersionString() ?? 'none'
+                        )
+                    );
             }
         }
     })->with(/** @return Generator<Example> */ function (): Generator {
