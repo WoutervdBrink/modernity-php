@@ -92,3 +92,25 @@ Func::for('sizeof')->argumentIsNull(0, until: PhpVersion::PHP_7_1);
 Func::for('sizeof')->argumentType(0, Int_::class, until: PhpVersion::PHP_7_1);
 Func::for('sizeof')->argumentType(0, Float_::class, until: PhpVersion::PHP_7_1);
 Func::for('sizeof')->argumentType(0, String_::class, until: PhpVersion::PHP_7_1);
+
+// Changed functions in PHP 7.3.
+Func::for('array_push')->arguments(fn (int $args): bool => $args === 1, since: PhpVersion::PHP_7_3);
+Func::for('array_unshift')->arguments(fn (int $args): bool => $args === 1, since: PhpVersion::PHP_7_3);
+Func::for('bscale')
+    ->arguments(fn (int $args): bool => $args === 0, since: PhpVersion::PHP_7_3)
+    ->argumentIsNull(0, since: PhpVersion::PHP_7_3);
+Func::for('ldap_add')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
+Func::for('ldap_mod_replace')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
+Func::for('ldap_mod_add')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
+Func::for('ldap_mod_del')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
+Func::for('ldap_rename')->arguments(fn (int $args): bool => $args >= 6, since: PhpVersion::PHP_7_3);
+Func::for('ldap_compare')->arguments(fn (int $args): bool => $args >= 5, since: PhpVersion::PHP_7_3);
+Func::for('ldap_delete')->arguments(fn (int $args): bool => $args >= 3, since: PhpVersion::PHP_7_3);
+Func::for('ldap_modify_batch')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
+Func::for('ldap_search')->arguments(fn (int $args): bool => $args >= 9, since: PhpVersion::PHP_7_3);
+Func::for('ldap_list')->arguments(fn (int $args): bool => $args >= 9, since: PhpVersion::PHP_7_3);
+Func::for('ldap_read')->arguments(fn (int $args): bool => $args >= 9, since: PhpVersion::PHP_7_3);
+Func::for('ldap_parse_result')->arguments(fn (int $args): bool => $args >= 7, since: PhpVersion::PHP_7_3);
+Func::for('setcookie')->argumentType(2, Array_::class, since: PhpVersion::PHP_7_3);
+Func::for('setrawcookie')->argumentType(2, Array_::class, since: PhpVersion::PHP_7_3);
+Func::for('session_set_cookie_params')->argumentType(0, Array_::class, since: PhpVersion::PHP_7_3);

@@ -115,7 +115,7 @@ final class Func extends IdentifierWithParentClassCatalogue
         ?PhpVersion $untilOtherwise = null,
     ): self {
         return $this->rule(function (FunctionCall $call) use ($argumentIndex, $since, $until, $sinceOtherwise, $untilOtherwise): PhpVersionConstraint {
-            $arg = $call->arguments[$argumentIndex];
+            $arg = $call->arguments[$argumentIndex] ?? null;
             $value = $arg->value ?? null;
 
             return $value instanceof ConstFetch && $value->name->name === 'null'

@@ -175,6 +175,11 @@ Feature::for(Node\Expr\Instanceof_::class)->sinceWhen(function (Node\Expr\Instan
         return PhpVersion::PHP_8_0;
     }
 
+    // As of PHP 7.3, literals are allowed as the first operand.
+    if (! $node->expr instanceof Node\Expr\Variable) {
+        return PhpVersion::PHP_7_3;
+    }
+
     return null;
 });
 Feature::for(Node\Expr\Isset_::class);

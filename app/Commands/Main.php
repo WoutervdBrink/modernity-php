@@ -90,7 +90,10 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-[&$foo] = $bar;
+$foo->bar(
+        $a,
+        $b,
+);
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];
