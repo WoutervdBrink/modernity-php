@@ -4,5 +4,5 @@ Parser: 7.0
 Max: 5.6
 
 <?php
-password_hash('test', null, array('salt' => 'foo'));
+password_hash('test', 'hash', array('salt' => 'foo'));
 ?>
