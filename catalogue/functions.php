@@ -114,3 +114,14 @@ Func::for('ldap_parse_result')->arguments(fn (int $args): bool => $args >= 7, si
 Func::for('setcookie')->argumentType(2, Array_::class, since: PhpVersion::PHP_7_3);
 Func::for('setrawcookie')->argumentType(2, Array_::class, since: PhpVersion::PHP_7_3);
 Func::for('session_set_cookie_params')->argumentType(0, Array_::class, since: PhpVersion::PHP_7_3);
+
+// Changed functions in PHP 7.4.
+Func::for('array_merge')->arguments(fn (int $args): bool => $args === 0, since: PhpVersion::PHP_7_4);
+Func::for('array_merge_recursive')->arguments(fn (int $args): bool => $args === 0, since: PhpVersion::PHP_7_4);
+Func::for('mb_ereg_replace')->argumentType(0, Int_::class, until: PhpVersion::PHP_7_3);
+Func::for('password_hash')->argumentIsNull(1, since: PhpVersion::PHP_7_4);
+Func::for('password_needs_rehash')->argumentIsNull(1, since: PhpVersion::PHP_7_4);
+Func::for('preg_replace_callback')->arguments(fn (int $args): bool => $args >= 6, since: PhpVersion::PHP_7_4);
+Func::for('preg_replace_callback_array')->arguments(fn (int $args): bool => $args >= 5, since: PhpVersion::PHP_7_4);
+Func::for('proc_open')->argumentType(0, Array_::class, since: PhpVersion::PHP_7_4);
+Func::for('strip_tags')->argumentType(1, Array_::class, since: PhpVersion::PHP_7_4);

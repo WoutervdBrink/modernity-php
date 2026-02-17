@@ -288,7 +288,7 @@ Feature::for(Node\Expr\Variable::class)->untilWhen(function (Node\Expr\Variable 
 Feature::for(Node\Expr\YieldFrom::class)->since(PhpVersion::PHP_7_0); // https://wiki.php.net/rfc/generator-delegation
 Feature::for(Node\Expr\Yield_::class)->since(PhpVersion::PHP_5_5); // https://www.php.net/manual/en/language.generators.overview.php
 Feature::for(Node\Expr\Cast\Unset_::class)->until(PhpVersion::PHP_7_4); // https://www.php.net/manual/en/language.types.null.php#language.types.null.casting
-Feature::for(Node\Expr\AssignOp\Coalesce::class)->since(PhpVersion::PHP_7_0); // https://wiki.php.net/rfc/isset_ternary
+Feature::for(Node\Expr\AssignOp\Coalesce::class)->since(PhpVersion::PHP_7_4); // https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.null-coalescing-assignment-operator
 Feature::for(Node\Expr\AssignOp\Pow::class)->since(PhpVersion::PHP_5_6); // https://wiki.php.net/rfc/pow-operator
 Feature::for(Node\Expr\BinaryOp\Coalesce::class)->since(PhpVersion::PHP_7_0); // https://wiki.php.net/rfc/isset_ternary
 Feature::for(Node\Expr\BinaryOp\Pow::class)->since(PhpVersion::PHP_5_6); // https://wiki.php.net/rfc/pow-operator

@@ -65,6 +65,7 @@ Feature::for(Node\Stmt\ClassMethod::class)
             '__invoke', '__callStatic' => PhpVersion::PHP_5_3,
             '__debugInfo' => PhpVersion::PHP_5_6,
             '__serialize' => PhpVersion::PHP_7_4,
+            '__unserialize' => PhpVersion::PHP_7_4,
             default => null,
         };
     })

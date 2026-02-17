@@ -18,7 +18,14 @@ Feature::for(Node\Arg::class)->sinceWhen(function (Node\Arg $node): ?PhpVersion 
 
     return null;
 });
-Feature::for(Node\ArrayItem::class);
+Feature::for(Node\ArrayItem::class)->sinceWhen(function (Node\ArrayItem $node): ?PhpVersion {
+    // https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.unpack-inside-array
+    if ($node->unpack) {
+        return PhpVersion::PHP_7_4;
+    }
+
+    return null;
+});
 Feature::for(Node\Attribute::class);
 Feature::for(Node\AttributeGroup::class);
 Feature::for(Node\ClosureUse::class);
