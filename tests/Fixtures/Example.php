@@ -6,17 +6,14 @@ use App\Language\PhpVersion;
 use InvalidArgumentException;
 use PhpParser\PhpVersion as ParserVersion;
 
-readonly class Example
+final readonly class Example
 {
-    public function __construct(
+    private function __construct(
         public ParserVersion $parserVersion,
         public string $code,
         public ?string $description,
-        public ?PhpVersion $minVersion,
-        public ?PhpVersion $maxVersion,
-        public bool $everyLine,
-        public bool $testForMin,
-        public bool $testForMax,
+        public PhpVersion|null|false $minVersion,
+        public PhpVersion|null|false $maxVersion,
     ) {
         //
     }
@@ -27,12 +24,13 @@ readonly class Example
      * N.B. This method assumes that <code>#Test</code> has already been stripped from the specification.
      *
      * @see ExampleRepository::fromSpec() for documentation of the specification.
+     *
+     * @return self[]
      */
-    public static function fromSpec(string $spec): self
+    public static function fromSpec(string $spec): array
     {
         $spec = explode("\n\n", $spec, 2);
         if (count($spec) !== 2) {
-            var_dump($spec);
             throw new InvalidArgumentException('Specification of an example must contain two consecutive newlines.');
         }
 
@@ -63,37 +61,47 @@ readonly class Example
 
         $code = trim($specCode);
 
-        if (! empty($properties['Min']) && $properties['Min'] !== 'none') {
-            $minVersion = PhpVersion::fromVersionString($properties['Min']);
-        } else {
-            $minVersion = null;
-        }
+        $minVersion = ! empty($properties['Min'])
+            ? (($properties['Min'] === 'none')
+                ? null
+                : PhpVersion::fromVersionString($properties['Min']))
+            : false;
 
-        if (! empty($properties['Max']) && $properties['Max'] !== 'none') {
-            $maxVersion = PhpVersion::fromVersionString($properties['Max']);
-        } else {
-            $maxVersion = null;
-        }
+        $maxVersion = ! empty($properties['Max'])
+            ? (($properties['Max'] === 'none')
+                ? null
+                : PhpVersion::fromVersionString($properties['Max']))
+            : false;
 
         $everyLine = ! empty($properties['EveryLine']) && $properties['EveryLine'] === 'true';
 
-        $testMin = ! empty($properties['Min']);
-        $testMax = ! empty($properties['Max']);
+        if ($everyLine) {
+            // The example has EveryLine: true, meaning **every** line in the code has to conform to the expectations.
+            $codes = explode("\n", $code);
+            // Shift '<?php' from the start of the code.
+            $start = array_shift($codes);
+            // Pop '? >' from the end of the code.
+            if (trim(array_pop($codes)) !== '?>') {
+                throw new InvalidArgumentException('Last line in an EveryLine example MUST be the PHP closing tag!');
+            }
+            // Zip the starting line to every line in the example.
+            $codes = array_map(fn (string $code): string => $start."\n".$code, $codes);
 
-        return new self(
+            return array_map(fn (string $code, int $idx): self => new self(
+                $parserVersion,
+                $code,
+                $properties['Description'].' (Line '.($idx + 1).')',
+                $minVersion,
+                $maxVersion,
+            ), $codes, array_keys($codes));
+        }
+
+        return [new self(
             $parserVersion,
             $code,
             $properties['Description'],
             $minVersion,
             $maxVersion,
-            $everyLine,
-            $testMin,
-            $testMax,
-        );
-    }
-
-    public function __toString(): string
-    {
-        return 'lmao';
+        )];
     }
 }

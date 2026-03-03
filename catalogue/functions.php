@@ -50,7 +50,6 @@ Func::for('dirname')->arguments(fn (int $args): bool => $args > 1, since: PhpVer
 // getrusage() is now supported on Windows.
 Func::for('gmmktime')->arguments(fn (int $args): bool => $args > 6, until: PhpVersion::PHP_5_6);
 Func::for('mktime')->arguments(fn (int $args): bool => $args > 6, until: PhpVersion::PHP_5_6);
-Func::for('password_hash')->option(2, 'salt', until: PhpVersion::PHP_5_6);
 // preg_replace() function no longer supports "\e" (PREG_REPLACE_EVAL). preg_replace_callback() should be used instead.
 Func::for('session_start')->arguments(fn (int $args): bool => $args > 0, since: PhpVersion::PHP_7_0);
 Func::for('setlocale')->argumentType(0, String_::class, until: PhpVersion::PHP_5_6);
@@ -125,3 +124,25 @@ Func::for('preg_replace_callback')->arguments(fn (int $args): bool => $args >= 6
 Func::for('preg_replace_callback_array')->arguments(fn (int $args): bool => $args >= 5, since: PhpVersion::PHP_7_4);
 Func::for('proc_open')->argumentType(0, Array_::class, since: PhpVersion::PHP_7_4);
 Func::for('strip_tags')->argumentType(1, Array_::class, since: PhpVersion::PHP_7_4);
+
+// Changed functions in PHP 8.0.
+Func::for('assert')->argumentType(0, String_::class, until: PhpVersion::PHP_7_4);
+Func::for('crypt')->arguments(fn (int $args): bool => $args <= 1, until: PhpVersion::PHP_7_4);
+Func::for('curl_version')->arguments(fn (int $args): bool => $args >= 1, until: PhpVersion::PHP_7_4);
+Func::for('gmmktime')->arguments(fn (int $args): bool => $args === 0, until: PhpVersion::PHP_7_4);
+Func::for('imagepolygon')->arguments(fn (int $args): bool => $args < 4, since: PhpVersion::PHP_8_0);
+Func::for('imageopenpolygon')->arguments(fn (int $args): bool => $args < 4, since: PhpVersion::PHP_8_0);
+Func::for('imagefilledpolygon')->arguments(fn (int $args): bool => $args < 4, since: PhpVersion::PHP_8_0);
+Func::for('mktime')->arguments(fn (int $args): bool => $args === 0, until: PhpVersion::PHP_7_4);
+Func::for('mb_parse_str')->arguments(fn (int $args): bool => $args <= 1, until: PhpVersion::PHP_7_4);
+Func::for('mb_strrpos')->argumentType(2, String_::class, until: PhpVersion::PHP_7_4);
+Func::for('odbc_exec')->arguments(fn (int $args): bool => $args >= 3, until: PhpVersion::PHP_7_4);
+Func::for('openssl_seal')->arguments(fn (int $args): bool => $args < 5, until: PhpVersion::PHP_7_4);
+Func::for('openssl_open')->arguments(fn (int $args): bool => $args < 5, until: PhpVersion::PHP_7_4);
+Func::for('parse_str')->arguments(fn (int $args): bool => $args === 1, until: PhpVersion::PHP_7_4);
+Func::for('password_hash')->option(2, 'salt', until: PhpVersion::PHP_7_4);
+Func::for('pg_connect')->arguments(fn (int $args): bool => $args > 2, until: PhpVersion::PHP_7_4);
+Func::for('sem_get')->argumentType(3, Int_::class, until: PhpVersion::PHP_7_4);
+Func::for('vsprintf')->argumentType(1, Array_::class, untilOtherwise: PhpVersion::PHP_7_4);
+Func::for('vfprintf')->argumentType(2, Array_::class, untilOtherwise: PhpVersion::PHP_7_4);
+Func::for('vprintf')->argumentType(1, Array_::class, untilOtherwise: PhpVersion::PHP_7_4);

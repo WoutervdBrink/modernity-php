@@ -26,8 +26,8 @@ Feature::for(Node\ArrayItem::class)->sinceWhen(function (Node\ArrayItem $node): 
 
     return null;
 });
-Feature::for(Node\Attribute::class);
-Feature::for(Node\AttributeGroup::class);
+Feature::for(Node\Attribute::class)->since(PhpVersion::PHP_8_0);
+Feature::for(Node\AttributeGroup::class)->since(PhpVersion::PHP_8_0);
 Feature::for(Node\ClosureUse::class);
 Feature::for(Node\Const_::class)->sinceWhen(function (Node\Const_ $node): ?PhpVersion {
     // As of PHP 5.6, scalar expressions are allowed in constant declarations.
@@ -82,7 +82,7 @@ Feature::for(Node\StaticVar::class)->sinceWhen(function (Node\StaticVar $node): 
 
     return null;
 });
-Feature::for(Node\UnionType::class);
+Feature::for(Node\UnionType::class)->since(PhpVersion::PHP_8_0);
 Feature::for(Node\UseItem::class)->sinceWhen(function (Node\UseItem $node): PhpVersion {
     if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT || $node->type === Node\Stmt\Use_::TYPE_FUNCTION) {
         return PhpVersion::PHP_5_6;

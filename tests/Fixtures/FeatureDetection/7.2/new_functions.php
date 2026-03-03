@@ -14,7 +14,7 @@ DOMNamedNodeMap::count();
 ftp_append();
 imagesetclip();
 imagegetclip();
-imageopenpolygon();
+imageopenpolygon($im, $points, $num, $color);
 imageresolution();
 imagecreatefrombmp();
 imagebmp();

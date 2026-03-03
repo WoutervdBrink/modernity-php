@@ -4,8 +4,10 @@ use App\Catalogue\Clazz;
 use App\Catalogue\Feature;
 use App\Language\PhpVersionConstraint;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -59,4 +61,20 @@ Feature::for(Catch_::class)->rule(function (Catch_ $node): PhpVersionConstraint 
     }
 
     return $constraint;
+});
+
+Feature::for(New_::class)->rule(function (New_ $node): PhpVersionConstraint {
+    if ($node->class instanceof Name) {
+        return Clazz::constraintFor($node->class->name);
+    }
+
+    return PhpVersionConstraint::open();
+});
+
+Feature::for(Param::class)->rule(function (Param $node): PhpVersionConstraint {
+    if ($node->type instanceof Name) {
+        return Clazz::constraintFor($node->type->name);
+    }
+
+    return PhpVersionConstraint::open();
 });

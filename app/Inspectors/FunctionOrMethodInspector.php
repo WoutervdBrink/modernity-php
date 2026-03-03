@@ -21,6 +21,14 @@ final class FunctionOrMethodInspector implements Inspector
         /** @var ?PhpVersion $since */
         $since = null;
 
+        /** @var ?PhpVersion $until */
+        $until = null;
+
+        // As of PHP 8.0, __autoload() autoloading behavior is removed.
+        if ($node instanceof Node\Stmt\Function_ && $node->name->name === '__autoload') {
+            $until = PhpVersion::PHP_7_4;
+        }
+
         if (! empty($node->returnType)) {
             $returnType = ($node->returnType instanceof Node\Identifier || $node->returnType instanceof Node\Name)
                 ? $node->returnType->toString()
@@ -30,6 +38,16 @@ final class FunctionOrMethodInspector implements Inspector
             // https://wiki.php.net/rfc/noreturn_type
             if ($returnType === 'noreturn') {
                 $since = PhpVersion::PHP_8_1;
+            }
+
+            // As of PHP 8.0, the static return type can be specified for methods.
+            if (($node instanceof Node\Stmt\ClassMethod) && $returnType === 'static') {
+                $since = PhpVersion::PHP_8_0;
+            }
+
+            // As of PHP 8.0, the 'mixed' type was introduced as a return type.
+            if ($returnType === 'mixed') {
+                $since = PhpVersion::PHP_8_0;
             }
 
             // As of PHP 7.2, the 'object' type was introduced as a return type.
@@ -46,9 +64,6 @@ final class FunctionOrMethodInspector implements Inspector
             // In any case, having a return type at all was introduced in PHP 7.0.
             $since = $since ?? PhpVersion::PHP_7_0;
         }
-
-        /** @var ?PhpVersion $until */
-        $until = null;
 
         /** @var array<string, bool> $paramMap */
         $paramMap = [];
@@ -73,6 +88,11 @@ final class FunctionOrMethodInspector implements Inspector
                 // The 'object' type declaration was introduced in PHP 7.2.
                 if ($param->type->name === 'object') {
                     $since = PhpVersion::max($since, PhpVersion::PHP_7_2);
+                }
+
+                // The 'mixed' type declaration was introduced in PHP 8.0.
+                if ($param->type->name === 'mixed') {
+                    $since = PhpVersion::max($since, PhpVersion::PHP_8_0);
                 }
             }
 

@@ -53,6 +53,16 @@ Feature::for(Node\Stmt\ClassMethod::class)
     ->sinceWhen(function (Node\Stmt\ClassMethod $node): ?PhpVersion {
         $name = $node->name->toString();
 
+        // As of PHP 8.0, constructors can contain promoted properties.
+        // https://www.php.net/manual/en/migration80.new-features.php#migration80.new-features.core.property-promotion
+        if ($name === '__construct') {
+            foreach ($node->params as $param) {
+                if ($param->flags & Modifiers::VISIBILITY_MASK) {
+                    return PhpVersion::PHP_8_0;
+                }
+            }
+        }
+
         // As of PHP 7.0, it is allowed to use semi-reserved keywords as method names.
         // https://wiki.php.net/rfc/context_sensitive_lexer
         if (Quirks::isSemiReservedKeyword($name)) {
@@ -72,8 +82,13 @@ Feature::for(Node\Stmt\ClassMethod::class)
     ->untilWhen(function (Node\Stmt\ClassMethod $node): ?PhpVersion {
         // As of PHP 7.2, using the __autoload magic class method is deprecated.
         // https://www.php.net/manual/en/language.oop5.changelog.php
-        if ($node->name->toString() === '__autoload') {
+        if (($name = $node->name->toString()) === '__autoload') {
             return PhpVersion::PHP_7_1;
+        }
+
+        // As of PHP 8.0, applying the final modifier to a private method produces a warning.
+        if ($node->flags & (Modifiers::FINAL | Modifiers::PRIVATE)) {
+            return PhpVersion::PHP_7_4;
         }
 
         return null;
@@ -89,6 +104,10 @@ Feature::for(Node\Stmt\Class_::class)
 
         // Idem for PHP 7.2 and 'object'.
         'object' => PhpVersion::PHP_7_1,
+
+        // Idem for PHP 8.0 and 'match'.
+        'match' => PhpVersion::PHP_7_4,
+
         default => null,
     });
 Feature::for(Node\Stmt\Const_::class);
@@ -159,6 +178,9 @@ Feature::for(Node\Stmt\Interface_::class)
 
         // Idem for PHP 7.2 and 'object'.
         'object' => PhpVersion::PHP_7_1,
+
+        // Idem for PHP 8.0 and 'match'.
+        'match' => PhpVersion::PHP_7_4,
         default => null,
     });
 Feature::for(Node\Stmt\Label::class)->since(PhpVersion::PHP_5_3);
@@ -169,6 +191,11 @@ Feature::for(Node\Stmt\Property::class)->sinceWhen(function (Node\Stmt\Property 
     // https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
     if ($node->flags & Modifiers::READONLY) {
         return PhpVersion::PHP_8_1;
+    }
+
+    // The 'mixed' type was introduced in PHP 8.0.
+    if ($node->type instanceof Node\Identifier && $node->type->name === 'mixed') {
+        return PhpVersion::PHP_8_0;
     }
 
     // As of PHP 7.4, properties can be typed.
@@ -210,6 +237,10 @@ Feature::for(Node\Stmt\Trait_::class)
 
         // Idem for PHP 7.2 and 'object'.
         'object' => PhpVersion::PHP_7_1,
+
+        // Idem for PHP 8.0 and 'match'.
+        'match' => PhpVersion::PHP_7_4,
+
         default => null,
     });
 Feature::for(Node\Stmt\TryCatch::class);

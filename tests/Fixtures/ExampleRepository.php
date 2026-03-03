@@ -8,16 +8,10 @@ use InvalidArgumentException;
 
 readonly class ExampleRepository
 {
-    /** @var list<Example> */
-    private array $examples;
-
     /**
-     * @param  list<Example>  $examples
+     * @param  Example[]  $examples
      */
-    public function __construct(array $examples)
-    {
-        $this->examples = $examples;
-    }
+    public function __construct(public string $name, private array $examples) {}
 
     /**
      * @return Generator<Example>
@@ -34,13 +28,15 @@ readonly class ExampleRepository
      *
      * @see ExampleRepository::fromSpec() for documentation of the specification.
      */
-    public static function fromFile(string $path): self
+    public static function fromFile(string $name, string $path): self
     {
-        if (! file_exists($path) || ! is_readable($path)) {
+        $contents = file_get_contents($path);
+
+        if ($contents === false) {
             throw new InvalidArgumentException('File '.$path.' does not exist or is not readable');
         }
 
-        return self::fromSpec(file_get_contents($path));
+        return self::fromSpec($name, $contents);
     }
 
     /**
@@ -62,34 +58,39 @@ readonly class ExampleRepository
      *
      * PHP versions are to be specified in <code><major>.<minor></code> format, e.g. <code>5.6</code>.
      */
-    public static function fromSpec(string $spec): self
+    public static function fromSpec(string $name, string $spec): self
     {
-        $examples = explode("#Test\n", $spec);
+        $specs = explode("#Test\n", $spec);
 
-        $examples = array_filter($examples);
+        $specs = array_filter($specs);
 
-        $examples = array_map(Example::fromSpec(...), $examples);
+        /** @var Example[] $examples */
+        $examples = [];
 
-        return new self($examples);
+        foreach ($specs as $spec) {
+            array_push($examples, ...Example::fromSpec($spec));
+        }
+
+        return new self($name, $examples);
     }
 
     /**
      * @return Generator<self>
      */
-    public static function fromDirectory(string $path): Generator
+    public static function fromDirectory(string $name, string $path): Generator
     {
         if (! file_exists($path) || ! is_dir($path)) {
             throw new InvalidArgumentException('Directory '.$path.' does not exist or is not a directory');
         }
 
         $iterator = new DirectoryIterator($path);
-        /** @var DirectoryIterator $file */
+
         foreach ($iterator as $file) {
             if (! $file->isFile()) {
                 continue;
             }
 
-            yield ExampleRepository::fromFile($file->getRealPath());
+            yield ExampleRepository::fromFile($name, $file->getRealPath());
         }
     }
 }

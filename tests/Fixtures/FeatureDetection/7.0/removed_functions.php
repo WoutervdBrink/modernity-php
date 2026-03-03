@@ -106,5 +106,4 @@ imagepsfreefont();
 imagepsloadfont();
 imagepsslantfont();
 imagepstext();
-ldap_sort();
 ?>

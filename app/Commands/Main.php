@@ -90,7 +90,7 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-$var{$idx};
+assert('a');
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];

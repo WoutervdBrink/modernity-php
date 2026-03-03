@@ -112,9 +112,12 @@ Feature::for(Node\Expr\BitwiseNot::class);
 Feature::for(Node\Expr\BooleanNot::class);
 Feature::for(Node\Expr\ClassConstFetch::class)
     ->sinceWhen(function (Node\Expr\ClassConstFetch $node): ?PhpVersion {
-        // https://www.php.net/manual/en/language.oop5.changelog.php
         if ($node->name instanceof Node\Identifier && $node->name->name === 'class') {
-            return PhpVersion::PHP_5_5;
+            // As of PHP 5.5, we can use ::class on classes to get the class name, e.g. Foo::class.
+            // As of PHP 8.0, we can also do this on instances, e.g. $foo::class.
+            return $node->class instanceof Node\Name
+                ? PhpVersion::PHP_5_5
+                : PhpVersion::PHP_8_0;
         }
 
         return null;
@@ -209,7 +212,7 @@ Feature::for(List_::class)
 
         return null;
     });
-Feature::for(Node\Expr\Match_::class);
+Feature::for(Node\Expr\Match_::class)->since(PhpVersion::PHP_8_0);
 Feature::for(Node\Expr\MethodCall::class)->sinceWhen(function (Node\Expr\MethodCall $node): ?PhpVersion {
     // As of PHP 7.0, class members can be accessed on cloning.
     if ($node->var instanceof Node\Expr\Clone_) {
@@ -265,16 +268,7 @@ Feature::for(Node\Expr\ShellExec::class);
 Feature::for(Node\Expr\StaticCall::class);
 Feature::for(Node\Expr\StaticPropertyFetch::class);
 Feature::for(Node\Expr\Ternary::class);
-Feature::for(Node\Expr\Throw_::class)->sinceWhen(function (Node\Expr\Throw_ $node) {
-    $parent = $node->getAttribute('parent');
-
-    // As of PHP 8.0.0, the throw keyword is an expression and may be used in any expression context.
-    if ($parent && ! $parent instanceof Node\Stmt\Expression) {
-        return PhpVersion::PHP_8_0;
-    }
-
-    return null;
-});
+Feature::for(Node\Expr\Throw_::class);
 Feature::for(Node\Expr\UnaryMinus::class);
 Feature::for(Node\Expr\UnaryPlus::class);
 Feature::for(Node\Expr\Variable::class)->untilWhen(function (Node\Expr\Variable $node) {
@@ -283,11 +277,23 @@ Feature::for(Node\Expr\Variable::class)->untilWhen(function (Node\Expr\Variable 
         return PhpVersion::PHP_5_6;
     }
 
+    // As of PHP 8.0, $php_errormsg is no longer available.
+    if ($node->name === 'php_errormsg') {
+        return PhpVersion::PHP_7_4;
+    }
+
     return null;
 });
 Feature::for(Node\Expr\YieldFrom::class)->since(PhpVersion::PHP_7_0); // https://wiki.php.net/rfc/generator-delegation
 Feature::for(Node\Expr\Yield_::class)->since(PhpVersion::PHP_5_5); // https://www.php.net/manual/en/language.generators.overview.php
 Feature::for(Node\Expr\Cast\Unset_::class)->until(PhpVersion::PHP_7_4); // https://www.php.net/manual/en/language.types.null.php#language.types.null.casting
+Feature::for(Node\Expr\Cast\Double::class)->untilWhen(function (Node\Expr\Cast\Double $node): ?PhpVersion {
+    if ($node->getAttribute('kind', Node\Expr\Cast\Double::KIND_DOUBLE) === Node\Expr\Cast\Double::KIND_REAL) {
+        return PhpVersion::PHP_7_4;
+    }
+
+    return null;
+});
 Feature::for(Node\Expr\AssignOp\Coalesce::class)->since(PhpVersion::PHP_7_4); // https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.null-coalescing-assignment-operator
 Feature::for(Node\Expr\AssignOp\Pow::class)->since(PhpVersion::PHP_5_6); // https://wiki.php.net/rfc/pow-operator
 Feature::for(Node\Expr\BinaryOp\Coalesce::class)->since(PhpVersion::PHP_7_0); // https://wiki.php.net/rfc/isset_ternary
