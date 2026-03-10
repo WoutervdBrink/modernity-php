@@ -63,7 +63,8 @@ Feature::for(Node\Stmt\ClassMethod::class)
         if ($name === '__construct') {
             foreach ($node->params as $param) {
                 if ($param->flags & Modifiers::VISIBILITY_MASK) {
-                    return PhpVersion::PHP_8_0;
+                    // But only in PHP 8.5 can you promote final properties.
+                    return $param->flags & Modifiers::FINAL ? PhpVersion::PHP_8_5 : PhpVersion::PHP_8_0;
                 }
             }
         }
@@ -126,7 +127,13 @@ Feature::for(Node\Stmt\Class_::class)
 
         default => null,
     });
-Feature::for(Node\Stmt\Const_::class);
+Feature::for(Node\Stmt\Const_::class)->sinceWhen(function (Node\Stmt\Const_ $node): ?PhpVersion {
+    if (! empty($node->attrGroups)) {
+        return PhpVersion::PHP_8_5;
+    }
+
+    return null;
+});
 Feature::for(Node\Stmt\Continue_::class)->untilWhen(function (Node\Stmt\Continue_ $node): ?PhpVersion {
     // As of PHP 7.0, continue statements no longer allow their argument to be a constant.
     if ($node->num instanceof Node\Expr\ConstFetch) {
@@ -209,7 +216,8 @@ Feature::for(Node\Stmt\Nop::class);
 Feature::for(Node\Stmt\Property::class)->sinceWhen(function (Node\Stmt\Property $node): ?PhpVersion {
     // Asymmetric property visibility was added in PHP 8.4.
     if ($node->flags & Modifiers::VISIBILITY_SET_MASK) {
-        return PhpVersion::PHP_8_4;
+        // But only in 8.5 can we apply them to static properties.
+        return $node->flags & Modifiers::STATIC ? PhpVersion::PHP_8_5 : PhpVersion::PHP_8_4;
     }
 
     // The readonly modifier was introduced in PHP 8.1.

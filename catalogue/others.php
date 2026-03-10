@@ -4,6 +4,7 @@ use App\Catalogue\Feature;
 use App\Language\PhpVersion;
 use App\Language\Quirks;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 
 Feature::for(Node\Arg::class)->sinceWhen(function (Node\Arg $node): ?PhpVersion {
     // As of PHP 5.6, arrays and traversable objects can be unpacked when calling functions.
@@ -29,9 +30,14 @@ Feature::for(Node\ArrayItem::class)->sinceWhen(function (Node\ArrayItem $node): 
 });
 Feature::for(Node\Attribute::class)
     ->sinceWhen(function (Node\Attribute $node): ?PhpVersion {
-        // // Initializers as attribute argument values were added in PHP 8.1.
-        if (array_any($node->args, fn ($arg) => $arg->value instanceof Node\Expr\New_)) {
+        // Initializers as attribute argument values were added in PHP 8.1.
+        if (array_any($node->args, fn (Arg $arg): bool => $arg->value instanceof Node\Expr\New_)) {
             return PhpVersion::PHP_8_1;
+        }
+
+        // First class callables as attribute argument values were added in PHP 8.5.
+        if (array_any($node->args, fn (Arg $arg): bool => $arg->value instanceof Node\Expr\FuncCall && $arg->value->isFirstClassCallable())) {
+            return PhpVersion::PHP_8_5;
         }
 
         return PhpVersion::PHP_8_0;
@@ -43,6 +49,16 @@ Feature::for(Node\Const_::class)->sinceWhen(function (Node\Const_ $node): ?PhpVe
     // If $node->value is instanceof Scalar, then it is a scalar, *not* a scalar expression.
 
     if (! $node->value instanceof Node\Scalar) {
+        // As of PHP 8.5, casts can be used in constant expressions.
+        if ($node->value instanceof Node\Expr\Cast) {
+            return PhpVersion::PHP_8_5;
+        }
+
+        // As of PHP 8.5, first class callables can be used in defaults of const values.
+        if ($node->value instanceof Node\Expr\FuncCall && $node->value->isFirstClassCallable()) {
+            return PhpVersion::PHP_8_5;
+        }
+
         // As of PHP 8.1, 'new' initializers can be used in defaults of const values.
         if ($node->value instanceof Node\Expr\New_) {
             return PhpVersion::PHP_8_1;
@@ -78,10 +94,15 @@ Feature::for(Node\PropertyHook::class)->since(PhpVersion::PHP_8_4);
 Feature::for(Node\PropertyItem::class)->sinceWhen(function (Node\PropertyItem $node): ?PhpVersion {
     // 5.6: scalar expressions are allowed
     // 8.1: new class() is allowed
-    // 8.3: anything is allowed
+    // 8.3: anything but closures is allowed
+    // 8.5: closures are allowed
     if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {
         if ($node->default instanceof Node\Expr\New_) {
             return PhpVersion::PHP_8_1;
+        }
+
+        if ($node->default instanceof Node\Expr\FuncCall && $node->default->isFirstClassCallable()) {
+            return PhpVersion::PHP_8_5;
         }
 
         return Quirks::isScalarExpression($node->default) ? PhpVersion::PHP_5_6 : PhpVersion::PHP_8_3;
@@ -92,10 +113,15 @@ Feature::for(Node\PropertyItem::class)->sinceWhen(function (Node\PropertyItem $n
 Feature::for(Node\StaticVar::class)->sinceWhen(function (Node\StaticVar $node): ?PhpVersion {
     // 5.6: scalar expressions are allowed
     // 8.1: new class() is allowed
-    // 8.3: anything is allowed
+    // 8.3: anything but closures is allowed
+    // 8.5: closures are allowed
     if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {
         if ($node->default instanceof Node\Expr\New_) {
             return PhpVersion::PHP_8_1;
+        }
+
+        if ($node->default instanceof Node\Expr\FuncCall && $node->default->isFirstClassCallable()) {
+            return PhpVersion::PHP_8_5;
         }
 
         return Quirks::isScalarExpression($node->default) ? PhpVersion::PHP_5_6 : PhpVersion::PHP_8_3;

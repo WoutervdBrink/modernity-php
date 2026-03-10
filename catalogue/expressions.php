@@ -108,6 +108,7 @@ Feature::for(Node\Expr\BinaryOp::class)->untilWhen(function (Node\Expr\BinaryOp 
 
     return null;
 });
+Feature::for(Node\Expr\BinaryOp\Pipe::class)->since(PhpVersion::PHP_8_5);
 Feature::for(Node\Expr\BitwiseNot::class);
 Feature::for(Node\Expr\BooleanNot::class);
 Feature::for(Node\Expr\CallLike::class)

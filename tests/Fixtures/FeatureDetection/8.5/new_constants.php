@@ -1,0 +1,56 @@
+#Test
+Description: New constants in PHP 8.5
+Parser: 8.5
+Min: 8.5
+EveryLine: true
+
+<?php
+echo PHP_BUILD_DATE;
+echo PHP_BUILD_PROVIDER;
+echo CURLINFO_USED_PROXY;
+echo CURLINFO_HTTPAUTH_USED;
+echo CURLINFO_PROXYAUTH_USED;
+echo CURLINFO_CONN_ID;
+echo CURLINFO_QUEUE_TIME_T;
+echo CURLOPT_INFILESIZE_LARGE;
+echo CURLFOLLOW_ALL;
+echo CURLFOLLOW_OBEYCODE;
+echo CURLFOLLOW_FIRSTONLY;
+echo FILTER_THROW_ON_FAILURE;
+echo DECIMAL_COMPACT_SHORT;
+echo DECIMAL_COMPACT_LONG;
+echo OPENSSL_PKCS1_PSS_PADDING;
+echo PKCS7_NOSMIMECAP;
+echo PKCS7_CRLFEOL;
+echo PKCS7_NOCRL;
+echo PKCS7_NO_DUAL_CONTENT;
+echo POSIX_SC_OPEN_MAX;
+echo IPPROTO_ICMP;
+echo IPPROTO_ICMPV6;
+echo TCP_FUNCTION_BLK;
+echo TCP_FUNCTION_ALIAS;
+echo TCP_REUSPORT_LB_NUMA;
+echo TCP_REUSPORT_LB_NUMA_NODOM;
+echo TCP_REUSPORT_LB_NUMA_CURDOM;
+echo TCP_BBR_ALGORITHM;
+echo AF_PACKET;
+echo IP_BINDANY;
+echo SO_BUSY_POLL;
+echo UDP_SEGMENT;
+echo SHUT_RD;
+echo SHUT_WR;
+echo SHUT_RDWR;
+echo T_VOID_CAST;
+echo T_PIPE;
+echo IMAGETYPE_SVG;
+echo NumberFormatter::CURRENCY_ISO;
+echo NumberFormatter::CURRENCY_PLURAL;
+echo NumberFormatter::CASH_CURRENCY;
+echo NumberFormatter::CURRENCY_STANDARD;
+echo IntlListFormatter::TYPE_AND;
+echo IntlListFormatter::TYPE_OR;
+echo IntlListFormatter::TYPE_UNITS;
+echo IntlListFormatter::WIDTH_WIDE;
+echo IntlListFormatter::WIDTH_SHORT;
+echo IntlListFormatter::WIDTH_NARROW;
+?>

@@ -74,6 +74,11 @@ final class FunctionOrMethodInspector implements Inspector
         $paramMap = [];
 
         foreach ($node->params as $param) {
+            if ($param->default instanceof Node\Expr\FuncCall && $param->default->isFirstClassCallable()) {
+                // First class callables as default parameter values were added in PHP 8.5.
+                $since = PhpVersion::max($since, PhpVersion::PHP_8_5);
+            }
+
             if ($param->default instanceof Node\Expr\New_) {
                 // Initializers as default parameter values were added in PHP 8.1.
                 $since = PhpVersion::max($since, PhpVersion::PHP_8_1);

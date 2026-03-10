@@ -63,17 +63,6 @@ class baz {
 
 
 #Test
-Description: Attributes on constants were added in PHP 8.0
-Parser: 8.0
-Min: 8.0
-
-<?php
-#[Example]
-const CONSTANT_WITH_ATTRIBUTE = 3;
-?>
-
-
-#Test
 Description: Attributes on class constants were added in PHP 8.0
 Parser: 8.0
 Min: 8.0
@@ -148,17 +137,6 @@ class baz {
     #[Example, Another]
     public $property_with_attribute;
 }
-?>
-
-
-#Test
-Description: Attribute groups on constants were added in PHP 8.0
-Parser: 8.0
-Min: 8.0
-
-<?php
-#[Example, Another]
-const CONSTANT_WITH_ATTRIBUTE = 3;
 ?>
 
 
