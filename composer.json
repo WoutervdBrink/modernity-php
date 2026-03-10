@@ -13,7 +13,7 @@
     "source": "https://github.com/woutervdbrink/modernity-php"
   },
   "require": {
-    "php": "^8.4",
+    "php": "^8.5",
     "ext-dom": "*",
     "ext-ds": "*",
     "illuminate/view": "^12.17",
