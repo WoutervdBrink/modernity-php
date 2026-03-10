@@ -90,7 +90,16 @@ Feature::for(Node\StaticVar::class)->sinceWhen(function (Node\StaticVar $node): 
 
     return null;
 });
-Feature::for(Node\UnionType::class)->since(PhpVersion::PHP_8_0);
+Feature::for(Node\UnionType::class)->sinceWhen(function (Node\UnionType $node): PhpVersion {
+    // As of PHP 8.2, union and intersection types can be combined, as long as they are in DNF.
+    foreach ($node->types as $type) {
+        if ($type instanceof Node\IntersectionType) {
+            return PhpVersion::PHP_8_2;
+        }
+    }
+
+    return PhpVersion::PHP_8_0;
+});
 Feature::for(Node\UseItem::class)->sinceWhen(function (Node\UseItem $node): PhpVersion {
     if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT || $node->type === Node\Stmt\Use_::TYPE_FUNCTION) {
         return PhpVersion::PHP_5_6;

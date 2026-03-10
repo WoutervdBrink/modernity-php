@@ -91,7 +91,7 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-#[Foo(new Bar())] function baz() {}
+function foo((P&Q)|R $bar) {}
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];

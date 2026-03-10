@@ -28,6 +28,7 @@ enum PhpVersion: int
     case PHP_8_2 = 80200;
     case PHP_8_3 = 80300;
     case PHP_8_4 = 80400;
+    case PHP_8_5 = 80500;
 
     /**
      * Get the amount of registered PHP versions.
@@ -162,7 +163,7 @@ enum PhpVersion: int
 
     public static function getNewestSupported(): self
     {
-        return self::PHP_8_4;
+        return self::PHP_8_5;
     }
 
     public static function getOldestSupported(): self

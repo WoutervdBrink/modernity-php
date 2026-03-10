@@ -94,6 +94,13 @@ Feature::for(Node\Stmt\ClassMethod::class)
         return null;
     });
 Feature::for(Node\Stmt\Class_::class)
+    ->sinceWhen(function (Node\Stmt\Class_ $node): ?PhpVersion {
+        if ($node->isReadonly()) {
+            return PhpVersion::PHP_8_2;
+        }
+
+        return null;
+    })
     ->untilWhen(fn (Node\Stmt\Class_ $node): ?PhpVersion => match ($node->name?->toString() ?? null) {
         // As of PHP 7.0, it is not allowed to use 'bool', 'int', 'float', 'string', 'null', 'true' or 'false' as a
         // class name.

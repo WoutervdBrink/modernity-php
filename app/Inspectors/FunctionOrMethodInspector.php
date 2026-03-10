@@ -34,8 +34,13 @@ final class FunctionOrMethodInspector implements Inspector
                 ? $node->returnType->toString()
                 : '';
 
+            // As of PHP 8.2, the null, true and false types can be used standalone.
+            if ($returnType === 'true' || $returnType === 'false' || $returnType === 'null') {
+                $since = PhpVersion::PHP_8_2;
+            }
+
             // As of PHP 8.1, the never type can be specified to indicate a method or function never returns.
-            https:// wiki.php.net/rfc/noreturn_type
+            // https:// wiki.php.net/rfc/noreturn_type
             if ($returnType === 'never') {
                 $since = PhpVersion::PHP_8_1;
             }
