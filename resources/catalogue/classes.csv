@@ -55,3 +55,8 @@ DOMLocator,,7.4
 DOMUserDataHandler,,7.4
 DOMTypeInfo,,7.4
 DOMStringExtend,,7.4
+CURLStringFile,8.1,
+finfo,8.1,
+IntlDatePatternGenerator,8.1,
+ReflectionFiber,8.1,
+Fiber,8.1,

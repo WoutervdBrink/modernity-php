@@ -15,9 +15,9 @@ Feature::for(Node\Scalar\Int_::class)
         // https://www.php.net/manual/en/language.types.integer.php#language.types.integer.syntax
         if (
             $kind === Node\Scalar\Int_::KIND_OCT &&
-            strtolower($rawValue[1]) === 'o'
+            ($rawValue[1] === 'o' || $rawValue[1] === 'O')
         ) {
-            return PhpVersion::PHP_8_0;
+            return PhpVersion::PHP_8_1;
         }
 
         // As of PHP 7.4, integer literals may contain underscores between digits.

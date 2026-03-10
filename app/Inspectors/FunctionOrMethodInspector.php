@@ -34,9 +34,9 @@ final class FunctionOrMethodInspector implements Inspector
                 ? $node->returnType->toString()
                 : '';
 
-            // As of PHP 8.1, the noreturn type can be specified to indicate a method or function never returns.
-            // https://wiki.php.net/rfc/noreturn_type
-            if ($returnType === 'noreturn') {
+            // As of PHP 8.1, the never type can be specified to indicate a method or function never returns.
+            https:// wiki.php.net/rfc/noreturn_type
+            if ($returnType === 'never') {
                 $since = PhpVersion::PHP_8_1;
             }
 
@@ -69,6 +69,11 @@ final class FunctionOrMethodInspector implements Inspector
         $paramMap = [];
 
         foreach ($node->params as $param) {
+            if ($param->default instanceof Node\Expr\New_) {
+                // Initializers as default parameter values were added in PHP 8.1.
+                $since = PhpVersion::max($since, PhpVersion::PHP_8_1);
+            }
+
             if ($param->type instanceof Node\Identifier) {
                 // Scalar type declarations were introduced in PHP 7.0.
                 if (

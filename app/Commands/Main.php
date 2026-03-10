@@ -9,6 +9,7 @@ use LaravelZero\Framework\Commands\Command;
 use Override;
 use PhpParser\Error;
 use PhpParser\Node;
+use PhpParser\NodeDumper;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
@@ -90,7 +91,7 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-assert('a');
+#[Foo(new Bar())] function baz() {}
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];
@@ -98,6 +99,8 @@ CODE;
             $this->table(['Depth', 'Node', 'Min', 'Max'], $nodeVisitor->nodes);
 
             $this->line($prettyPrinter->prettyPrint($stmts));
+
+            $this->line(new NodeDumper()->dump($stmts));
 
             $constraint = $minMax->constraint;
 

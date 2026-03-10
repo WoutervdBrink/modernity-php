@@ -26,7 +26,15 @@ Feature::for(Node\ArrayItem::class)->sinceWhen(function (Node\ArrayItem $node): 
 
     return null;
 });
-Feature::for(Node\Attribute::class)->since(PhpVersion::PHP_8_0);
+Feature::for(Node\Attribute::class)
+    ->sinceWhen(function (Node\Attribute $node): ?PhpVersion {
+        // // Initializers as attribute argument values were added in PHP 8.1.
+        if (array_any($node->args, fn ($arg) => $arg->value instanceof Node\Expr\New_)) {
+            return PhpVersion::PHP_8_1;
+        }
+
+        return PhpVersion::PHP_8_0;
+    });
 Feature::for(Node\AttributeGroup::class)->since(PhpVersion::PHP_8_0);
 Feature::for(Node\ClosureUse::class);
 Feature::for(Node\Const_::class)->sinceWhen(function (Node\Const_ $node): ?PhpVersion {
@@ -48,7 +56,7 @@ Feature::for(Node\Const_::class)->sinceWhen(function (Node\Const_ $node): ?PhpVe
 Feature::for(Node\DeclareItem::class);
 Feature::for(Node\Identifier::class);
 Feature::for(Node\InterpolatedStringPart::class);
-Feature::for(Node\IntersectionType::class);
+Feature::for(Node\IntersectionType::class)->since(PhpVersion::PHP_8_1);
 Feature::for(Node\MatchArm::class);
 Feature::for(Node\Name::class);
 Feature::for(Node\NullableType::class)->since(PhpVersion::PHP_7_1);

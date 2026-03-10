@@ -108,6 +108,9 @@ Feature::for(Node\Stmt\Class_::class)
         // Idem for PHP 8.0 and 'match'.
         'match' => PhpVersion::PHP_7_4,
 
+        // Idem for PHP 8.1 and 'never' or 'readonly',
+        'never', 'readonly' => PhpVersion::PHP_8_0,
+
         default => null,
     });
 Feature::for(Node\Stmt\Const_::class);
@@ -181,6 +184,10 @@ Feature::for(Node\Stmt\Interface_::class)
 
         // Idem for PHP 8.0 and 'match'.
         'match' => PhpVersion::PHP_7_4,
+
+        // Idem for PHP 8.1 and 'never' or 'readonly',
+        'never', 'readonly' => PhpVersion::PHP_8_0,
+
         default => null,
     });
 Feature::for(Node\Stmt\Label::class)->since(PhpVersion::PHP_5_3);
@@ -191,6 +198,15 @@ Feature::for(Node\Stmt\Property::class)->sinceWhen(function (Node\Stmt\Property 
     // https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
     if ($node->flags & Modifiers::READONLY) {
         return PhpVersion::PHP_8_1;
+    }
+
+    // Initializers as default static values were added in PHP 8.1.
+    if ($node->flags & Modifiers::STATIC) {
+        foreach ($node->props as $prop) {
+            if ($prop->default instanceof Node\Expr\New_) {
+                return PhpVersion::PHP_8_1;
+            }
+        }
     }
 
     // The 'mixed' type was introduced in PHP 8.0.
@@ -240,6 +256,9 @@ Feature::for(Node\Stmt\Trait_::class)
 
         // Idem for PHP 8.0 and 'match'.
         'match' => PhpVersion::PHP_7_4,
+
+        // Idem for PHP 8.1 and 'never' or 'readonly',
+        'never', 'readonly' => PhpVersion::PHP_8_0,
 
         default => null,
     });

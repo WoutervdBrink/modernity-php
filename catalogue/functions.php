@@ -7,6 +7,7 @@ use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -146,3 +147,10 @@ Func::for('sem_get')->argumentType(3, Int_::class, until: PhpVersion::PHP_7_4);
 Func::for('vsprintf')->argumentType(1, Array_::class, untilOtherwise: PhpVersion::PHP_7_4);
 Func::for('vfprintf')->argumentType(2, Array_::class, untilOtherwise: PhpVersion::PHP_7_4);
 Func::for('vprintf')->argumentType(1, Array_::class, untilOtherwise: PhpVersion::PHP_7_4);
+
+// Changed functions in PHP 8.1.
+Func::for('define')->argumentType(1, New_::class, since: PhpVersion::PHP_8_1);
+Func::for('fputcsv')->arguments(fn (int $args): bool => $args >= 6, since: PhpVersion::PHP_8_1);
+Func::for('hash')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_1);
+Func::for('hash_file')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_1);
+Func::for('hash_init')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_1);

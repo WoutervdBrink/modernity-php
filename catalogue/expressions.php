@@ -110,6 +110,27 @@ Feature::for(Node\Expr\BinaryOp::class)->untilWhen(function (Node\Expr\BinaryOp 
 });
 Feature::for(Node\Expr\BitwiseNot::class);
 Feature::for(Node\Expr\BooleanNot::class);
+Feature::for(Node\Expr\CallLike::class)
+    ->sinceWhen(function (Node\Expr\CallLike $node): ?PhpVersion {
+        // As of PHP 8.1, named arguments are allowed after unpacking.
+        if (! $node->isFirstClassCallable()) {
+            $unpacking = false;
+
+            foreach ($node->getArgs() as $arg) {
+                if ($arg->unpack) {
+                    $unpacking = true;
+                }
+
+                if ($arg->name !== null && $unpacking) {
+                    return PhpVersion::PHP_8_1;
+                }
+            }
+        } else {
+            return PhpVersion::PHP_8_1;
+        }
+
+        return null;
+    });
 Feature::for(Node\Expr\ClassConstFetch::class)
     ->sinceWhen(function (Node\Expr\ClassConstFetch $node): ?PhpVersion {
         if ($node->name instanceof Node\Identifier && $node->name->name === 'class') {
