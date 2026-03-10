@@ -207,6 +207,11 @@ Feature::for(Node\Stmt\Label::class)->since(PhpVersion::PHP_5_3);
 Feature::for(Node\Stmt\Namespace_::class)->since(PhpVersion::PHP_5_3);
 Feature::for(Node\Stmt\Nop::class);
 Feature::for(Node\Stmt\Property::class)->sinceWhen(function (Node\Stmt\Property $node): ?PhpVersion {
+    // Asymmetric property visibility was added in PHP 8.4.
+    if ($node->flags & Modifiers::VISIBILITY_SET_MASK) {
+        return PhpVersion::PHP_8_4;
+    }
+
     // The readonly modifier was introduced in PHP 8.1.
     // https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
     if ($node->flags & Modifiers::READONLY) {

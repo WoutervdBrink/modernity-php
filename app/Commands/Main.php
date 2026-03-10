@@ -91,7 +91,7 @@ final class Main extends Command
 
         $code = <<<'CODE'
 <?php
-class bar { static $baz = 3 + 4 + baz(); } // static class variable
+
 CODE;
         try {
             $stmts = $parser->parse($code) ?? [];

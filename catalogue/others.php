@@ -74,7 +74,7 @@ Feature::for(Node\Param::class)->sinceWhen(function (Node\Param $node): ?PhpVers
 
     return null;
 });
-Feature::for(Node\PropertyHook::class);
+Feature::for(Node\PropertyHook::class)->since(PhpVersion::PHP_8_4);
 Feature::for(Node\PropertyItem::class)->sinceWhen(function (Node\PropertyItem $node): ?PhpVersion {
     // 5.6: scalar expressions are allowed
     // 8.1: new class() is allowed

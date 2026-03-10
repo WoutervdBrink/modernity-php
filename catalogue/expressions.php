@@ -194,7 +194,13 @@ Feature::for(Node\Expr\Empty_::class)->sinceWhen(function (Node\Expr\Empty_ $nod
 Feature::for(Node\Expr\Error::class);
 Feature::for(Node\Expr\ErrorSuppress::class);
 Feature::for(Node\Expr\Eval_::class);
-Feature::for(Node\Expr\Exit_::class);
+Feature::for(Node\Expr\Exit_::class)->untilWhen(function (Node\Expr\Exit_ $node): ?PhpVersion {
+    if (! $node->expr instanceof Node\Scalar\String_ && ! $node->expr instanceof Node\Scalar\Int_) {
+        return PhpVersion::PHP_8_3;
+    }
+
+    return null;
+});
 Feature::for(Node\Expr\FuncCall::class);
 Feature::for(Node\Expr\Include_::class);
 Feature::for(Node\Expr\Instanceof_::class)->sinceWhen(function (Node\Expr\Instanceof_ $node): ?PhpVersion {
