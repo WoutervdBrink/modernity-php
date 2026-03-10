@@ -141,6 +141,11 @@ Feature::for(Node\Expr\ClassConstFetch::class)
                 : PhpVersion::PHP_8_0;
         }
 
+        if ($node->name instanceof Node\Expr\Variable) {
+            // As of PHP 8.3, class constants can be fetched dynamically, e.g. Foo::{$bar}.
+            return PhpVersion::PHP_8_3;
+        }
+
         return null;
     });
 Feature::for(Node\Expr\Clone_::class);

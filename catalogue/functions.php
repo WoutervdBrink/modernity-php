@@ -154,3 +154,14 @@ Func::for('fputcsv')->arguments(fn (int $args): bool => $args >= 6, since: PhpVe
 Func::for('hash')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_1);
 Func::for('hash_file')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_1);
 Func::for('hash_init')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_1);
+
+// Changed functions in PHP 8.3.
+Func::for('posix_getrlimit')->arguments(fn (int $args): bool => $args >= 1, since: PhpVersion::PHP_8_3);
+Func::for('imagerotate')->arguments(fn (int $args): bool => $args >= 4, until: PhpVersion::PHP_8_2);
+Func::for('odbc_autocommit')->argumentIsNull(1, since: PhpVersion::PHP_8_3);
+Func::for('pg_field_is_null')->argumentIsNull(1, since: PhpVersion::PHP_8_3);
+Func::for('pg_fetch_result')->argumentIsNull(1, since: PhpVersion::PHP_8_3);
+Func::for('pg_field_prtlen')->argumentIsNull(1, since: PhpVersion::PHP_8_3);
+Func::for('mt_srand')->argumentIsNull(0, since: PhpVersion::PHP_8_3);
+Func::for('srand')->argumentIsNull(0, since: PhpVersion::PHP_8_3);
+Func::for('strrchr')->arguments(fn (int $args): bool => $args >= 3, since: PhpVersion::PHP_8_3);

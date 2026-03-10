@@ -2,6 +2,7 @@
 
 use App\Catalogue\Feature;
 use App\Language\PhpVersion;
+use App\Language\Quirks;
 use PhpParser\Node;
 
 Feature::for(Node\Arg::class)->sinceWhen(function (Node\Arg $node): ?PhpVersion {
@@ -75,17 +76,29 @@ Feature::for(Node\Param::class)->sinceWhen(function (Node\Param $node): ?PhpVers
 });
 Feature::for(Node\PropertyHook::class);
 Feature::for(Node\PropertyItem::class)->sinceWhen(function (Node\PropertyItem $node): ?PhpVersion {
-    // As of PHP 5.6, scalar expressions are allowed in default property values.
+    // 5.6: scalar expressions are allowed
+    // 8.1: new class() is allowed
+    // 8.3: anything is allowed
     if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {
-        return PhpVersion::PHP_5_6;
+        if ($node->default instanceof Node\Expr\New_) {
+            return PhpVersion::PHP_8_1;
+        }
+
+        return Quirks::isScalarExpression($node->default) ? PhpVersion::PHP_5_6 : PhpVersion::PHP_8_3;
     }
 
     return null;
 });
 Feature::for(Node\StaticVar::class)->sinceWhen(function (Node\StaticVar $node): ?PhpVersion {
-    // As of PHP 8.1, new expressions are allowed in defaults of static variables.
-    if ($node->default instanceof Node\Expr\New_) {
-        return PhpVersion::PHP_8_1;
+    // 5.6: scalar expressions are allowed
+    // 8.1: new class() is allowed
+    // 8.3: anything is allowed
+    if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {
+        if ($node->default instanceof Node\Expr\New_) {
+            return PhpVersion::PHP_8_1;
+        }
+
+        return Quirks::isScalarExpression($node->default) ? PhpVersion::PHP_5_6 : PhpVersion::PHP_8_3;
     }
 
     return null;

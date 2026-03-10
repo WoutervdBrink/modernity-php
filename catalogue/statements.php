@@ -33,6 +33,11 @@ Feature::for(Node\Stmt\Catch_::class)->sinceWhen(function (Node\Stmt\Catch_ $nod
     return null;
 });
 Feature::for(Node\Stmt\ClassConst::class)->sinceWhen(function (Node\Stmt\ClassConst $node): ?PhpVersion {
+    // As of PHP 8.3, class(like) constants can be typed.
+    if ($node->type !== null) {
+        return PhpVersion::PHP_8_3;
+    }
+
     // As of PHP 8.1, class constants can have the final modifier.
     // https://www.php.net/manual/en/language.oop5.constants.php
     if ($node->flags && $node->flags & Modifiers::FINAL) {
@@ -95,8 +100,9 @@ Feature::for(Node\Stmt\ClassMethod::class)
     });
 Feature::for(Node\Stmt\Class_::class)
     ->sinceWhen(function (Node\Stmt\Class_ $node): ?PhpVersion {
+        // Readonly classes were added in 8.2, but only in 8.3 can you make an anonymous class readonly.
         if ($node->isReadonly()) {
-            return PhpVersion::PHP_8_2;
+            return $node->isAnonymous() ? PhpVersion::PHP_8_3 : PhpVersion::PHP_8_2;
         }
 
         return null;

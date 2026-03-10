@@ -2,6 +2,9 @@
 
 namespace App\Language;
 
+use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar;
+
 final class Quirks
 {
     /**
@@ -106,5 +109,18 @@ final class Quirks
     public static function isSuperglobal(string $name): bool
     {
         return in_array($name, self::SUPERGLOBALS);
+    }
+
+    public static function isScalarExpression(Expr $expr): bool
+    {
+        if ($expr instanceof Scalar) {
+            return true;
+        }
+
+        if ($expr instanceof Expr\BinaryOp) {
+            return self::isScalarExpression($expr->left) && self::isScalarExpression($expr->right);
+        }
+
+        return false;
     }
 }
