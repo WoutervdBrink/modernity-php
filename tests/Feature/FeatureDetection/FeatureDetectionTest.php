@@ -10,7 +10,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use Tests\Fixtures\ExampleRepository;
 
-it('detects features correctly', function () {
+it('detects features correctly', function (): void {
     /** @var ExampleRepository[] $repositories */
     $repositories = [];
 

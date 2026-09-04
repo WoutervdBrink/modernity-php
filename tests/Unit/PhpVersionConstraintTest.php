@@ -15,44 +15,44 @@ dataset('version sets', [
     [PhpVersion::PHP_7_0, PhpVersion::PHP_8_1],
 ]);
 
-describe('constructor', function () {
-    it('creates since', function () {
+describe('constructor', function (): void {
+    it('creates since', function (): void {
         $constraint = PhpVersionConstraint::since(PhpVersion::PHP_7_0);
 
         expect($constraint->min)->toBe(PhpVersion::PHP_7_0)
             ->and($constraint->max)->toBeNull();
     });
 
-    it('creates until', function () {
+    it('creates until', function (): void {
         $constraint = PhpVersionConstraint::until(PhpVersion::PHP_7_0);
 
         expect($constraint->min)->toBeNull()
             ->and($constraint->max)->toBe(PhpVersion::PHP_7_0);
     });
 
-    it('defaults to open when since is null', function () {
+    it('defaults to open when since is null', function (): void {
         $constraint = PhpVersionConstraint::since(null);
 
         expect($constraint)->toBe(PhpVersionConstraint::open());
     });
 
-    it('defaults to open when until is null', function () {
+    it('defaults to open when until is null', function (): void {
         $constraint = PhpVersionConstraint::until(null);
 
         expect($constraint)->toBe(PhpVersionConstraint::open());
     });
 
-    it('defaults to open when between values are null', function () {
+    it('defaults to open when between values are null', function (): void {
         $constraint = PhpVersionConstraint::between(null, null);
 
         expect($constraint)->toEqual(PhpVersionConstraint::open());
     });
 
-    it('validates between ordering', function () {
+    it('validates between ordering', function (): void {
         PhpVersionConstraint::between(PhpVersion::PHP_7_0, PhpVersion::PHP_5_6);
     })->throws(InvalidArgumentException::class);
 
-    it('merges with tighter min', function () {
+    it('merges with tighter min', function (): void {
         $a = PhpVersionConstraint::since(PhpVersion::PHP_7_1);
         $b = PhpVersionConstraint::since(PhpVersion::PHP_7_3);
 
@@ -60,14 +60,14 @@ describe('constructor', function () {
             ->and($b->merge($a)->min)->toBe(PhpVersion::PHP_7_3);
     });
 
-    it('merges with tighter max', function () {
+    it('merges with tighter max', function (): void {
         $a = PhpVersionConstraint::until(PhpVersion::PHP_7_4);
         $b = PhpVersionConstraint::until(PhpVersion::PHP_7_2);
 
         expect($a->merge($b)->max)->toBe(PhpVersion::PHP_7_2);
     });
 
-    it('merges with identity on equal values', function () {
+    it('merges with identity on equal values', function (): void {
         $first = PhpVersionConstraint::between(PhpVersion::PHP_5_6, PhpVersion::PHP_7_0);
         $second = PhpVersionConstraint::between(PhpVersion::PHP_5_6, PhpVersion::PHP_7_0);
 
@@ -75,7 +75,7 @@ describe('constructor', function () {
             ->and($second->merge($first))->toEqual($first);
     });
 
-    it('merges with identity on null values', function () {
+    it('merges with identity on null values', function (): void {
         $any = PhpVersionConstraint::since(PhpVersion::PHP_5_6);
         $open = PhpVersionConstraint::open(); // no bounds
 
@@ -83,7 +83,7 @@ describe('constructor', function () {
             ->and($open->merge($any))->toEqual($any);
     });
 
-    it('converts to string', function (?PhpVersion $lower, ?PhpVersion $higher) {
+    it('converts to string', function (?PhpVersion $lower, ?PhpVersion $higher): void {
         $constraint = PhpVersionConstraint::between($lower, $higher);
 
         expect($constraint)

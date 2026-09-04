@@ -5,6 +5,7 @@
   ],
   "rules": {
     "global_namespace_import": true,
-    "final_class": true
+    "final_class": true,
+    "void_return": true
   }
 }

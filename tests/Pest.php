@@ -13,8 +13,9 @@
 
 use App\Language\PhpVersion;
 use App\Language\PhpVersionVector;
+use Tests\TestCase;
 
-pest()->extend(Tests\TestCase::class)->in('Feature');
+pest()->extend(TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ expect()->extend('toHaveSameValues', function (array $expected) {
         ->and($a)->toEqual($b);
 });
 
-expect()->extend('toBeVersionVector', function (float ...$values) {
+expect()->extend('toBeVersionVector', function (float ...$values): void {
     expect($this->value)->toBeInstanceOf(PhpVersionVector::class);
 
     $versions = PhpVersion::orderedCases();

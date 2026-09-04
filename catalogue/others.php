@@ -6,7 +6,7 @@ use App\Language\Quirks;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 
-Feature::for(Node\Arg::class)->sinceWhen(function (Node\Arg $node): ?PhpVersion {
+Feature::for(Arg::class)->sinceWhen(function (Arg $node): ?PhpVersion {
     // As of PHP 5.6, arrays and traversable objects can be unpacked when calling functions.
     // https://www.php.net/manual/en/migration56.new-features.php
     if ($node->unpack) {

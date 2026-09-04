@@ -28,34 +28,34 @@ dataset('invalid versions', [
     '4.0',
 ]);
 
-describe('formatting', function () {
-    it('returns major and minor components', function (PhpVersion $version, int $major, int $minor) {
+describe('formatting', function (): void {
+    it('returns major and minor components', function (PhpVersion $version, int $major, int $minor): void {
         expect($version->getMajor())->toBe($major)
             ->and($version->getMinor())->toBe($minor);
     })->with('version components');
 
-    it('returns the version string', function (PhpVersion $version, int $major, int $minor) {
+    it('returns the version string', function (PhpVersion $version, int $major, int $minor): void {
         expect($version->toVersionString())->toBe($major.'.'.$minor);
     })->with('version components');
 
-    it('retrieves based on version string', function (PhpVersion $version, int $major, int $minor) {
+    it('retrieves based on version string', function (PhpVersion $version, int $major, int $minor): void {
         expect(PhpVersion::fromVersionString($major.'.'.$minor))->toBe($version);
     })->with('version components');
 
-    it('rejects an invalid version string', function () {
+    it('rejects an invalid version string', function (): void {
         PhpVersion::fromVersionString('9.a');
     })->with('invalid versions')->throws(InvalidArgumentException::class);
 });
 
-describe('ordered cases', function () {
-    it('returns an array of PhpVersion instances', function () {
+describe('ordered cases', function (): void {
+    it('returns an array of PhpVersion instances', function (): void {
         $actual = PhpVersion::orderedCases();
 
         expect($actual)->toBeArray()
             ->and($actual)->each->toBeInstanceOf(PhpVersion::class);
     });
 
-    it('contains all and only the enum cases', function () {
+    it('contains all and only the enum cases', function (): void {
         $expected = PhpVersion::cases();
         $actual = PhpVersion::orderedCases();
 
@@ -68,7 +68,7 @@ describe('ordered cases', function () {
             ->and($extra)->toBeEmpty();
     });
 
-    it('is ordered by version ascending', function () {
+    it('is ordered by version ascending', function (): void {
         $actual = PhpVersion::orderedCases();
 
         for ($i = 1; $i < count($actual); $i++) {
@@ -77,14 +77,14 @@ describe('ordered cases', function () {
     });
 });
 
-describe('previous', function () {
-    it('returns null for the oldest version', function () {
+describe('previous', function (): void {
+    it('returns null for the oldest version', function (): void {
         $oldest = array_first(PhpVersion::orderedCases());
 
         expect($oldest->previous())->toBeNull();
     });
 
-    it('returns the newest older version', function () {
+    it('returns the newest older version', function (): void {
         for ($i = 1; $i < PhpVersion::count(); $i++) {
             $current = PhpVersion::orderedCases()[$i];
             $older = PhpVersion::orderedCases()[$i - 1];
@@ -94,8 +94,8 @@ describe('previous', function () {
     });
 });
 
-describe('next', function () {
-    it('returns the oldest newer version', function () {
+describe('next', function (): void {
+    it('returns the oldest newer version', function (): void {
         for ($i = 0; $i < PhpVersion::count() - 1; $i++) {
             $current = PhpVersion::orderedCases()[$i];
             $newer = PhpVersion::orderedCases()[$i + 1];
@@ -104,15 +104,15 @@ describe('next', function () {
         }
     });
 
-    it('returns null for the newest version', function () {
+    it('returns null for the newest version', function (): void {
         $oldest = array_last(PhpVersion::orderedCases());
 
         expect($oldest->next())->toBeNull();
     });
 });
 
-describe('version ordering', function () {
-    it('compares versions consistently (reflexivity)', function () {
+describe('version ordering', function (): void {
+    it('compares versions consistently (reflexivity)', function (): void {
         foreach (PhpVersion::cases() as $version) {
             expect($version->isOlderThan($version))->toBeFalse()
                 ->and($version->isNewerThan($version))->toBeFalse
@@ -121,14 +121,14 @@ describe('version ordering', function () {
         }
     });
 
-    it('compares versions consistently (symmetry)', function (PhpVersion $newer, PhpVersion $older) {
+    it('compares versions consistently (symmetry)', function (PhpVersion $newer, PhpVersion $older): void {
         expect($newer->isNewerThan($older))->toBeTrue()
             ->and($newer->isOlderThan($older))->toBeFalse()
             ->and($older->isOlderThan($newer))->toBeTrue()
             ->and($older->isNewerThan($newer))->toBeFalse();
     })->with('ordered doubles');
 
-    it('compares versions consistently (transitiveness)', function (PhpVersion $new, PhpVersion $mid, PhpVersion $old) {
+    it('compares versions consistently (transitiveness)', function (PhpVersion $new, PhpVersion $mid, PhpVersion $old): void {
         expect($new->isNewerThan($mid))->toBeTrue()
             ->and($mid->isNewerThan($old))->toBeTrue()
             ->and($new->isNewerThan($old))->toBeTrue()
@@ -138,24 +138,24 @@ describe('version ordering', function () {
     })->with('ordered triples');
 });
 
-describe('count', function () {
-    it('returns the amount of cases', function () {
+describe('count', function (): void {
+    it('returns the amount of cases', function (): void {
         expect(PhpVersion::count())->toBe(count(PhpVersion::cases()));
     });
 
-    it('returns the same value on repeated calls (idempotence)', function () {
+    it('returns the same value on repeated calls (idempotence)', function (): void {
         expect(PhpVersion::count())->toBe(PhpVersion::count());
     });
 });
 
-describe('ordered keys', function () {
-    it('keys equal the index in orderedCases()', function () {
+describe('ordered keys', function (): void {
+    it('keys equal the index in orderedCases()', function (): void {
         foreach (PhpVersion::orderedCases() as $i => $case) {
             expect($case->getOrderedKey())->toBe($i);
         }
     });
 
-    it('returns the same key on repeated calls (idempotence)', function () {
+    it('returns the same key on repeated calls (idempotence)', function (): void {
         foreach (PhpVersion::cases() as $case) {
             $k1 = $case->getOrderedKey();
             $k2 = $case->getOrderedKey();
@@ -164,7 +164,7 @@ describe('ordered keys', function () {
         }
     });
 
-    it('is independent of enumeration order (permutation invariance)', function () {
+    it('is independent of enumeration order (permutation invariance)', function (): void {
         $shuffled = $baseline = PhpVersion::cases();
         shuffle($shuffled);
 
@@ -177,7 +177,7 @@ describe('ordered keys', function () {
         expect($shuffled)->toBe($baseline);
     });
 
-    it('assigns a distinct key for each version', function () {
+    it('assigns a distinct key for each version', function (): void {
         $keys = [];
         foreach (PhpVersion::cases() as $version) {
             $key = $version->getOrderedKey();
@@ -186,7 +186,7 @@ describe('ordered keys', function () {
         }
     });
 
-    it('bounds keys between 0 and the amount of versions (exclusive)', function () {
+    it('bounds keys between 0 and the amount of versions (exclusive)', function (): void {
         $keys = array_map(fn (PhpVersion $version) => $version->getOrderedKey(), PhpVersion::cases());
         sort($keys);
 
@@ -194,22 +194,22 @@ describe('ordered keys', function () {
     });
 });
 
-describe('oldest and newest versions', function () {
-    it('returns the oldest version as an enum member', function () {
+describe('oldest and newest versions', function (): void {
+    it('returns the oldest version as an enum member', function (): void {
         $oldest = PhpVersion::getOldestSupported();
         expect($oldest)
             ->not->toBeNull()
             ->toBeInstanceOf(PhpVersion::class);
     });
 
-    it('returns the newest version as an enum member', function () {
+    it('returns the newest version as an enum member', function (): void {
         $newest = PhpVersion::getNewestSupported();
         expect($newest)
             ->not->toBeNull()
             ->toBeInstanceOf(PhpVersion::class);
     });
 
-    it('orders oldest before or equal to newest', function () {
+    it('orders oldest before or equal to newest', function (): void {
         $oldest = PhpVersion::getOldestSupported();
         $newest = PhpVersion::getNewestSupported();
 
@@ -217,7 +217,7 @@ describe('oldest and newest versions', function () {
             ->and($newest->isNewerThanOrEqualTo($oldest));
     });
 
-    it('bounds all known versions between oldest and newest', function () {
+    it('bounds all known versions between oldest and newest', function (): void {
         $oldest = PhpVersion::getOldestSupported();
         $newest = PhpVersion::getNewestSupported();
 
@@ -228,31 +228,31 @@ describe('oldest and newest versions', function () {
     });
 });
 
-describe('minimum and maximum', function () {
-    it('determines minimum versions when both are null', function () {
+describe('minimum and maximum', function (): void {
+    it('determines minimum versions when both are null', function (): void {
         expect(PhpVersion::min(null, null))->toBeNull();
     });
 
-    it('determines minimum versions when one is null', function () {
+    it('determines minimum versions when one is null', function (): void {
         expect(PhpVersion::min(null, PhpVersion::PHP_5_4))->toBe(PhpVersion::PHP_5_4)
             ->and(PhpVersion::min(PhpVersion::PHP_5_4, null))->toBe(PhpVersion::PHP_5_4);
     });
 
-    it('determines minimum versions', function (PhpVersion $newer, PhpVersion $older) {
+    it('determines minimum versions', function (PhpVersion $newer, PhpVersion $older): void {
         expect(PhpVersion::min($newer, $older))->toBe($older)
             ->and(PhpVersion::min($older, $newer))->toBe($older);
     })->with('ordered doubles');
 
-    it('determines maximum versions when both are null', function () {
+    it('determines maximum versions when both are null', function (): void {
         expect(PhpVersion::max(null, null))->toBeNull();
     });
 
-    it('determines maximum versions when one is null', function () {
+    it('determines maximum versions when one is null', function (): void {
         expect(PhpVersion::max(null, PhpVersion::PHP_5_4))->toBe(PhpVersion::PHP_5_4)
             ->and(PhpVersion::max(PhpVersion::PHP_5_4, null))->toBe(PhpVersion::PHP_5_4);
     });
 
-    it('determines maximum versions', function (PhpVersion $newer, PhpVersion $older) {
+    it('determines maximum versions', function (PhpVersion $newer, PhpVersion $older): void {
         expect(PhpVersion::max($newer, $older))->toBe($newer)
             ->and(PhpVersion::max($older, $newer))->toBe($newer);
     })->with('ordered doubles');

@@ -1,5 +1,9 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\CatalogueServiceProvider;
+use App\Providers\ParserServiceProvider;
+
 return [
 
     /*
@@ -54,9 +58,9 @@ return [
     */
 
     'providers' => [
-        App\Providers\AppServiceProvider::class,
-        App\Providers\CatalogueServiceProvider::class,
-        App\Providers\ParserServiceProvider::class,
+        AppServiceProvider::class,
+        CatalogueServiceProvider::class,
+        ParserServiceProvider::class,
     ],
 
 ];
