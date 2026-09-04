@@ -9,7 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use RuntimeException;
 
-class ModernityDeterminizer
+final class ModernityDeterminizer
 {
     /**
      * @param  Stmt[]  $stmts

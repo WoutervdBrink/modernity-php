@@ -9,7 +9,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use PhpParser\PhpVersion;
 
-class ConvertAST extends Command
+final class ConvertAST extends Command
 {
     /**
      * The name and signature of the console command.

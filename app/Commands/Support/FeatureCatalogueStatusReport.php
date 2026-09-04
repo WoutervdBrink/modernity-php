@@ -2,7 +2,7 @@
 
 namespace App\Commands\Support;
 
-readonly class FeatureCatalogueStatusReport
+final readonly class FeatureCatalogueStatusReport
 {
     public function __construct(
         /** @var class-string $class */

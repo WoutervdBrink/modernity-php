@@ -11,7 +11,7 @@ use Override;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
-class ASTToXMLConvertingVisitor extends NodeVisitorAbstract
+final class ASTToXMLConvertingVisitor extends NodeVisitorAbstract
 {
     public private(set) DOMDocument $document;
 

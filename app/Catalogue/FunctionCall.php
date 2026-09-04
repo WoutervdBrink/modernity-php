@@ -8,7 +8,7 @@ use PhpParser\Node\VariadicPlaceholder;
 /**
  * Detected instance of a function being called.
  */
-readonly class FunctionCall
+final readonly class FunctionCall
 {
     /**
      * @var int Amount of arguments passed to the function.

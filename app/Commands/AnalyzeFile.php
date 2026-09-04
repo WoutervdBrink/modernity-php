@@ -17,7 +17,7 @@ use PhpParser\ParserFactory;
 use PhpParser\PhpVersion;
 use RuntimeException;
 
-class AnalyzeFile extends Command
+final class AnalyzeFile extends Command
 {
     /**
      * The name and signature of the console command.
