@@ -6,6 +6,13 @@
       0 => 'GrahamCampbell\\GitHub\\GitHubServiceProvider',
     ),
   ),
+  'inertiajs/inertia-laravel' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Inertia\\ServiceProvider',
+    ),
+  ),
   'laravel/pail' => 
   array (
     'providers' => 
@@ -20,11 +27,25 @@
       0 => 'Laravel\\Pao\\Laravel\\ServiceProvider',
     ),
   ),
+  'laravel/sail' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Sail\\SailServiceProvider',
+    ),
+  ),
   'laravel/tinker' => 
   array (
     'providers' => 
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    ),
+  ),
+  'laravel/wayfinder' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Wayfinder\\WayfinderServiceProvider',
     ),
   ),
   'nesbot/carbon' => 
