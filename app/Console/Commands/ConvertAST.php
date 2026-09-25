@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
-use App\Commands\Traits\HandlesIO;
-use App\Commands\Traits\HandlesParser;
+use App\Console\Commands\Traits\HandlesIO;
+use App\Console\Commands\Traits\HandlesParser;
 use App\Parser\Visitors\ASTToXMLConvertingVisitor;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
 use LaravelZero\Framework\Commands\Command;

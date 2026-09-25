@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands\Traits;
+namespace App\Console\Commands\Traits;
 
 trait HandlesIO
 {

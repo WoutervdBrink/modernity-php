@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Commands\Support;
+namespace App\Console\Commands\Support;
+
+use;
 
 final readonly class FeatureCatalogueStatusReport
 {

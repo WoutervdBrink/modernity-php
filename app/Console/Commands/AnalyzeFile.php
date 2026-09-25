@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
-use App\Commands\Traits\HandlesIO;
-use App\Commands\Traits\HandlesParser;
+use App\Console\Commands\Traits\HandlesIO;
+use App\Console\Commands\Traits\HandlesParser;
 use App\Modernity\ModernityDeterminizer;
 use App\Parser\Visitors\ASTFeatureConstraintMergingVisitor;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;

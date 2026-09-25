@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands\Support;
+namespace App\Console\Commands\Support;
 
 enum FeatureCatalogueStatus: string
 {

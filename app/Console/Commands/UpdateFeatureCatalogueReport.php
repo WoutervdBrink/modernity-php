@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
+use;
 use App\Catalogue\Feature;
-use App\Commands\Support\FeatureCatalogueStatusReport;
+use App\Console\Commands\Support\FeatureCatalogueStatusReport;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Support\Facades\Storage;

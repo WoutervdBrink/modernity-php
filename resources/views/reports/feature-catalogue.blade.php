@@ -1,5 +1,5 @@
-@php use App\Commands\Support\FeatureCatalogueStatusReport; @endphp
-@php use App\Commands\Support\FeatureCatalogueStatus; @endphp
+@php use App\Console\Commands\Support\FeatureCatalogueStatus;use App\Console\Commands\Support\FeatureCatalogueStatusReport; @endphp
+@php @endphp
 @extends('layouts.report')
 
 @section('title', 'Feature catalogue coverage')

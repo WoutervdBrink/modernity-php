@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands\Traits;
+namespace App\Console\Commands\Traits;
 
 use PhpParser\Parser;
 use PhpParser\ParserFactory;

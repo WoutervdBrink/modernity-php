@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
-use App\Commands\Traits\HandlesIO;
+use App\Console\Commands\Traits\HandlesIO;
 use App\Turbo\TurboReader;
 use LaravelZero\Framework\Commands\Command;
 

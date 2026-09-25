@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
+use;
 use App\Language\PhpVersionConstraint;
 use App\Parser\Visitors\ASTFeatureConstraintMergingVisitor;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
