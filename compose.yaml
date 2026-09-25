@@ -38,6 +38,8 @@ services:
             POSTGRES_DB: "${DB_DATABASE:-modernity}"
             POSTGRES_USER: "${DB_USERNAME:-modernity}"
             POSTGRES_PASSWORD: "${DB_PASSWORD:-modernity}"
+        ports:
+            - "${DB_PORT:-5432}:5432"
         volumes:
             - postgres_data:/var/lib/postgresql
         healthcheck:
