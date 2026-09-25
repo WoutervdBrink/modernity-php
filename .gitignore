@@ -1,37 +1,27 @@
-# PHP/Composer
-/vendor
-composer.phar
-
-# PHPUnit/Pest cache
-.phpunit.result.cache
-.pest-results/
-.pest-snapshot-temp/
-
-# Coverage reports
-coverage/
-.clover.xml
-coverage.xml
-html/
-/reports/
-
-# Logs and temporary files
 *.log
-*.tmp
-*.cache
-*.bak
-*.swp
-
-# OS-specific files
 .DS_Store
-Thumbs.db
-
-# PhpStorm and other IDEs/editors
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.codex
+/.cursor/
 /.idea
+/.nova
+/.phpunit.cache
 /.vscode
-/.vagrant
-
-# Other development artifacts
-build/
-dist/
-tmp/
-.cache//database/database.sqlite
+/.zed
+/auth.json
+/node_modules
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+_ide_helper.php
+Homestead.json
+Homestead.yaml
+Thumbs.db
