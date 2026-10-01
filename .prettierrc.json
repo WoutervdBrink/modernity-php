@@ -5,9 +5,6 @@
     "trailingComma": "all",
     "htmlWhitespaceSensitivity": "css",
     "printWidth": 120,
-    "plugins": [
-        "prettier-plugin-organize-imports"
-    ],
     "tabWidth": 4,
     "overrides": [
         {

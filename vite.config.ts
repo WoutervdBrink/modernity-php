@@ -1,8 +1,8 @@
-import {wayfinder} from '@laravel/vite-plugin-wayfinder';
-import {defineConfig} from 'vite';
+import inertia from '@inertiajs/vite';
+import { wayfinder } from '@laravel/vite-plugin-wayfinder';
+import vuePlugin from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
-import inertia from "@inertiajs/vite";
-import vuePlugin from "@vitejs/plugin-vue";
+import { defineConfig } from 'vite';
 
 export default defineConfig({
     plugins: [
@@ -13,7 +13,9 @@ export default defineConfig({
         wayfinder({
             formVariants: true,
         }),
-        inertia(),
-        vuePlugin()
+        inertia({
+            ssr: false,
+        }),
+        vuePlugin(),
     ],
 });
