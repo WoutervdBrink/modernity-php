@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GitHub\Data;
+namespace App\Data\Repository;
 
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -12,11 +12,12 @@ final class GitHubRepository extends Data
     public function __construct(
         public int $id,
         public string $full_name,
-        public string $description,
+        public ?string $description,
         #[WithCast(DateTimeInterfaceCast::class)]
         public CarbonImmutable $created_at,
         #[WithCast(DateTimeInterfaceCast::class)]
         public CarbonImmutable $updated_at,
         public int $stargazers_count,
+        public ?float $phpShare,
     ) {}
 }

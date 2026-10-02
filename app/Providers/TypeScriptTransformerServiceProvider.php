@@ -8,7 +8,7 @@ use Spatie\TypeScriptTransformer\Formatters\PrettierFormatter;
 use Spatie\TypeScriptTransformer\Transformers\AttributedClassTransformer;
 use Spatie\TypeScriptTransformer\Transformers\EnumTransformer;
 use Spatie\TypeScriptTransformer\TypeScriptTransformerConfigFactory;
-use Spatie\TypeScriptTransformer\Writers\GlobalNamespaceWriter;
+use Spatie\TypeScriptTransformer\Writers\ModuleWriter;
 
 final class TypeScriptTransformerServiceProvider extends BaseTypeScriptTransformerServiceProvider
 {
@@ -18,8 +18,9 @@ final class TypeScriptTransformerServiceProvider extends BaseTypeScriptTransform
             ->extension(new LaravelDataTypeScriptTransformerExtension)
             ->transformer(AttributedClassTransformer::class)
             ->transformer(EnumTransformer::class)
-            ->transformDirectories(app_path('Data'))
-            ->writer(new GlobalNamespaceWriter('generated.d.ts'))
+            ->transformDirectories(...config('data.structure_caching.directories'))
+            ->outputDirectory(resource_path('js/generated'))
+            ->writer(new ModuleWriter)
             ->formatter(PrettierFormatter::class);
     }
 }

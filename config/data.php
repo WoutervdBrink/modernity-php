@@ -124,7 +124,10 @@ return [
      */
     'structure_caching' => [
         'enabled' => true,
-        'directories' => [app_path('Data')],
+        'directories' => [
+            app_path('Data'),
+            app_path('Models/Enums'),
+        ],
         'cache' => [
             'store' => env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
             'prefix' => 'laravel-data',

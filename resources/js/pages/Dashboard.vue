@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import Layout from '@/shared/Layout.vue';
+
+defineOptions({
+    layout: {
+        title: 'Dashboard',
+    },
+});
 </script>
 
 <template>
-    <Layout title="Dashboard">
-        <h1>Dashboard</h1>
-    </Layout>
+    <h1>Dashboard</h1>
 </template>
