@@ -76,6 +76,13 @@
       0 => 'Spatie\\LaravelData\\LaravelDataServiceProvider',
     ),
   ),
+  'spatie/laravel-query-builder' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
+    ),
+  ),
   'spatie/laravel-typescript-transformer' => 
   array (
     'providers' => 

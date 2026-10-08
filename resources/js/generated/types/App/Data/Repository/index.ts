@@ -12,6 +12,7 @@ export type RepositoryData = {
     github_id: number;
     name: string;
     description: string | null;
+    is_accepted: boolean;
     snapshots_discovered_at: string | null;
     created_at: string | null;
     updated_at: string | null;

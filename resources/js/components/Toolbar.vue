@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex mb-3 justify-content-between align-items-center">
         <h1>{{ title }}</h1>
         <slot />
     </div>

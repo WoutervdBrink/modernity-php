@@ -6,6 +6,8 @@ import { defineConfig } from 'vite';
 import Components from 'unplugin-vue-components/vite';
 import { BootstrapVueNextResolver } from 'bootstrap-vue-next/resolvers';
 import { componentNames } from 'bootstrap-vue-next';
+import Icons from 'unplugin-icons/vite';
+import IconsResolver from 'unplugin-icons/resolver';
 
 export default defineConfig({
     plugins: [
@@ -21,7 +23,12 @@ export default defineConfig({
         }),
         vuePlugin(),
         Components({
-            resolvers: [BootstrapVueNextResolver()],
+            resolvers: [
+                BootstrapVueNextResolver(),
+                IconsResolver({
+                    enabledCollections: ['fa6-solid'],
+                }),
+            ],
             types: [
                 {
                     from: 'bootstrap-vue-next/components',
@@ -30,6 +37,10 @@ export default defineConfig({
             ],
             dts: 'resources/js/generated/components.d.ts',
             dirs: ['resources/js/shared', 'resources/js/components'],
+        }),
+        Icons({
+            compiler: 'vue3',
+            scale: 1,
         }),
     ],
 });

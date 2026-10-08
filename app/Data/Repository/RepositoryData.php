@@ -12,6 +12,7 @@ final class RepositoryData extends Data
         public int $github_id,
         public string $name,
         public ?string $description,
+        public bool $is_accepted,
         public ?CarbonImmutable $snapshots_discovered_at,
         public ?CarbonImmutable $created_at,
         public ?CarbonImmutable $updated_at,
