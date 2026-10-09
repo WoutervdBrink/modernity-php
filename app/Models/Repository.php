@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use App\Data\Repository\GitHubRepository;
+use App\Data\Git\GitTag;
+use App\Data\GitHub\GitHubRepository;
+use App\Models\Enums\RepositorySnapshotDiscoveryStatus;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use LogicException;
 
 final class Repository extends Model
 {
@@ -26,14 +29,6 @@ final class Repository extends Model
                 'description' => $repository->description,
             ]
         );
-    }
-
-    /**
-     * @return HasMany<Snapshot, $this>
-     */
-    public function snapshots(): HasMany
-    {
-        return $this->hasMany(Snapshot::class);
     }
 
     #[Scope]
@@ -56,10 +51,26 @@ final class Repository extends Model
         }
     }
 
+    #[Scope]
+    public function fetched(Builder $query, bool $fetched): Builder
+    {
+        return $fetched ? $query->whereNotNull('fetched_at') : $query->whereNull('fetched_at');
+    }
+
     public function markSnapshotsDiscovered(): void
     {
+        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::COMPLETED);
         $this->snapshots_discovered_at = now();
         $this->save();
+    }
+
+    private function setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus $to): void
+    {
+        if (! $this->snapshot_discovery_status->isTransitionAllowed($to)) {
+            throw new LogicException('Transitioning from status '.$this->snapshot_discovery_status->name.' to '.$to->name.' is not allowed.');
+        }
+
+        $this->snapshot_discovery_status = $to;
     }
 
     #[Scope]
@@ -68,6 +79,68 @@ final class Repository extends Model
         return $query->withExists([
             'searchResults as is_accepted' => fn (Builder $query) => $query->whereNull('rejection_reason'),
         ]);
+    }
+
+    public function markFetched(): void
+    {
+        $this->fetched_at = now();
+        $this->save();
+    }
+
+    public function recordSnapshot(GitTag $tag): Snapshot
+    {
+        $existing = $this->snapshots()
+            ->where('tag', $tag->name)
+            ->first();
+
+        if ($existing !== null) {
+            return $existing;
+        }
+
+        $snapshot = $this->snapshots()->make();
+
+        $snapshot->tag = $tag->name;
+        $snapshot->commit_sha = $tag->sha;
+        $snapshot->semver = $tag->semver;
+
+        $snapshot->save();
+
+        return $snapshot;
+    }
+
+    /**
+     * @return HasMany<Snapshot, $this>
+     */
+    public function snapshots(): HasMany
+    {
+        return $this->hasMany(Snapshot::class);
+    }
+
+    public function queueSnapshotDiscovery(): void
+    {
+        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::QUEUED);
+        $this->save();
+    }
+
+    public function startSnapshotDiscovery(): void
+    {
+        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::RUNNING);
+        $this->save();
+    }
+
+    public function failSnapshotDiscovery(): void
+    {
+        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::FAILED);
+        $this->save();
+    }
+
+    protected function isDiscoveringSnapshots(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->snapshot_discovery_status->isActive();
+            }
+        );
     }
 
     protected function isAccepted(): Attribute
@@ -95,11 +168,20 @@ final class Repository extends Model
         return $this->hasMany(SearchResult::class);
     }
 
+    protected function isFetched(): Attribute
+    {
+        return Attribute::make(get: function (mixed $value, array $attributes): bool {
+            return $attributes['fetched_at'] !== null;
+        });
+    }
+
     protected function casts(): array
     {
         return [
             'github_id' => 'integer',
-            'snapshots_discovered_at' => 'timestamp',
+            'snapshots_discovered_at' => 'immutable_datetime',
+            'fetched_at' => 'immutable_datetime',
+            'snapshot_discovery_status' => RepositorySnapshotDiscoveryStatus::class,
         ];
     }
 }

@@ -14,3 +14,4 @@ Route::get('/searches/{search}', [SearchController::class, 'show'])->name('searc
 
 Route::get('/repositories', [RepositoryController::class, 'index'])->name('repositories.index');
 Route::get('/repositories/{repository}', [RepositoryController::class, 'show'])->name('repositories.show');
+Route::post('/repositories/{repository}/discoverSnapshots', [RepositoryController::class, 'discoverSnapshots'])->name('repositories.discoverSnapshots');

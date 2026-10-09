@@ -16,7 +16,7 @@ enum SearchStatus: string
         self::FAILED->value => [],
     ];
 
-    public function isTransitionAllowed(SearchStatus $to): bool
+    public function isTransitionAllowed(self $to): bool
     {
         return in_array($to, self::ALLOWED_TRANSITIONS[$this->value], true);
     }

@@ -118,9 +118,7 @@ function destroy(row: T): void {
 
 const columnsWithFormat = computed<(formats: DatatableFormat[]) => Column<T>[]>(
     () => (formats: DatatableFormat[]) =>
-        props.columns.filter(
-            (col) => col.format !== undefined && formats.includes(col.format) && !(`cell(${col.key})` in slots),
-        ),
+        props.columns.filter((col) => formats.includes(col.format ?? 'text') && !(`cell(${col.key})` in slots)),
 );
 
 function timestampValue(col: Column<T>, row: T): string | Date | null {
@@ -162,7 +160,11 @@ function sortDirection(key: string): 'asc' | 'desc' | null {
 
 <template>
     <div class="d-flex justify-content-between align-items-center">
-        <component :is="titleComponent">{{ title }}</component>
+        <component :is="titleComponent" v-if="title">
+            {{ title }}
+            ({{ data.meta.total }})
+        </component>
+        <div v-else />
         <div v-if="searchable || filters.length" class="d-flex justify-content-end gap-2 mb-3">
             <div>
                 <BInputGroup v-if="searchable" size="sm">
@@ -254,7 +256,11 @@ function sortDirection(key: string): 'asc' | 'desc' | null {
             :key="`timestamp-${col.key}`"
             #[`cell(${col.key})`]="{ item }"
         >
-            <div :style="{ maxWidth: col.width ?? '300px' }" class="text-truncate">
+            <div
+                :style="{ maxWidth: col.width ?? '300px' }"
+                :title="String(cellValue(col, asRow(item)))"
+                class="text-truncate"
+            >
                 <span v-if="cellValue(col, asRow(item)) === null" class="text-secondary">
                     {{ col.nullLabel ?? 'None' }}
                 </span>

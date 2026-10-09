@@ -36,6 +36,12 @@ final class Snapshot extends Model
         }
     }
 
+    #[Scope]
+    public function semverDetected(Builder $query, bool $detected): Builder
+    {
+        return $detected ? $query->whereNotNull('semver') : $query->whereNull('semver');
+    }
+
     protected function casts(): array
     {
         return [

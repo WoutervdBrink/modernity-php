@@ -23,6 +23,14 @@ return [
             'report' => false,
         ],
 
+        'repositories' => [
+            'driver' => 'local',
+            'root' => storage_path('app/repositories'),
+            'serve' => false,
+            'throw' => true,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

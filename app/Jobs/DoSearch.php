@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Data\Repository\GitHubRepository;
+use App\Actions\Repository\QueueSnapshotDiscovery;
+use App\Data\GitHub\GitHubRepository;
 use App\Models\Enums\SearchStatus;
 use App\Models\Repository;
 use App\Models\Search;
@@ -13,10 +14,12 @@ use GrahamCampbell\GitHub\GitHubManager;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Attributes\DeleteWhenMissingModels;
 use Illuminate\Queue\Attributes\Tries;
 use Throwable;
 
 #[Tries(1)]
+#[DeleteWhenMissingModels]
 final class DoSearch implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
@@ -34,11 +37,9 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(GitHubManager $gh): void
+    public function handle(GitHubManager $gh, QueueSnapshotDiscovery $queueSnapshotDiscovery): void
     {
-        $search = $this->search->fresh();
-
-        $search->start();
+        $this->search->start();
 
         $client = $gh->connection();
         $pager = new ResultPager($client, 100);
@@ -46,7 +47,7 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
         $repositories = $pager->fetchAllLazy(
             $client->search(),
             'repositories',
-            [$this->buildSearchQuery($search), 'stars']
+            [$this->buildSearchQuery(), 'stars']
         );
 
         $accepted = 0;
@@ -54,46 +55,48 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
         foreach ($repositories as $repository) {
             $candidate = GitHubRepository::from($repository);
 
-            $result = $this->consider($client, $search, $candidate);
+            $result = $this->consider($client, $candidate);
 
             if (! $result->is_rejected) {
                 $accepted++;
+
+                $queueSnapshotDiscovery($result->repository);
             }
 
-            if ($accepted >= $search->parameters->max) {
+            if ($accepted >= $this->search->parameters->max) {
                 break;
             }
         }
 
-        $search->complete();
+        $this->search->complete();
     }
 
-    private function buildSearchQuery(Search $search): string
+    private function buildSearchQuery(): string
     {
         $query = 'language:php';
 
-        if (is_string($search->parameters->cutoff)) {
+        if (is_string($this->search->parameters->cutoff)) {
             $query .= ' created:<='.$this->search->parameters->cutoff;
         }
 
         return $query;
     }
 
-    private function consider(Client $client, $search, GitHubRepository $candidate): SearchResult
+    private function consider(Client $client, GitHubRepository $candidate): SearchResult
     {
         $repository = Repository::fromGitHubRepository($candidate);
-        $rejectionReason = $this->determineRejectionReason($client, $search, $candidate);
+        $rejectionReason = $this->determineRejectionReason($client, $candidate);
 
-        return $search->associateCandidateRepository($repository, $candidate, $rejectionReason);
+        return $this->search->associateCandidateRepository($repository, $candidate, $rejectionReason);
     }
 
-    private function determineRejectionReason(Client $client, Search $search, GitHubRepository $candidate): ?string
+    private function determineRejectionReason(Client $client, GitHubRepository $candidate): ?string
     {
         $name = explode('/', $candidate->full_name, 2);
         $languageInfo = $client->repos()->languages($name[0], $name[1]);
         $candidate->phpShare = (($languageInfo['PHP'] ?? 0) / array_sum($languageInfo)) * 100;
-        if ($candidate->phpShare < $search->parameters->php) {
-            return 'PHP share is '.round($candidate->phpShare, 2).'%; minimum is '.$search->parameters->php.'%';
+        if ($candidate->phpShare < $this->search->parameters->php) {
+            return 'PHP share is '.round($candidate->phpShare, 2).'%; minimum is '.$this->search->parameters->php.'%';
         }
 
         return null;

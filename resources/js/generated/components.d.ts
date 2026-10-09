@@ -144,6 +144,7 @@ declare module 'vue' {
     Layout: typeof import('./../components/Layout.vue')['default']
     Navbar: typeof import('./../components/Navbar.vue')['default']
     RepositoryAcceptedBadge: typeof import('./../components/Repository/RepositoryAcceptedBadge.vue')['default']
+    RepositorySnapshotDiscoveryStatusBadge: typeof import('./../components/Repository/RepositorySnapshotDiscoveryStatusBadge.vue')['default']
     SearchParameters: typeof import('./../components/SearchParameters.vue')['default']
     SearchResultDetailsModal: typeof import('./../components/SearchResultDetailsModal.vue')['default']
     SearchStatusBadge: typeof import('./../components/SearchStatusBadge.vue')['default']

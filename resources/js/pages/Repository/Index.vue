@@ -35,6 +35,10 @@ const columns = [
         format: 'boolean',
     },
     {
+        key: 'snapshot_discovery_status',
+        label: 'Snapshot discovery',
+    },
+    {
         key: 'created_at',
         label: 'First discovered at',
         format: 'datetime',
@@ -47,19 +51,15 @@ const actions: RowActions<RepositoryData> = {
 </script>
 
 <template>
-    <Datatable
-        :actions
-        :columns
-        :data="repositories"
-        :filters
-        :title="`Repositories (${repositories.meta.total})`"
-        searchable
-    >
+    <Datatable :actions :columns :data="repositories" :filters searchable title="Repositories">
         <template #cell(name)="{ item }">
             <GitHubLink :repository="item" />
         </template>
         <template #cell(is_accepted)="{ item }">
             <RepositoryAcceptedBadge :repository="item" />
+        </template>
+        <template #cell(snapshot_discovery_status)="{ item }">
+            <RepositorySnapshotDiscoveryStatusBadge :status="item.snapshot_discovery_status" />
         </template>
     </Datatable>
 </template>

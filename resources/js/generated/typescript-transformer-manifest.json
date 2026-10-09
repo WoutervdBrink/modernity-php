@@ -1,8 +1,10 @@
 {
-    "types\/App\/Data\/Repository\/index.ts": "d0f730b3be79d52f67538590825000c1",
-    "types\/App\/Data\/Search\/index.ts": "13048c735003144ab4587242e6b6ca4b",
-    "types\/App\/Data\/Snapshot\/index.ts": "695b72da361d95078852c13bc0d7ec79",
-    "types\/App\/Models\/Enums\/index.ts": "394632decccefd26391357c54fd8fd4e",
+    "types\/App\/Data\/Git\/index.ts": "c0db5e33b71f4624f4cfec9d0eabb1f8",
+    "types\/App\/Data\/GitHub\/index.ts": "71224699e7fcf77c621bd2d947d66f58",
+    "types\/App\/Data\/Repository\/index.ts": "ba53a266f2a35aa925e549ba83d2d907",
+    "types\/App\/Data\/Search\/index.ts": "efdcaa053c73a2fbf8617b552882d07c",
+    "types\/App\/Data\/Snapshot\/index.ts": "9b01e43152f92a1d1be975dd87a42c6f",
+    "types\/App\/Models\/Enums\/index.ts": "138e59c8004cc88427d69ccfab2bf89f",
     "types\/Illuminate\/index.ts": "c49cb82ab295a835fb8553e262cc508a",
     "types\/Spatie\/LaravelData\/index.ts": "101e5c5ea9c44b7f18ad04a3c0b31fdb"
 }

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\Search\CreateSearch;
 use App\Data\Search\CreateSearchRequestData;
 use App\Data\Search\SearchData;
-use App\Git;
 use App\Models\Search;
+use App\Services\Git\LocalRepositoryStorage;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -38,7 +38,7 @@ final class SearchController extends Controller
         $search->load('results', 'results.repository')->loadCount('results', 'acceptedResults');
 
         return Inertia::render('Search/Show', [
-            'current_commit' => Git::getCurrentGitCommitHash(),
+            'current_commit' => LocalRepositoryStorage::getCurrentApplicationCommitHash(),
             'search' => SearchData::from($search),
         ]);
     }

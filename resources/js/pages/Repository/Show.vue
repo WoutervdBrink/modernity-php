@@ -4,8 +4,10 @@ import GitHubLink from '@/components/Repository/GitHubLink.vue';
 import type { LengthAwarePaginator } from '@/generated/types/Illuminate';
 import type { SnapshotData } from '@/generated/types/App/Data/Snapshot';
 import type { Column, FilterDefinition } from '@/components/Datatable';
+import { router } from '@inertiajs/vue3';
+import RepositoryController from '@/actions/App/Http/Controllers/RepositoryController.ts';
 
-defineProps<{
+const props = defineProps<{
     repository: RepositoryData;
     snapshots: LengthAwarePaginator<number, SnapshotData>;
     filters: FilterDefinition[];
@@ -23,6 +25,12 @@ const columns = [
         sortable: true,
     },
     {
+        key: 'semver',
+        label: 'Semver',
+        sortable: true,
+        nullLabel: 'Not detected',
+    },
+    {
         key: 'downloaded_at',
         label: 'Downloaded',
     },
@@ -32,16 +40,23 @@ const columns = [
         format: 'datetime',
     },
 ] satisfies Column<SnapshotData>[];
+
+function discoverSnapshots(): void {
+    router.visit(RepositoryController.discoverSnapshots(props.repository), {
+        preserveScroll: true,
+    });
+}
 </script>
 
 <template>
     <Toolbar :title="`Repository: ${repository.name}`">
-        <BButton variant="primary">
-            <i-fa6-solid-magnifying-glass />
+        <BButton :disabled="repository.is_discovering_snapshots" variant="primary" @click="discoverSnapshots">
+            <BSpinner v-if="repository.is_discovering_snapshots" small />
+            <i-fa6-solid-magnifying-glass v-else />
             Discover snapshots
         </BButton>
     </Toolbar>
-    <DetailList class="mb-3">
+    <DetailList class="mb-5">
         <Detail label="Name">
             <GitHubLink :repository />
         </Detail>
@@ -54,6 +69,12 @@ const columns = [
         <Detail label="Accepted">
             <RepositoryAcceptedBadge :repository="repository" />
         </Detail>
+        <Detail label="Snapshot discovery status">
+            <RepositorySnapshotDiscoveryStatusBadge :status="repository.snapshot_discovery_status" />
+        </Detail>
+        <Detail label="Last fetched">
+            <Timestamp :timestamp="repository.fetched_at" />
+        </Detail>
         <Detail label="Snapshots discovered">
             <Timestamp :timestamp="repository.snapshots_discovered_at" relative />
         </Detail>
@@ -62,9 +83,7 @@ const columns = [
         </Detail>
     </DetailList>
 
-    <h2>Snapshots</h2>
-
-    <Datatable :columns :data="snapshots" :filters>
+    <Datatable :columns :data="snapshots" :filters searchable title="Snapshots" title-component="h2">
         <template #cell(downloaded_at)="{ item }">
             <YesNoBadge :status="item.downloaded_at !== null" />
         </template>

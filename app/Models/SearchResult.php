@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Data\Repository\GitHubRepository;
+use App\Data\GitHub\GitHubRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

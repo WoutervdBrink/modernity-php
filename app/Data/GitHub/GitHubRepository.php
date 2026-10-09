@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Repository;
+namespace App\Data\GitHub;
 
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Attributes\WithCast;

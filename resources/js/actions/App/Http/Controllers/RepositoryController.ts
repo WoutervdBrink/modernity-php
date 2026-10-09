@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\RepositoryController::index
-* @see app/Http/Controllers/RepositoryController.php:18
+* @see app/Http/Controllers/RepositoryController.php:20
 * @route '/repositories'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 export const show = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 show.url = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -130,7 +130,7 @@ show.url = (args: { repository: number | { id: number } } | [repository: number 
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 show.get = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -140,7 +140,7 @@ show.get = (args: { repository: number | { id: number } } | [repository: number 
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 show.head = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -150,7 +150,7 @@ show.head = (args: { repository: number | { id: number } } | [repository: number
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 const showForm = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -160,7 +160,7 @@ const showForm = (args: { repository: number | { id: number } } | [repository: n
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 showForm.get = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -170,7 +170,7 @@ showForm.get = (args: { repository: number | { id: number } } | [repository: num
 
 /**
 * @see \App\Http\Controllers\RepositoryController::show
-* @see app/Http/Controllers/RepositoryController.php:65
+* @see app/Http/Controllers/RepositoryController.php:67
 * @route '/repositories/{repository}'
 */
 showForm.head = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -185,6 +185,86 @@ showForm.head = (args: { repository: number | { id: number } } | [repository: nu
 
 show.form = showForm
 
-const RepositoryController = { index, show }
+/**
+* @see \App\Http\Controllers\RepositoryController::discoverSnapshots
+* @see app/Http/Controllers/RepositoryController.php:117
+* @route '/repositories/{repository}/discoverSnapshots'
+*/
+export const discoverSnapshots = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: discoverSnapshots.url(args, options),
+    method: 'post',
+})
+
+discoverSnapshots.definition = {
+    methods: ["post"],
+    url: '/repositories/{repository}/discoverSnapshots',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\RepositoryController::discoverSnapshots
+* @see app/Http/Controllers/RepositoryController.php:117
+* @route '/repositories/{repository}/discoverSnapshots'
+*/
+discoverSnapshots.url = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { repository: args }
+    }
+
+    if (typeof args === 'object' && !Array.isArray(args) && 'id' in args) {
+        args = { repository: args.id }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            repository: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        repository: typeof args.repository === 'object'
+        ? args.repository.id
+        : args.repository,
+    }
+
+    return discoverSnapshots.definition.url
+            .replace('{repository}', parsedArgs.repository.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\RepositoryController::discoverSnapshots
+* @see app/Http/Controllers/RepositoryController.php:117
+* @route '/repositories/{repository}/discoverSnapshots'
+*/
+discoverSnapshots.post = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: discoverSnapshots.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\RepositoryController::discoverSnapshots
+* @see app/Http/Controllers/RepositoryController.php:117
+* @route '/repositories/{repository}/discoverSnapshots'
+*/
+const discoverSnapshotsForm = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: discoverSnapshots.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\RepositoryController::discoverSnapshots
+* @see app/Http/Controllers/RepositoryController.php:117
+* @route '/repositories/{repository}/discoverSnapshots'
+*/
+discoverSnapshotsForm.post = (args: { repository: number | { id: number } } | [repository: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: discoverSnapshots.url(args, options),
+    method: 'post',
+})
+
+discoverSnapshots.form = discoverSnapshotsForm
+
+const RepositoryController = { index, show, discoverSnapshots }
 
 export default RepositoryController

@@ -2,7 +2,7 @@
 
 namespace App\Data\Search;
 
-use App\Data\Repository\GitHubRepository;
+use App\Data\GitHub\GitHubRepository;
 use App\Data\Repository\RepositoryData;
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Data;

@@ -16,6 +16,8 @@
         "php": "^8.5",
         "ext-dom": "*",
         "ext-ds": "*",
+        "composer/semver": "^3.5",
+        "czproject/git-php": "^4.6",
         "graham-campbell/github": "^13.1",
         "inertiajs/inertia-laravel": "^3.4",
         "laravel/framework": "^13.0",

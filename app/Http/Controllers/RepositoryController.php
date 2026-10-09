@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Repository\QueueSnapshotDiscovery;
 use App\Data\Repository\RepositoryData;
 use App\Data\Snapshot\SnapshotData;
 use App\Models\Repository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -68,18 +70,21 @@ final class RepositoryController extends Controller
 
         $snapshots = QueryBuilder::for($repository->snapshots())
             ->allowedFilters(
-                AllowedFilter::scope('downloaded')
+                AllowedFilter::scope('downloaded'),
+                AllowedFilter::scope('semver_detected')
             )
             ->allowedSorts(
                 'tag',
                 'commit_sha',
                 'committed_at',
+                'semver'
             )
             ->defaultSort('tag')
             ->when($search !== '', function (Builder $query) use ($search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->where('tag', 'like', '%'.$search.'%')
-                        ->orWhere('commit_sha', 'like', '%'.$search.'%');
+                        ->orWhere('commit_sha', 'like', '%'.$search.'%')
+                        ->orWhere('semver', 'like', '%'.$search.'%');
                 });
             })
             ->paginate()
@@ -97,7 +102,23 @@ final class RepositoryController extends Controller
                         ['value' => 0, 'text' => 'No'],
                     ],
                 ],
+                [
+                    'key' => 'filter[semver_detected]',
+                    'label' => 'Semver detected',
+                    'options' => [
+                        ['value' => 1, 'text' => 'Yes'],
+                        ['value' => 0, 'text' => 'No'],
+                    ],
+                ],
             ],
         ]);
+    }
+
+    public function discoverSnapshots(Repository $repository, QueueSnapshotDiscovery $queueSnapshotDiscovery): RedirectResponse
+    {
+        $queueSnapshotDiscovery($repository);
+
+        return redirect()
+            ->route('repositories.show', $repository);
     }
 }

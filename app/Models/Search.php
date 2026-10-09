@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Data\Repository\GitHubRepository;
+use App\Data\GitHub\GitHubRepository;
 use App\Data\Search\SearchParameters;
-use App\Git;
 use App\Models\Enums\SearchStatus;
+use App\Services\Git\LocalRepositoryStorage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use LogicException;
@@ -18,7 +18,7 @@ final class Search extends Model
 
         $search->parameters = $parameters;
         $search->status = SearchStatus::PENDING;
-        $search->application_commit = Git::getCurrentGitCommitHash() ?? str_repeat('0', 40);
+        $search->application_commit = LocalRepositoryStorage::getCurrentApplicationCommitHash() ?? str_repeat('0', 40);
 
         $search->save();
 
