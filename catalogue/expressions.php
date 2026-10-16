@@ -190,7 +190,12 @@ Feature::for(Node\Expr\ConstFetch::class)->sinceWhen(function (Node\Expr\ConstFe
 Feature::for(Node\Expr\Empty_::class)->sinceWhen(function (Node\Expr\Empty_ $node): ?PhpVersion {
     // Since PHP 5.5, arbitrary expression arguments are allowed inside empty().
     // https://wiki.php.net/rfc/empty_isset_exprs
-    return ! $node->expr instanceof Node\Expr\Variable ? PhpVersion::PHP_5_5 : null;
+    return (
+        $node->expr instanceof Node\Expr\Variable ||
+        $node->expr instanceof Node\Expr\ArrayDimFetch ||
+        $node->expr instanceof Node\Expr\PropertyFetch ||
+        $node->expr instanceof Node\Expr\StaticPropertyFetch
+    ) ? PhpVersion::PHP_5_5 : null;
 });
 Feature::for(Node\Expr\Error::class);
 Feature::for(Node\Expr\ErrorSuppress::class);
