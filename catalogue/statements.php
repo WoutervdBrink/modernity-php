@@ -92,7 +92,8 @@ Feature::for(Node\Stmt\ClassMethod::class)
         // As of PHP 8.0, applying the final modifier to a private method produces a warning.
         if (
             ($node->flags & Modifiers::FINAL) &&
-            ($node->flags & Modifiers::PRIVATE)
+            ($node->flags & Modifiers::PRIVATE) &&
+            $node->name->name !== '__construct'
         ) {
             return PhpVersion::PHP_7_4;
         }
