@@ -7,7 +7,7 @@ use App\Language\PhpVersionConstraint;
 use Override;
 use UnexpectedValueException;
 
-abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue
+abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue implements CaseInsensitiveIdentifierCatalogue
 {
     /**
      * @param  string  $name  Name of the identifier.
@@ -25,6 +25,14 @@ abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue
         }
 
         return $name;
+    }
+
+    /**
+     * Get the {@link PhpVersionConstraint} for the given identifier and parent class name.
+     */
+    public static function constraintForWithClass(string $name, string $className): PhpVersionConstraint
+    {
+        return static::constraintFor(self::key($name, $className));
     }
 
     /**
@@ -73,13 +81,5 @@ abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue
     public static function forClass(string $name, string $className): static
     {
         return new static($name, $className);
-    }
-
-    /**
-     * Get the {@link PhpVersionConstraint} for the given identifier and parent class name.
-     */
-    public static function constraintForWithClass(string $name, string $className): PhpVersionConstraint
-    {
-        return static::constraintFor(self::key($name, $className));
     }
 }

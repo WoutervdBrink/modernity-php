@@ -7,7 +7,7 @@ namespace App\Catalogue;
  *
  * <code>Class</code> is a keyword, which is why this class is called <code>Clazz</code>.
  */
-final class Clazz extends IdentifierCatalogue
+final class Clazz extends IdentifierCatalogue implements CaseInsensitiveIdentifierCatalogue
 {
     //
 }

@@ -15,7 +15,7 @@ use PhpParser\Node\Scalar\String_;
  *
  * N.B. <code>function</code> is a keyword. Consequently, this class could not have been named <code>Function</code>.
  */
-final class Func extends IdentifierWithParentClassCatalogue
+final class Func extends IdentifierWithParentClassCatalogue implements CaseInsensitiveIdentifierCatalogue
 {
     /**
      * @var array<string, list<callable(FunctionCall): PhpVersionConstraint>>
@@ -33,6 +33,24 @@ final class Func extends IdentifierWithParentClassCatalogue
         self::$rules[$this->name] ??= [];
     }
 
+    public static function constraintForFunctionCall(FunctionCall $functionCall): PhpVersionConstraint
+    {
+        // We cannot (yet) determine the version constraint for functions if we do not know what function was called.
+        if (empty($functionCall->functionName)) {
+            return PhpVersionConstraint::open();
+        }
+
+        $baseVersionConstraint = self::constraintFor(self::key($functionCall->functionName, $functionCall->className));
+
+        $rules = self::$rules[self::key($functionCall->functionName, $functionCall->className)] ?? [];
+
+        return array_reduce(
+            $rules,
+            fn (PhpVersionConstraint $acc, callable $rule): PhpVersionConstraint => $acc->merge($rule($functionCall)),
+            $baseVersionConstraint,
+        );
+    }
+
     /**
      * @param  callable(FunctionCall): ?PhpVersion  $rule
      * @return $this
@@ -40,6 +58,17 @@ final class Func extends IdentifierWithParentClassCatalogue
     public function sinceWhen(callable $rule): self
     {
         return $this->rule(static fn (FunctionCall $call): PhpVersionConstraint => PhpVersionConstraint::since($rule($call)));
+    }
+
+    /**
+     * @param  callable(FunctionCall): PhpVersionConstraint  $rule
+     * @return $this
+     */
+    public function rule(callable $rule): self
+    {
+        self::$rules[$this->name][] = $rule;
+
+        return $this;
     }
 
     /**
@@ -186,34 +215,5 @@ final class Func extends IdentifierWithParentClassCatalogue
     public function untilWhen(callable $rule): self
     {
         return $this->rule(static fn (FunctionCall $call): PhpVersionConstraint => PhpVersionConstraint::until($rule($call)));
-    }
-
-    /**
-     * @param  callable(FunctionCall): PhpVersionConstraint  $rule
-     * @return $this
-     */
-    public function rule(callable $rule): self
-    {
-        self::$rules[$this->name][] = $rule;
-
-        return $this;
-    }
-
-    public static function constraintForFunctionCall(FunctionCall $functionCall): PhpVersionConstraint
-    {
-        // We cannot (yet) determine the version constraint for functions if we do not know what function was called.
-        if (empty($functionCall->functionName)) {
-            return PhpVersionConstraint::open();
-        }
-
-        $baseVersionConstraint = self::constraintFor(self::key($functionCall->functionName, $functionCall->className));
-
-        $rules = self::$rules[self::key($functionCall->functionName, $functionCall->className)] ?? [];
-
-        return array_reduce(
-            $rules,
-            fn (PhpVersionConstraint $acc, callable $rule): PhpVersionConstraint => $acc->merge($rule($functionCall)),
-            $baseVersionConstraint,
-        );
     }
 }

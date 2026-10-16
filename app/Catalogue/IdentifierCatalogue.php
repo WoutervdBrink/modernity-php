@@ -15,23 +15,57 @@ abstract class IdentifierCatalogue
     /**
      * Registrations of minimum PHP versions for the identifiers.
      *
-     * @var array<string, PhpVersion>
+     * @var array<class-string, <string, PhpVersion>>
      */
     private static array $min = [];
 
     /**
      * Registrations of maximum PHP versions for registered identifiers.
      *
-     * @var array<string, PhpVersion>
+     * @var array<class-string, <string, PhpVersion>>
      */
     private static array $max = [];
 
     /**
+     * Registrations of catalogues which use case-insensitive identifiers.
+     *
+     * @var array<class-string, bool>
+     */
+    private static array $caseInsensitiveCatalogues = [];
+
+    /**
+     * Name of the identifier.
+     */
+    public readonly string $name;
+
+    /**
      * @param  string  $name  Name of the identifier.
      */
-    protected function __construct(
-        public readonly string $name,
-    ) {}
+    protected function __construct(string $name)
+    {
+        if ($this instanceof CaseInsensitiveIdentifierCatalogue) {
+            $this->name = mb_strtolower($name);
+            static::$caseInsensitiveCatalogues[static::class] = true;
+        } else {
+            $this->name = $name;
+        }
+    }
+
+    final public static function loadFromCatalogue(string $catalogue): void
+    {
+        $fp = fopen(resource_path('catalogue/'.$catalogue.'.csv'), 'r');
+
+        if ($fp === false) {
+            throw new RuntimeException('Unable to open identifier catalogue file '.$catalogue.'.');
+        }
+
+        fgetcsv($fp);
+
+        while (($row = fgetcsv($fp)) !== false) {
+            /** @var string[] $row */
+            static::processFromCatalogue($row);
+        }
+    }
 
     /**
      * Process a row from the catalogue and load it.
@@ -60,27 +94,15 @@ abstract class IdentifierCatalogue
         }
     }
 
-    final public static function loadFromCatalogue(string $catalogue): void
-    {
-        $fp = fopen(resource_path('catalogue/'.$catalogue.'.csv'), 'r');
-
-        if ($fp === false) {
-            throw new RuntimeException('Unable to open identifier catalogue file '.$catalogue.'.');
-        }
-
-        fgetcsv($fp);
-
-        while (($row = fgetcsv($fp)) !== false) {
-            /** @var string[] $row */
-            static::processFromCatalogue($row);
-        }
-    }
-
     /**
      * Construct a new registration of version information for a certain identifier.
      */
     final public static function for(string $name): static
     {
+        if (isset(static::$caseInsensitiveCatalogues[static::class])) {
+            return new static(mb_strtolower($name));
+        }
+
         return new static($name);
     }
 
@@ -91,10 +113,12 @@ abstract class IdentifierCatalogue
      */
     final public function since(PhpVersion $min): static
     {
-        $current = self::$min[$this->name] ?? PhpVersion::getNewestSupported();
+        $catalogue = static::class;
+
+        $current = self::$min[$catalogue][$this->name] ?? PhpVersion::getNewestSupported();
 
         $next = PhpVersion::min($min, $current);
-        self::$min[$this->name] = $next;
+        self::$min[$catalogue][$this->name] = $next;
 
         return $this;
     }
@@ -110,10 +134,12 @@ abstract class IdentifierCatalogue
      */
     final public function until(PhpVersion $max): static
     {
-        $current = self::$max[$this->name] ?? PhpVersion::getOldestSupported();
+        $catalogue = static::class;
+
+        $current = self::$max[$catalogue][$this->name] ?? PhpVersion::getOldestSupported();
 
         $next = PhpVersion::max($max, $current);
-        self::$max[$this->name] = $next;
+        self::$max[$catalogue][$this->name] = $next;
 
         return $this;
     }
@@ -123,8 +149,10 @@ abstract class IdentifierCatalogue
      */
     public static function constraintFor(string $name): PhpVersionConstraint
     {
-        $min = self::$min[$name] ?? null;
-        $max = self::$max[$name] ?? null;
+        $catalogue = static::class;
+
+        $min = self::$min[$catalogue][$name] ?? null;
+        $max = self::$max[$catalogue][$name] ?? null;
 
         return PhpVersionConstraint::between($min, $max);
     }
