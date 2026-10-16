@@ -2,7 +2,6 @@
 
 use App\Catalogue\Feature;
 use App\Language\PhpVersion;
-use App\Language\PhpVersionConstraint;
 use PhpParser\Node;
 
 Feature::for(Node\Scalar\Int_::class)
@@ -55,22 +54,7 @@ Feature::for(Node\Scalar\Float_::class)->sinceWhen(function (Node\Scalar\Float_ 
     return null;
 });
 
-Feature::for(Node\Scalar\String_::class)->rule(function (Node\Scalar\String_ $node): PhpVersionConstraint {
-    $rawValue = $node->getAttribute('rawValue');
-    if (! is_string($rawValue)) {
-        return PhpVersionConstraint::open();
-    }
-
-    if (preg_match('/u\{(.*?)}/', $rawValue, $matches)) {
-        if (preg_match('/^[0-9a-fA-F]{1,6}$/', $matches[1])) {
-            return PhpVersionConstraint::since(PhpVersion::PHP_7_0);
-        } else {
-            return PhpVersionConstraint::until(PhpVersion::PHP_5_6);
-        }
-    }
-
-    return PhpVersionConstraint::open();
-});
+Feature::for(Node\Scalar\String_::class);
 
 // __DIR__ and __NAMESPACE__ were added in 5.3.
 Feature::for(Node\Scalar\MagicConst\Dir::class)->since(PhpVersion::PHP_5_3);
