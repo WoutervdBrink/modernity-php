@@ -97,7 +97,7 @@ Func::for('sizeof')->argumentType(0, String_::class, until: PhpVersion::PHP_7_1)
 // Changed functions in PHP 7.3.
 Func::for('array_push')->arguments(fn (int $args): bool => $args === 1, since: PhpVersion::PHP_7_3);
 Func::for('array_unshift')->arguments(fn (int $args): bool => $args === 1, since: PhpVersion::PHP_7_3);
-Func::for('bscale')
+Func::for('bcscale')
     ->arguments(fn (int $args): bool => $args === 0, since: PhpVersion::PHP_7_3)
     ->argumentIsNull(0, since: PhpVersion::PHP_7_3);
 Func::for('ldap_add')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
