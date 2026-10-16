@@ -89,12 +89,6 @@ Feature::for(Node\Stmt\ClassMethod::class)
         });
     })
     ->untilWhen(function (Node\Stmt\ClassMethod $node): ?PhpVersion {
-        // As of PHP 7.2, using the __autoload magic class method is deprecated.
-        // https://www.php.net/manual/en/language.oop5.changelog.php
-        if (($name = $node->name->toString()) === '__autoload') {
-            return PhpVersion::PHP_7_1;
-        }
-
         // As of PHP 8.0, applying the final modifier to a private method produces a warning.
         if (
             ($node->flags & Modifiers::FINAL) &&
