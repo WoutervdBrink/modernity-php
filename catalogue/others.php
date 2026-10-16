@@ -113,44 +113,73 @@ Feature::for(Node\Param::class)->sinceWhen(function (Node\Param $node): ?PhpVers
     return null;
 });
 Feature::for(Node\PropertyHook::class)->since(PhpVersion::PHP_8_4);
-Feature::for(Node\PropertyItem::class)->sinceWhen(function (Node\PropertyItem $node): ?PhpVersion {
-    // 5.6: scalar expressions are allowed
-    // 8.1: new class() is allowed
-    // 8.3: anything but closures is allowed
-    // 8.5: closures are allowed
-    if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {
+Feature::for(Node\PropertyItem::class)
+    ->rule(function (Node\PropertyItem $node): PhpVersionConstraint {
+        if ($node->default === null) {
+            return PhpVersionConstraint::open();
+        }
+
+        $constraint = PhpVersionConstraint::open();
+
+        if (
+            ! $node->default instanceof Node\Scalar
+            && Quirks::isScalarExpression($node->default)
+        ) {
+            $constraint = $constraint->merge(
+                PhpVersionConstraint::since(PhpVersion::PHP_5_6),
+            );
+        }
+
+        return $constraint->merge(
+            RecursiveConstraintInspector::inspect(
+                $node->default,
+                function (Node $node): ?PhpVersionConstraint {
+                    if (
+                        $node instanceof Node\Expr\CallLike
+                        && $node->isFirstClassCallable()
+                    ) {
+                        return PhpVersionConstraint::since(
+                            PhpVersion::PHP_8_5,
+                        );
+                    }
+
+                    if (
+                        $node instanceof Node\Expr\Closure
+                        && $node->static
+                        && $node->uses === []
+                    ) {
+                        return PhpVersionConstraint::since(
+                            PhpVersion::PHP_8_5,
+                        );
+                    }
+
+                    return null;
+                },
+            ),
+        );
+    });
+Feature::for(Node\StaticVar::class)
+    ->rule(function (Node\StaticVar $node): PhpVersionConstraint {
+        if ($node->default === null) {
+            return PhpVersionConstraint::open();
+        }
+
         if ($node->default instanceof Node\Expr\New_) {
-            return PhpVersion::PHP_8_1;
+            return PhpVersionConstraint::since(
+                PhpVersion::PHP_8_1,
+            );
         }
 
-        if ($node->default instanceof Node\Expr\FuncCall && $node->default->isFirstClassCallable()) {
-            return PhpVersion::PHP_8_5;
+        if (Quirks::isScalarExpression($node->default)) {
+            return PhpVersionConstraint::since(
+                PhpVersion::PHP_5_6,
+            );
         }
 
-        return Quirks::isScalarExpression($node->default) ? PhpVersion::PHP_5_6 : PhpVersion::PHP_8_3;
-    }
-
-    return null;
-});
-Feature::for(Node\StaticVar::class)->sinceWhen(function (Node\StaticVar $node): ?PhpVersion {
-    // 5.6: scalar expressions are allowed
-    // 8.1: new class() is allowed
-    // 8.3: anything but closures is allowed
-    // 8.5: closures are allowed
-    if (! empty($node->default) && ! $node->default instanceof Node\Scalar) {
-        if ($node->default instanceof Node\Expr\New_) {
-            return PhpVersion::PHP_8_1;
-        }
-
-        if ($node->default instanceof Node\Expr\FuncCall && $node->default->isFirstClassCallable()) {
-            return PhpVersion::PHP_8_5;
-        }
-
-        return Quirks::isScalarExpression($node->default) ? PhpVersion::PHP_5_6 : PhpVersion::PHP_8_3;
-    }
-
-    return null;
-});
+        return PhpVersionConstraint::since(
+            PhpVersion::PHP_8_3,
+        );
+    });
 Feature::for(Node\UnionType::class)->sinceWhen(function (Node\UnionType $node): PhpVersion {
     // As of PHP 8.2, union and intersection types can be combined, as long as they are in DNF.
     foreach ($node->types as $type) {

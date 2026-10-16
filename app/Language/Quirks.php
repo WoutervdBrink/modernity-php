@@ -113,12 +113,45 @@ final class Quirks
 
     public static function isScalarExpression(Expr $expr): bool
     {
-        if ($expr instanceof Scalar) {
+        if (
+            $expr instanceof Scalar
+            || $expr instanceof Expr\ConstFetch
+            || $expr instanceof Expr\ClassConstFetch
+        ) {
             return true;
         }
 
         if ($expr instanceof Expr\BinaryOp) {
-            return self::isScalarExpression($expr->left) && self::isScalarExpression($expr->right);
+            return self::isScalarExpression($expr->left)
+                && self::isScalarExpression($expr->right);
+        }
+
+        if (
+            $expr instanceof Expr\BooleanNot
+            || $expr instanceof Expr\BitwiseNot
+            || $expr instanceof Expr\UnaryMinus
+            || $expr instanceof Expr\UnaryPlus
+        ) {
+            return self::isScalarExpression($expr->expr);
+        }
+
+        if ($expr instanceof Expr\Ternary) {
+            return self::isScalarExpression($expr->cond)
+                && ($expr->if === null || self::isScalarExpression($expr->if))
+                && self::isScalarExpression($expr->else);
+        }
+
+        if ($expr instanceof Expr\Array_) {
+            foreach ($expr->items as $item) {
+                if (
+                    ($item->key !== null && ! self::isScalarExpression($item->key))
+                    || ! self::isScalarExpression($item->value)
+                ) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         return false;
