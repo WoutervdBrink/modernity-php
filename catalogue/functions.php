@@ -99,7 +99,7 @@ Func::for('array_push')->arguments(fn (int $args): bool => $args === 1, since: P
 Func::for('array_unshift')->arguments(fn (int $args): bool => $args === 1, since: PhpVersion::PHP_7_3);
 Func::for('bcscale')
     ->arguments(fn (int $args): bool => $args === 0, since: PhpVersion::PHP_7_3)
-    ->argumentIsNull(0, since: PhpVersion::PHP_7_3);
+    ->argumentIsNull(0, since: PhpVersion::PHP_8_0);
 Func::for('ldap_add')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
 Func::for('ldap_mod_replace')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
 Func::for('ldap_mod_add')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_7_3);
