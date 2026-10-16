@@ -64,11 +64,35 @@ Feature::for(Node\Stmt\ClassMethod::class)
         // https://www.php.net/manual/en/migration80.new-features.php#migration80.new-features.core.property-promotion
         if ($name === '__construct') {
             foreach ($node->params as $param) {
+                // No visiblity flags --> not a promoted property.
                 if (($param->flags & Modifiers::VISIBILITY_MASK) === 0) {
                     continue;
                 }
 
-                $since = PhpVersion::max($since, ($param->flags & Modifiers::FINAL) !== 0 ? PhpVersion::PHP_8_5 : PhpVersion::PHP_8_0);
+                $paramSince = PhpVersion::PHP_8_0;
+
+                if (($param->flags & Modifiers::READONLY) !== 0) {
+                    $paramSince = PhpVersion::max(
+                        $paramSince,
+                        PhpVersion::PHP_8_1,
+                    );
+                }
+
+                if (($param->flags & Modifiers::VISIBILITY_SET_MASK) !== 0) {
+                    $paramSince = PhpVersion::max(
+                        $paramSince,
+                        PhpVersion::PHP_8_4,
+                    );
+                }
+
+                if (($param->flags & Modifiers::FINAL) !== 0) {
+                    $paramSince = PhpVersion::max(
+                        $paramSince,
+                        PhpVersion::PHP_8_5,
+                    );
+                }
+
+                $since = PhpVersion::max($since, $paramSince);
             }
         }
 
