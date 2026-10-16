@@ -1,7 +1,9 @@
 <?php
 
 use App\Catalogue\Feature;
+use App\Catalogue\RecursiveConstraintInspector;
 use App\Language\PhpVersion;
+use App\Language\PhpVersionConstraint;
 use App\Language\Quirks;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -29,18 +31,38 @@ Feature::for(Node\ArrayItem::class)->sinceWhen(function (Node\ArrayItem $node): 
     return null;
 });
 Feature::for(Node\Attribute::class)
-    ->sinceWhen(function (Node\Attribute $node): ?PhpVersion {
-        // Initializers as attribute argument values were added in PHP 8.1.
-        if (array_any($node->args, fn (Arg $arg): bool => $arg->value instanceof Node\Expr\New_)) {
-            return PhpVersion::PHP_8_1;
-        }
+    ->rule(function (Node\Attribute $node): PhpVersionConstraint {
+        $constraint = PhpVersionConstraint::since(
+            PhpVersion::PHP_8_0,
+        );
 
-        // First class callables as attribute argument values were added in PHP 8.5.
-        if (array_any($node->args, fn (Arg $arg): bool => $arg->value instanceof Node\Expr\FuncCall && $arg->value->isFirstClassCallable())) {
-            return PhpVersion::PHP_8_5;
-        }
+        $constraint = $constraint->merge(
+            RecursiveConstraintInspector::inspect(
+                $node->args,
+                function (Node $node): ?PhpVersionConstraint {
+                    // Initializers as attribute argument values were added in PHP 8.1.
+                    if ($node instanceof Node\Expr\New_) {
+                        return PhpVersionConstraint::since(
+                            PhpVersion::PHP_8_1,
+                        );
+                    }
 
-        return PhpVersion::PHP_8_0;
+                    // First class callables as attribute argument values were added in PHP 8.5.
+                    if (
+                        $node instanceof Node\Expr\FuncCall
+                        && $node->isFirstClassCallable()
+                    ) {
+                        return PhpVersionConstraint::since(
+                            PhpVersion::PHP_8_5,
+                        );
+                    }
+
+                    return null;
+                },
+            ),
+        );
+
+        return $constraint;
     });
 Feature::for(Node\AttributeGroup::class)->since(PhpVersion::PHP_8_0);
 Feature::for(Node\ClosureUse::class);

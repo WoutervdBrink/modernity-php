@@ -221,17 +221,19 @@ Feature::for(Node\Expr\Instanceof_::class)->sinceWhen(function (Node\Expr\Instan
 Feature::for(Node\Expr\Isset_::class);
 Feature::for(List_::class)
     ->sinceWhen(function (List_ $node): ?PhpVersion {
+        $since = null;
+
         foreach ($node->items as $item) {
             // In PHP 7.3, new syntax was introduced, allowing reference assignment using list().
             // https://wiki.php.net/rfc/list_reference_assignment
             if ($item?->byRef) {
-                return PhpVersion::PHP_7_3;
+                $since = PhpVersion::max($since, PhpVersion::PHP_7_3);
             }
 
             // As of PHP 7.1, keys can be specified in list().
             // https://wiki.php.net/rfc/list_keys
             if ($item?->key) {
-                return PhpVersion::PHP_7_1;
+                $since = PhpVersion::max($since, PhpVersion::PHP_7_1);
             }
         }
 

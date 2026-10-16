@@ -7,7 +7,10 @@ namespace App\Catalogue;
  *
  * <code>Class</code> is a keyword, which is why this class is called <code>Clazz</code>.
  */
-final class Clazz extends IdentifierCatalogue implements CaseInsensitiveIdentifierCatalogue
+final class Clazz extends IdentifierCatalogue
 {
-    //
+    protected static function normalizeName(string $name): string
+    {
+        return mb_strtolower($name);
+    }
 }

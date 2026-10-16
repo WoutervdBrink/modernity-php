@@ -7,7 +7,7 @@ use App\Language\PhpVersionConstraint;
 use Override;
 use UnexpectedValueException;
 
-abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue implements CaseInsensitiveIdentifierCatalogue
+abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue
 {
     /**
      * @param  string  $name  Name of the identifier.
@@ -18,13 +18,29 @@ abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue im
         parent::__construct(self::key($name, $className));
     }
 
-    final protected static function key(string $name, ?string $className): string
-    {
-        if (! empty($className)) {
-            return $className.'::'.$name;
+    final protected static function key(
+        string $name,
+        ?string $className,
+    ): string {
+        $name = static::normalizeName($name);
+
+        if ($className !== null) {
+            return static::normalizeClassName($className)
+                .'::'
+                .$name;
         }
 
         return $name;
+    }
+
+    protected static function normalizeName(string $name): string
+    {
+        return $name;
+    }
+
+    protected static function normalizeClassName(string $className): string
+    {
+        return strtolower($className);
     }
 
     /**

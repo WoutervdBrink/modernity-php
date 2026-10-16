@@ -27,13 +27,6 @@ abstract class IdentifierCatalogue
     private static array $max = [];
 
     /**
-     * Registrations of catalogues which use case-insensitive identifiers.
-     *
-     * @var array<class-string, bool>
-     */
-    private static array $caseInsensitiveCatalogues = [];
-
-    /**
      * Name of the identifier.
      */
     public readonly string $name;
@@ -43,12 +36,12 @@ abstract class IdentifierCatalogue
      */
     protected function __construct(string $name)
     {
-        if ($this instanceof CaseInsensitiveIdentifierCatalogue) {
-            $this->name = mb_strtolower($name);
-            static::$caseInsensitiveCatalogues[static::class] = true;
-        } else {
-            $this->name = $name;
-        }
+        $this->name = static::normalizeName($name);
+    }
+
+    protected static function normalizeName(string $name): string
+    {
+        return $name;
     }
 
     final public static function loadFromCatalogue(string $catalogue): void
@@ -99,11 +92,7 @@ abstract class IdentifierCatalogue
      */
     final public static function for(string $name): static
     {
-        if (isset(static::$caseInsensitiveCatalogues[static::class])) {
-            return new static(mb_strtolower($name));
-        }
-
-        return new static($name);
+        return new static(static::normalizeName($name));
     }
 
     /**

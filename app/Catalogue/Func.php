@@ -15,7 +15,7 @@ use PhpParser\Node\Scalar\String_;
  *
  * N.B. <code>function</code> is a keyword. Consequently, this class could not have been named <code>Function</code>.
  */
-final class Func extends IdentifierWithParentClassCatalogue implements CaseInsensitiveIdentifierCatalogue
+final class Func extends IdentifierWithParentClassCatalogue
 {
     /**
      * @var array<string, list<callable(FunctionCall): PhpVersionConstraint>>
@@ -49,6 +49,11 @@ final class Func extends IdentifierWithParentClassCatalogue implements CaseInsen
             fn (PhpVersionConstraint $acc, callable $rule): PhpVersionConstraint => $acc->merge($rule($functionCall)),
             $baseVersionConstraint,
         );
+    }
+
+    protected static function normalizeName(string $name): string
+    {
+        return mb_strtolower($name);
     }
 
     /**
