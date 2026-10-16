@@ -2,7 +2,7 @@
 
 namespace App\Turbo;
 
-use App\Turbo\Data\TurboDocument;
+use App\Data\Analysis\Turbo\TurboDocument;
 
 final class TurboReader
 {

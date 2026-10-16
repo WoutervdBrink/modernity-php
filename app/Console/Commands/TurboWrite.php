@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Console\Commands\Traits\HandlesIO;
 use App\Console\Commands\Traits\HandlesParser;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
-use App\Turbo\TurboWriter;
+use App\Services\Analysis\Php\TurboWriter;
 use LaravelZero\Framework\Commands\Command;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\ParserFactory;

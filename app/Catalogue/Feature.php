@@ -41,6 +41,47 @@ final class Feature
         return new Feature($nodeClass);
     }
 
+    public static function constraintFor(Node $node): PhpVersionConstraint
+    {
+        $acc = PhpVersionConstraint::open();
+
+        foreach (self::walkClasses($node) as $class) {
+            foreach (self::$rules[$class] ?? [] as $rule) {
+                try {
+                    $acc = $acc->merge($rule($node));
+                } catch (InvalidArgumentException $e) {
+                    throw new InvalidArgumentException('Invalid argument exception when applying rule to node of type '.$node->getType().': '.$e->getMessage());
+                }
+            }
+        }
+
+        return $acc;
+    }
+
+    /**
+     * @return iterable<class-string>
+     */
+    private static function walkClasses(object $o): iterable
+    {
+        yield $o::class;
+
+        foreach (class_parents($o) ?: [] as $parent) {
+            yield $parent;
+        }
+
+        foreach (class_implements($o) ?: [] as $interface) {
+            yield $interface;
+        }
+    }
+
+    /**
+     * @param  class-string  $nodeClass
+     */
+    public static function hasConstraintFor(string $nodeClass): bool
+    {
+        return isset(self::$rules[$nodeClass]);
+    }
+
     /**
      * @psalm-suppress UnusedReturnValue, UnusedMethod
      *
@@ -74,6 +115,47 @@ final class Feature
         self::$rules[$this->nodeClass][] = $wrapped;
 
         return $this;
+    }
+
+    /**
+     * @param  callable(T): PhpVersionConstraint  $rule
+     * @return Closure(Node): PhpVersionConstraint
+     */
+    private function wrapRule(callable $rule): Closure
+    {
+        /** @var Closure(T): PhpVersionConstraint $closure */
+        /** @noinspection PhpClosureCanBeConvertedToFirstClassCallableInspection */
+        $closure = Closure::fromCallable($rule);
+
+        try {
+            $rf = new ReflectionFunction($rule(...));
+        } catch (ReflectionException) {
+            throw new RuntimeException('This should never happen.');
+        }
+
+        if ($rf->getNumberOfParameters() !== 1) {
+            throw new InvalidArgumentException('Callback must take exactly one parameter.');
+        }
+
+        $param = $rf->getParameters()[0]->getType();
+
+        if (! $param instanceof ReflectionNamedType || $param->isBuiltin()) {
+            throw new InvalidArgumentException('Callback parameter must be a class type.');
+        }
+
+        $expectedParam = $param->getName();
+        if (! is_a($this->nodeClass, $expectedParam, true)) {
+            throw new InvalidArgumentException(sprintf('Callback parameter %s must accept %s', $expectedParam, $this->nodeClass));
+        }
+
+        $ret = $rf->getReturnType();
+        if (! $ret instanceof ReflectionNamedType || $ret->getName() !== PhpVersionConstraint::class) {
+            throw new InvalidArgumentException('Callback must return a PhpVersionConstraint');
+        }
+
+        return static function (Node $n) use ($closure): PhpVersionConstraint {
+            return $closure($n);
+        };
     }
 
     /**
@@ -118,83 +200,5 @@ final class Feature
     public function between(PhpVersion $min, PhpVersion $max): self
     {
         return self::rule(fn (Node $_): PhpVersionConstraint => PhpVersionConstraint::between($min, $max));
-    }
-
-    /**
-     * @param  callable(T): PhpVersionConstraint  $rule
-     * @return Closure(Node): PhpVersionConstraint
-     */
-    private function wrapRule(callable $rule): Closure
-    {
-        /** @var Closure(T): PhpVersionConstraint $closure */
-        /** @noinspection PhpClosureCanBeConvertedToFirstClassCallableInspection */
-        $closure = Closure::fromCallable($rule);
-
-        try {
-            $rf = new ReflectionFunction($rule(...));
-        } catch (ReflectionException) {
-            throw new RuntimeException('This should never happen.');
-        }
-
-        if ($rf->getNumberOfParameters() !== 1) {
-            throw new InvalidArgumentException('Callback must take exactly one parameter.');
-        }
-
-        $param = $rf->getParameters()[0]->getType();
-
-        if (! $param instanceof ReflectionNamedType || $param->isBuiltin()) {
-            throw new InvalidArgumentException('Callback parameter must be a class type.');
-        }
-
-        $expectedParam = $param->getName();
-        if (! is_a($this->nodeClass, $expectedParam, true)) {
-            throw new InvalidArgumentException(sprintf('Callback parameter %s must accept %s', $expectedParam, $this->nodeClass));
-        }
-
-        $ret = $rf->getReturnType();
-        if (! $ret instanceof ReflectionNamedType || $ret->getName() !== PhpVersionConstraint::class) {
-            throw new InvalidArgumentException('Callback must return a PhpVersionConstraint');
-        }
-
-        return static function (Node $n) use ($closure): PhpVersionConstraint {
-            return $closure($n);
-        };
-    }
-
-    public static function constraintFor(Node $node): PhpVersionConstraint
-    {
-        $acc = PhpVersionConstraint::open();
-
-        foreach (self::walkClasses($node) as $class) {
-            foreach (self::$rules[$class] ?? [] as $rule) {
-                $acc = $acc->merge($rule($node));
-            }
-        }
-
-        return $acc;
-    }
-
-    /**
-     * @param  class-string  $nodeClass
-     */
-    public static function hasConstraintFor(string $nodeClass): bool
-    {
-        return isset(self::$rules[$nodeClass]);
-    }
-
-    /**
-     * @return iterable<class-string>
-     */
-    private static function walkClasses(object $o): iterable
-    {
-        yield $o::class;
-
-        foreach (class_parents($o) ?: [] as $parent) {
-            yield $parent;
-        }
-
-        foreach (class_implements($o) ?: [] as $interface) {
-            yield $interface;
-        }
     }
 }

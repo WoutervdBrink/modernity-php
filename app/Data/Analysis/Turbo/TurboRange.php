@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Turbo\Data;
+namespace App\Data\Analysis\Turbo;
 
 use Spatie\LaravelData\Data;
 

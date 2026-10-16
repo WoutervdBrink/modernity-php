@@ -58,32 +58,35 @@ Feature::for(Node\Stmt\ClassMethod::class)
     ->sinceWhen(function (Node\Stmt\ClassMethod $node): ?PhpVersion {
         $name = $node->name->toString();
 
+        $since = null;
+
         // As of PHP 8.0, constructors can contain promoted properties.
         // https://www.php.net/manual/en/migration80.new-features.php#migration80.new-features.core.property-promotion
         if ($name === '__construct') {
             foreach ($node->params as $param) {
-                if ($param->flags & Modifiers::VISIBILITY_MASK) {
-                    // But only in PHP 8.5 can you promote final properties.
-                    return $param->flags & Modifiers::FINAL ? PhpVersion::PHP_8_5 : PhpVersion::PHP_8_0;
+                if (($param->flags & Modifiers::VISIBILITY_MASK) === 0) {
+                    continue;
                 }
+
+                $since = PhpVersion::max($since, ($param->flags & Modifiers::FINAL) !== 0 ? PhpVersion::PHP_8_5 : PhpVersion::PHP_8_0);
             }
         }
 
         // As of PHP 7.0, it is allowed to use semi-reserved keywords as method names.
         // https://wiki.php.net/rfc/context_sensitive_lexer
         if (Quirks::isSemiReservedKeyword($name)) {
-            return PhpVersion::PHP_7_0;
+            $since = PhpVersion::max($since, PhpVersion::PHP_7_0);
         }
 
         // Various magic methods were introduced in later PHP versions.
         // https://www.php.net/manual/en/language.oop5.changelog.php
-        return match ($node->name->toString()) {
+        return PhpVersion::max($since, match ($node->name->toString()) {
             '__invoke', '__callStatic' => PhpVersion::PHP_5_3,
             '__debugInfo' => PhpVersion::PHP_5_6,
             '__serialize' => PhpVersion::PHP_7_4,
             '__unserialize' => PhpVersion::PHP_7_4,
             default => null,
-        };
+        });
     })
     ->untilWhen(function (Node\Stmt\ClassMethod $node): ?PhpVersion {
         // As of PHP 7.2, using the __autoload magic class method is deprecated.
@@ -93,7 +96,10 @@ Feature::for(Node\Stmt\ClassMethod::class)
         }
 
         // As of PHP 8.0, applying the final modifier to a private method produces a warning.
-        if ($node->flags & (Modifiers::FINAL | Modifiers::PRIVATE)) {
+        if (
+            ($node->flags & Modifiers::FINAL) &&
+            ($node->flags & Modifiers::PRIVATE)
+        ) {
             return PhpVersion::PHP_7_4;
         }
 

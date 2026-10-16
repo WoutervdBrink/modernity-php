@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Turbo\Data;
+namespace App\Data\Analysis\Turbo;
 
 use Spatie\LaravelData\Casts\Cast;
 use Spatie\LaravelData\Support\Creation\CreationContext;
@@ -22,7 +22,13 @@ final class TurboRangesCastAndTransformer implements Cast, Transformer
         $ranges = [];
 
         foreach ($value as $range) {
-            if (! is_array($range) || ! is_int($range[0]) || ! is_int($range[1])) {
+            if (
+                ! is_array($range)
+                || ! array_key_exists(0, $range)
+                || ! array_key_exists(1, $range)
+                || (! is_int($range[0]) && $range[0] !== null)
+                || (! is_int($range[1]) && $range[1] !== null)
+            ) {
                 continue;
             }
 

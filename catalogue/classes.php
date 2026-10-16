@@ -24,7 +24,10 @@ Feature::for(ClassLike::class)->rule(function (ClassLike $node): PhpVersionConst
 
     if ($node instanceof Class_ || $node instanceof Interface_) {
         if (! empty($node->extends)) {
-            $constraint = $constraint->merge(Clazz::constraintFor($node->extends->name));
+            $extends = is_array($node->extends) ? $node->extends : [$node->extends];
+            foreach ($extends as $extend) {
+                $constraint = $constraint->merge(Clazz::constraintFor($extend->name));
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 import { SearchStatus } from '../../Models/Enums';
-import { GitHubRepository } from '../GitHub';
 import { RepositoryData } from '../Repository';
+import { GitHubRepository } from '../GitHub';
 export type CreateSearchRequestData = {
     parameters: SearchParameters;
 };

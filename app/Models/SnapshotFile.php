@@ -18,6 +18,6 @@ final class SnapshotFile extends Model
 
     public function sourceFile(): HasOne
     {
-        return $this->hasOne(SourceFile::class);
+        return $this->hasOne(SourceFile::class, 'sha256', 'sha256');
     }
 }

@@ -19,5 +19,5 @@ interface RepositoryStorage
 
     public function hasCommit(Repository $repository, string $sha): bool;
 
-    public function archive(Repository $repository, string $sha): void;
+    public function archive(Repository $repository, string $sha): RepositoryArchive;
 }

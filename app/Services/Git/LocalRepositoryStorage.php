@@ -2,6 +2,7 @@
 
 namespace App\Services\Git;
 
+use App\Contracts\Git\RepositoryArchive;
 use App\Contracts\Git\RepositoryStorage;
 use App\Data\Git\GitTag;
 use App\Models\Repository;
@@ -113,9 +114,16 @@ final class LocalRepositoryStorage implements RepositoryStorage
         }
     }
 
-    public function archive(Repository $repository, string $sha): void
+    public function archive(Repository $repository, string $sha): RepositoryArchive
     {
-        // TODO: Implement archive() method.
+
+        $gitRepository = $this->getGitRepository($repository);
+
+        $path = sys_get_temp_dir().DIRECTORY_SEPARATOR.'modernity_repository_'.$sha.'.zip';
+
+        $gitRepository->run('archive', '--format', 'zip', '-o', $path, $sha);
+
+        return new LocalRepositoryArchive($path);
     }
 
     public function discoverTags(Repository $repository): Collection

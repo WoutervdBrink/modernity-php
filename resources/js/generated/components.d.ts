@@ -151,6 +151,8 @@ declare module 'vue' {
     Show: typeof import('./../pages/Search/Show.vue')['default']
     Timestamp: typeof import('./../components/Timestamp.vue')['default']
     Toolbar: typeof import('./../components/Toolbar.vue')['default']
+    TurboDocument: typeof import('./../components/Turbo/TurboDocument.vue')['default']
+    TurboNode: typeof import('./../components/Turbo/TurboNode.vue')['default']
     YesNoBadge: typeof import('./../components/YesNoBadge.vue')['default']
   }
   export interface GlobalDirectives {

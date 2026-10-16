@@ -3,6 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import DashboardController from '@/actions/App/Http/Controllers/DashboardController.ts';
 import { href, menu, type MenuItem } from '@/menu.ts';
 import { computed } from 'vue';
+import FailedJobsController from '@/actions/App/Http/Controllers/FailedJobsController.ts';
 
 const page = usePage();
 
@@ -11,6 +12,12 @@ const isActive = computed(() => (item: MenuItem): boolean => {
 
     return root === item.root;
 });
+
+const failedJobs: MenuItem = {
+    label: 'Failed Jobs',
+    root: 'FailedJob',
+    href: FailedJobsController.index,
+};
 </script>
 
 <template>
@@ -18,7 +25,7 @@ const isActive = computed(() => (item: MenuItem): boolean => {
         <Link :href="DashboardController.url()" class="navbar-brand">PHP Modernity</Link>
         <BNavbarToggle target="nav-collapse" />
         <BCollapse id="nav-collapse" is-nav>
-            <BNavbarNav>
+            <BNavbarNav class="me-auto">
                 <InertiaBNavItem
                     v-for="item in menu"
                     :key="item.root"
@@ -27,6 +34,11 @@ const isActive = computed(() => (item: MenuItem): boolean => {
                     prefetch
                 >
                     {{ item.label }}
+                </InertiaBNavItem>
+            </BNavbarNav>
+            <BNavbarNav>
+                <InertiaBNavItem :active="isActive(failedJobs)" :href="href(failedJobs.href)" prefetch>
+                    {{ failedJobs.label }}
                 </InertiaBNavItem>
             </BNavbarNav>
         </BCollapse>

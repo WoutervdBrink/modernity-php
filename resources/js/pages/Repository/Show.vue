@@ -3,9 +3,10 @@ import type { RepositoryData } from '@/generated/types/App/Data/Repository';
 import GitHubLink from '@/components/Repository/GitHubLink.vue';
 import type { LengthAwarePaginator } from '@/generated/types/Illuminate';
 import type { SnapshotData } from '@/generated/types/App/Data/Snapshot';
-import type { Column, FilterDefinition } from '@/components/Datatable';
+import type { Column, FilterDefinition, RowActions } from '@/components/Datatable';
 import { router } from '@inertiajs/vue3';
 import RepositoryController from '@/actions/App/Http/Controllers/RepositoryController.ts';
+import SnapshotController from '@/actions/App/Http/Controllers/SnapshotController.ts';
 
 const props = defineProps<{
     repository: RepositoryData;
@@ -40,6 +41,10 @@ const columns = [
         format: 'datetime',
     },
 ] satisfies Column<SnapshotData>[];
+
+const actions: RowActions<SnapshotData> = {
+    view: (snapshot) => SnapshotController.show(snapshot).url,
+};
 
 function discoverSnapshots(): void {
     router.visit(RepositoryController.discoverSnapshots(props.repository), {
@@ -83,7 +88,7 @@ function discoverSnapshots(): void {
         </Detail>
     </DetailList>
 
-    <Datatable :columns :data="snapshots" :filters searchable title="Snapshots" title-component="h2">
+    <Datatable :actions :columns :data="snapshots" :filters searchable title="Snapshots" title-component="h2">
         <template #cell(downloaded_at)="{ item }">
             <YesNoBadge :status="item.downloaded_at !== null" />
         </template>
