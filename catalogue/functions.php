@@ -5,7 +5,6 @@ use App\Catalogue\Func;
 use App\Catalogue\FunctionCall;
 use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
@@ -169,18 +168,6 @@ Func::for('strrchr')->arguments(fn (int $args): bool => $args >= 3, since: PhpVe
 
 // Changed functions in PHP 8.5.
 Func::for('clone')->arguments(fn (int $args): bool => $args >= 2, since: PhpVersion::PHP_8_5);
-Func::for('define')->sinceWhen(function (FunctionCall $call): ?PhpVersion {
-    $arg = $call->arguments[1] ?? null;
-
-    if (! $arg instanceof Arg) {
-        return null;
-    }
-    if (! $arg->value instanceof FuncCall) {
-        return null;
-    }
-
-    return $arg->value->isFirstClassCallable() ? PhpVersion::PHP_8_5 : null;
-});
 Func::for('grapheme_strpos')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_5);
 Func::for('grapheme_stripos')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_5);
 Func::for('grapheme_strrpos')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_5);
