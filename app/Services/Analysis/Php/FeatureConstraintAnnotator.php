@@ -3,7 +3,7 @@
 namespace App\Services\Analysis\Php;
 
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
-use PhpParser\Node\Stmt;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 
@@ -19,8 +19,8 @@ final readonly class FeatureConstraintAnnotator
     }
 
     /**
-     * @param  array<Stmt>  $ast
-     * @return array<Stmt>
+     * @param  array<Node>  $ast
+     * @return array<Node>
      */
     public function annotate(array $ast): array
     {

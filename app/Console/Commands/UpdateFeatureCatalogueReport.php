@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use;
 use App\Catalogue\Feature;
 use App\Console\Commands\Support\FeatureCatalogueStatusReport;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use LaravelZero\Framework\Commands\Command;
 use ReflectionClass;
 use ReflectionException;
 

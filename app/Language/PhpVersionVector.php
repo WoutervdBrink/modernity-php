@@ -35,21 +35,6 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
     }
 
     /**
-     * @param  list<float>  $values
-     */
-    public static function of(array $values): self
-    {
-        if (count($values) !== PhpVersion::count()) {
-            throw new InvalidArgumentException(
-                'Amount of values passed to PhpVersionVector::of() ('.count($values).
-                ') must be equal to the amount of defined PHP versions ('.PhpVersion::count().').'
-            );
-        }
-
-        return new self(new Vector($values));
-    }
-
-    /**
      * @return Vector<float>
      */
     private static function emptyVector(): Vector
@@ -66,6 +51,27 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
         return $empty;
     }
 
+    #[Override]
+    public function count(): int
+    {
+        return PhpVersion::count();
+    }
+
+    /**
+     * @param  list<float>  $values
+     */
+    public static function of(array $values): self
+    {
+        if (count($values) !== PhpVersion::count()) {
+            throw new InvalidArgumentException(
+                'Amount of values passed to PhpVersionVector::of() ('.count($values).
+                ') must be equal to the amount of defined PHP versions ('.PhpVersion::count().').'
+            );
+        }
+
+        return new self(new Vector($values));
+    }
+
     public static function zero(): self
     {
         return new self;
@@ -76,31 +82,10 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
         $new = clone $this;
 
         foreach (PhpVersion::orderedCases() as $key) {
-            $new[$key] += $other[$key];
+            $new[$key] = (float) ($new[$key] + $other[$key]);
         }
 
         return $new;
-    }
-
-    public function addFactor(float $factor): self
-    {
-        $new = clone $this;
-
-        foreach (PhpVersion::orderedCases() as $key) {
-            $new[$key] += $factor;
-        }
-
-        return $new;
-    }
-
-    public function subFactor(float $factor): self
-    {
-        return $this->addFactor(-$factor);
-    }
-
-    public function min(): float
-    {
-        return min($this->values->toArray());
     }
 
     /**
@@ -137,14 +122,43 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
         return $vector;
     }
 
-    public function scale(int|float $factor): self
+    public function min(): float
     {
-        return new self($this->values->map(fn (float $value): float => $value * (float) $factor));
+        $values = $this->values->toArray();
+
+        assert($values !== []);
+
+        return min($values);
     }
 
     public function max(): float
     {
-        return max($this->values->toArray());
+        $values = $this->values->toArray();
+
+        assert($values !== []);
+
+        return max($values);
+    }
+
+    public function addFactor(float $factor): self
+    {
+        $new = clone $this;
+
+        foreach (PhpVersion::orderedCases() as $key) {
+            $new[$key] = (float) ($new[$key] + $factor);
+        }
+
+        return $new;
+    }
+
+    public function subFactor(float $factor): self
+    {
+        return $this->addFactor(-$factor);
+    }
+
+    public function scale(int|float $factor): self
+    {
+        return new self($this->values->map(fn (float $value): float => $value * (float) $factor));
     }
 
     #[Override]
@@ -168,6 +182,9 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
         return $this->values->offsetGet(self::getKey($offset));
     }
 
+    /**
+     * @param  float  $value
+     */
     #[Override]
     public function offsetSet(mixed $offset, mixed $value): void
     {
@@ -208,11 +225,5 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
     public function rewind(): void
     {
         $this->key = array_first(PhpVersion::orderedCases());
-    }
-
-    #[Override]
-    public function count(): int
-    {
-        return PhpVersion::count();
     }
 }

@@ -70,10 +70,10 @@ abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue
         [$name, $class, $since, $until] = $row;
 
         if ($class === '') {
-            $func = self::for($name);
+            $func = static::for($name);
         } else {
             /** @var class-string $class */
-            $func = self::forClass($name, $class);
+            $func = static::forClass($name, $class);
         }
 
         if (! empty($since)) {
@@ -94,8 +94,5 @@ abstract class IdentifierWithParentClassCatalogue extends IdentifierCatalogue
      *
      * @example <code>::forClass('connect', 'MySQL')</code>: Say something about the <code>MySQL::connect</code> identifier.
      */
-    public static function forClass(string $name, string $className): static
-    {
-        return new static($name, $className);
-    }
+    abstract public static function forClass(string $name, string $className): static;
 }

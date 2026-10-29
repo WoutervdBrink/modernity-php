@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\Support;
 
-use;
-
 final readonly class FeatureCatalogueStatusReport
 {
     public function __construct(

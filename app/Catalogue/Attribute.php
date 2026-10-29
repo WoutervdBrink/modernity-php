@@ -11,4 +11,9 @@ final class Attribute extends IdentifierCatalogue
     {
         return mb_strtolower($name);
     }
+
+    final public static function for(string $name): static
+    {
+        return new self(self::normalizeName($name));
+    }
 }

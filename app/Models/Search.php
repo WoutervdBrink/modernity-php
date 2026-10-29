@@ -12,6 +12,13 @@ use LogicException;
 
 final class Search extends Model
 {
+    protected $casts = [
+        'parameters' => SearchParameters::class,
+        'status' => SearchStatus::class,
+        'started_at' => 'immutable_datetime',
+        'finished_at' => 'immutable_datetime',
+    ];
+
     public static function create(SearchParameters $parameters): self
     {
         $search = new self;
@@ -33,7 +40,7 @@ final class Search extends Model
     public function start(): void
     {
         $this->transitionTo(SearchStatus::RUNNING);
-        $this->started_at ??= now();
+        $this->started_at ??= now()->toImmutable();
         $this->save();
     }
 
@@ -53,7 +60,7 @@ final class Search extends Model
     public function complete(): void
     {
         $this->transitionTo(SearchStatus::COMPLETED);
-        $this->finished_at = now();
+        $this->finished_at = now()->toImmutable();
         $this->save();
     }
 
@@ -81,22 +88,15 @@ final class Search extends Model
      */
     public function results(): HasMany
     {
-        return $this->hasMany(SearchResult::class)->orderBy('discovered_at', 'desc');
+        return $this->hasMany(SearchResult::class)->latest('discovered_at');
     }
 
+    /**
+     * @return HasMany<SearchResult, $this>
+     */
     public function acceptedResults(): HasMany
     {
         return $this->hasMany(SearchResult::class)
             ->whereNull('rejection_reason');
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'parameters' => SearchParameters::class,
-            'status' => SearchStatus::class,
-            'started_at' => 'immutable_datetime',
-            'finished_at' => 'immutable_datetime',
-        ];
     }
 }

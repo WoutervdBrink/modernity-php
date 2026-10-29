@@ -3,6 +3,7 @@
 namespace App\Services\Analysis\Php;
 
 use App\Data\Analysis\Turbo\TurboDocument;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 
 final readonly class TurboDocumentWriter
@@ -19,6 +20,9 @@ final readonly class TurboDocumentWriter
         $this->traverser->addVisitor($this->writer);
     }
 
+    /**
+     * @param  Node[]  $ast
+     */
     public function write(array $ast): TurboDocument
     {
         $this->traverser->traverse($ast);

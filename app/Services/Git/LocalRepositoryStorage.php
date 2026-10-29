@@ -17,7 +17,7 @@ final class LocalRepositoryStorage implements RepositoryStorage
 {
     private Filesystem $disk;
 
-    public function __construct(private Git $git)
+    public function __construct(private readonly Git $git)
     {
         $this->disk = Storage::disk('repositories');
     }
@@ -76,7 +76,7 @@ final class LocalRepositoryStorage implements RepositoryStorage
                 if (trim($gitRepository->run('rev-parse', '--is-bare-repository')->getOutputAsString()) === 'true') {
                     return;
                 }
-            } catch (GitException $e) {
+            } catch (GitException) {
                 // Invalid/incomplete.
             }
         }
@@ -109,11 +109,14 @@ final class LocalRepositoryStorage implements RepositoryStorage
             $gitRepository->getCommit($sha);
 
             return true;
-        } catch (GitException $e) {
+        } catch (GitException) {
             return false;
         }
     }
 
+    /**
+     * @throws GitException
+     */
     public function archive(Repository $repository, string $sha): RepositoryArchive
     {
 
@@ -126,6 +129,9 @@ final class LocalRepositoryStorage implements RepositoryStorage
         return new LocalRepositoryArchive($path);
     }
 
+    /**
+     * @throws GitException
+     */
     public function discoverTags(Repository $repository): Collection
     {
         $gitRepository = $this->getGitRepository($repository);

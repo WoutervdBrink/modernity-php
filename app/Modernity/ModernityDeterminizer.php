@@ -20,6 +20,14 @@ final class ModernityDeterminizer
     }
 
     /**
+     * @param  Node[]  $nodes
+     */
+    private function visitArray(array $nodes): PhpVersionVector
+    {
+        return $this->mergeVectors(array_map($this->visitNode(...), $nodes));
+    }
+
+    /**
      * @param  array<PhpVersionVector|null>  $vectors
      */
     private function mergeVectors(array $vectors): PhpVersionVector
@@ -29,24 +37,6 @@ final class ModernityDeterminizer
         $vectors = array_map(fn (PhpVersionVector $vector): PhpVersionVector => $vector->rescale(), $vectors);
 
         return array_reduce($vectors, fn (PhpVersionVector $carry, PhpVersionVector $item): PhpVersionVector => $carry->add($item), PhpVersionVector::zero())->rescale();
-    }
-
-    private function constraintToVector(PhpVersionConstraint $constraint): ?PhpVersionVector
-    {
-        if ($constraint->min === null && $constraint->max === null) {
-            return null;
-        }
-
-        $vector = PhpVersionVector::zero();
-
-        $min = $constraint->min ?? PhpVersion::getOldestSupported();
-        $max = $constraint->max ?? PhpVersion::getNewestSupported();
-
-        for ($cursor = $min; $cursor !== null && $cursor->isOlderThan($max); $cursor = $cursor->next()) {
-            $vector[$cursor] = 1.0;
-        }
-
-        return $vector;
     }
 
     private function visitNode(Node $node): PhpVersionVector
@@ -64,6 +54,9 @@ final class ModernityDeterminizer
             $child = $node->{$subNodeName};
 
             if (is_array($child)) {
+                /**
+                 * @var Node[] $child
+                 */
                 $vectors[] = $this->visitArray($child);
 
                 continue;
@@ -85,11 +78,21 @@ final class ModernityDeterminizer
         return $this->mergeVectors($vectors);
     }
 
-    /**
-     * @param  Node[]  $nodes
-     */
-    private function visitArray(array $nodes): PhpVersionVector
+    private function constraintToVector(PhpVersionConstraint $constraint): ?PhpVersionVector
     {
-        return $this->mergeVectors(array_map($this->visitNode(...), $nodes));
+        if ($constraint->min === null && $constraint->max === null) {
+            return null;
+        }
+
+        $vector = PhpVersionVector::zero();
+
+        $min = $constraint->min ?? PhpVersion::getOldestSupported();
+        $max = $constraint->max ?? PhpVersion::getNewestSupported();
+
+        for ($cursor = $min; $cursor !== null && $cursor->isOlderThan($max); $cursor = $cursor->next()) {
+            $vector[$cursor] = 1.0;
+        }
+
+        return $vector;
     }
 }

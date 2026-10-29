@@ -22,6 +22,11 @@ final readonly class LocalRepositoryArchive implements RepositoryArchive
     {
         for ($i = 0; $i < $this->zip->numFiles; $i++) {
             $file = $this->zip->statIndex($i);
+
+            if ($file === false) {
+                continue;
+            }
+
             $pathInfo = pathinfo($file['name']);
             if (! empty($pathInfo['extension']) && $pathInfo['extension'] === 'php') {
                 yield RepositoryFile::from([

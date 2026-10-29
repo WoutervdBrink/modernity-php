@@ -33,6 +33,21 @@ final class Func extends IdentifierWithParentClassCatalogue
         self::$rules[$this->name] ??= [];
     }
 
+    public static function for(string $name): static
+    {
+        return new self(self::normalizeName($name));
+    }
+
+    protected static function normalizeName(string $name): string
+    {
+        return mb_strtolower($name);
+    }
+
+    public static function forClass(string $name, string $className): static
+    {
+        return new self($name, $className);
+    }
+
     public static function constraintForFunctionCall(FunctionCall $functionCall): PhpVersionConstraint
     {
         // We cannot (yet) determine the version constraint for functions if we do not know what function was called.
@@ -49,11 +64,6 @@ final class Func extends IdentifierWithParentClassCatalogue
             fn (PhpVersionConstraint $acc, callable $rule): PhpVersionConstraint => $acc->merge($rule($functionCall)),
             $baseVersionConstraint,
         );
-    }
-
-    protected static function normalizeName(string $name): string
-    {
-        return mb_strtolower($name);
     }
 
     /**
@@ -93,9 +103,11 @@ final class Func extends IdentifierWithParentClassCatalogue
         ?PhpVersion $sinceOtherwise = null,
         ?PhpVersion $untilOtherwise = null,
     ): self {
-        return $this->rule(fn (FunctionCall $call): PhpVersionConstraint => $argumentsRule($call->amountOfArguments)
+        return $this->rule(fn (FunctionCall $call): PhpVersionConstraint => $call->amountOfArguments !== null
+            ? ($argumentsRule($call->amountOfArguments)
                 ? PhpVersionConstraint::between($since, $until)
-                : PhpVersionConstraint::between($sinceOtherwise, $untilOtherwise)
+                : PhpVersionConstraint::between($sinceOtherwise, $untilOtherwise))
+            : PhpVersionConstraint::open()
         );
     }
 

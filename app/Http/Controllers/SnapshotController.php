@@ -24,7 +24,7 @@ final class SnapshotController extends Controller
         $files = QueryBuilder::for($snapshot->files()->with('sourceFile'))
             ->allowedSorts('path', 'sha256')
             ->defaultSort('path')
-            ->when($search !== '', function (Builder $query) use ($search): void {
+            ->when($search->isNotEmpty(), function (Builder $query) use ($search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->where('path', 'like', '%'.$search.'%')
                         ->orWhere('sha256', 'like', '%'.$search.'%');

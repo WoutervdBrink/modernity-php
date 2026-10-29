@@ -27,18 +27,14 @@ final class RecursiveConstraintInspector
             return $constraint;
         }
 
-        if (is_array($value)) {
-            $constraint = PhpVersionConstraint::open();
+        $constraint = PhpVersionConstraint::open();
 
-            foreach ($value as $item) {
-                $constraint = $constraint->merge(
-                    self::inspect($item, $callback),
-                );
-            }
-
-            return $constraint;
+        foreach ($value as $item) {
+            $constraint = $constraint->merge(
+                self::inspect($item, $callback),
+            );
         }
 
-        return PhpVersionConstraint::open();
+        return $constraint;
     }
 }

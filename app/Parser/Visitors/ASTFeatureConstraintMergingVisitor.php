@@ -22,19 +22,7 @@ final class ASTFeatureConstraintMergingVisitor extends NodeVisitorAbstract
     /**
      * @var PhpVersionConstraint Current or final version constraint.
      */
-    public private(set) PhpVersionConstraint $constraint {
-        get {
-            if (empty($this->constraint)) {
-                return PhpVersionConstraint::open();
-            }
-
-            return $this->constraint;
-        }
-
-        set(PhpVersionConstraint $constraint) {
-            $this->constraint = $constraint;
-        }
-    }
+    public private(set) PhpVersionConstraint $constraint;
 
     public function __construct()
     {

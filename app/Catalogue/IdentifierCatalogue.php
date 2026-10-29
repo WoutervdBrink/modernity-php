@@ -15,14 +15,14 @@ abstract class IdentifierCatalogue
     /**
      * Registrations of minimum PHP versions for the identifiers.
      *
-     * @var array<class-string, <string, PhpVersion>>
+     * @var array<class-string, array<string, PhpVersion>>
      */
     private static array $min = [];
 
     /**
      * Registrations of maximum PHP versions for registered identifiers.
      *
-     * @var array<class-string, <string, PhpVersion>>
+     * @var array<class-string, array<string, PhpVersion>>
      */
     private static array $max = [];
 
@@ -90,10 +90,7 @@ abstract class IdentifierCatalogue
     /**
      * Construct a new registration of version information for a certain identifier.
      */
-    final public static function for(string $name): static
-    {
-        return new static(static::normalizeName($name));
-    }
+    abstract public static function for(string $name): static;
 
     /**
      * Register that the identifier was introduced in the given version.

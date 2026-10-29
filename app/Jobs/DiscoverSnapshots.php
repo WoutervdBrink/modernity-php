@@ -34,6 +34,7 @@ final class DiscoverSnapshots implements ShouldBeUnique, ShouldQueue
      * Execute the job.
      *
      * @throws GitException
+     * @throws Throwable
      */
     public function handle(RepositoryStorage $storage): void
     {

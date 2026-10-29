@@ -25,16 +25,16 @@ final class SearchResult extends Model
         return $this->belongsTo(Repository::class);
     }
 
-    public function isRejected(): Attribute
+    /**
+     * @return Attribute<bool, never>
+     */
+    protected function isRejected(): Attribute
     {
         return Attribute::get(fn (): bool => $this->rejection_reason !== null);
     }
 
-    protected function casts(): array
-    {
-        return [
-            'observed_data' => GitHubRepository::class,
-            'discovered_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'observed_data' => GitHubRepository::class,
+        'discovered_at' => 'datetime',
+    ];
 }

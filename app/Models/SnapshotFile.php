@@ -16,6 +16,9 @@ final class SnapshotFile extends Model
         return $this->belongsTo(Snapshot::class);
     }
 
+    /**
+     * @return HasOne<SourceFile, $this>
+     */
     public function sourceFile(): HasOne
     {
         return $this->hasOne(SourceFile::class, 'sha256', 'sha256');

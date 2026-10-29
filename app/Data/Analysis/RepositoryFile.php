@@ -7,6 +7,9 @@ use Spatie\LaravelData\Data;
 
 final class RepositoryFile extends Data
 {
+    /**
+     * @var int<0, max>
+     */
     #[Computed]
     public int $size;
 

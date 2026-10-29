@@ -31,7 +31,7 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return (string) $this->search->getKey();
+        return (string) $this->search->id;
     }
 
     /**
@@ -60,7 +60,9 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
             if (! $result->is_rejected) {
                 $accepted++;
 
-                $queueSnapshotDiscovery($result->repository);
+                if ($result->repository !== null) {
+                    $queueSnapshotDiscovery($result->repository);
+                }
             }
 
             if ($accepted >= $this->search->parameters->max) {
@@ -104,9 +106,9 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
 
     public function failed(?Throwable $exception): void
     {
-        $search = Search::find($this->search->getKey());
+        $search = Search::whereKey($this->search->getKey())->first();
 
-        if ($search?->status === SearchStatus::RUNNING) {
+        if ($search !== null && $search->status === SearchStatus::RUNNING) {
             $search->fail();
         }
     }

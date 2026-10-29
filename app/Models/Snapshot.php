@@ -19,22 +19,6 @@ final class Snapshot extends Model
         return $this->belongsTo(Repository::class);
     }
 
-    #[Scope]
-    public function downloaded(Builder $query, bool $downloaded): Builder
-    {
-        if ($downloaded) {
-            return $query->whereNotNull('downloaded_at');
-        } else {
-            return $query->whereNull('downloaded_at');
-        }
-    }
-
-    #[Scope]
-    public function semverDetected(Builder $query, bool $detected): Builder
-    {
-        return $detected ? $query->whereNotNull('semver') : $query->whereNull('semver');
-    }
-
     public function recordFile(string $path, SourceFile $sourceFile): void
     {
         $existing = $this->files()
@@ -78,12 +62,33 @@ final class Snapshot extends Model
         $this->save();
     }
 
-    protected function casts(): array
+    /**
+     * @param  Builder<Snapshot>  $query
+     * @return Builder<Snapshot>
+     */
+    #[Scope]
+    protected function semverDetected(Builder $query, bool $detected): Builder
     {
-        return [
-            'committed_at' => 'datetime',
-            'downloaded_at' => 'datetime',
-            'indexed_at' => 'datetime',
-        ];
+        return $detected ? $query->whereNotNull('semver') : $query->whereNull('semver');
     }
+
+    /**
+     * @param  Builder<Snapshot>  $query
+     * @return Builder<Snapshot>
+     */
+    #[Scope]
+    protected function downloaded(Builder $query, bool $downloaded): Builder
+    {
+        if ($downloaded) {
+            return $query->whereNotNull('downloaded_at');
+        } else {
+            return $query->whereNull('downloaded_at');
+        }
+    }
+
+    protected $casts = [
+        'committed_at' => 'datetime',
+        'downloaded_at' => 'datetime',
+        'indexed_at' => 'datetime',
+    ];
 }

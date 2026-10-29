@@ -14,11 +14,13 @@ final class TypeScriptTransformerServiceProvider extends BaseTypeScriptTransform
 {
     protected function configure(TypeScriptTransformerConfigFactory $config): void
     {
+        /** @var string[] $directories */
+        $directories = config('data.structure_caching.directories');
         $config
             ->extension(new LaravelDataTypeScriptTransformerExtension)
             ->transformer(AttributedClassTransformer::class)
             ->transformer(EnumTransformer::class)
-            ->transformDirectories(...config('data.structure_caching.directories'))
+            ->transformDirectories(...$directories)
             ->outputDirectory(resource_path('js/generated'))
             ->writer(new ModuleWriter)
             ->formatter(PrettierFormatter::class);

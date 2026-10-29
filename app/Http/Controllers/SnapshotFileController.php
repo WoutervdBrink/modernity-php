@@ -20,9 +20,9 @@ final class SnapshotFileController extends Controller
             [
                 'snapshotFile' => SnapshotFileData::from($snapshotFile),
                 'snapshot' => SnapshotData::from($snapshotFile->snapshot),
-                'repository' => RepositoryData::from($snapshotFile->snapshot->repository),
-                'contents' => highlight_string($snapshotFile->sourceFile->contents, true),
-                'analysis' => $snapshotFile->sourceFile->analysis,
+                'repository' => RepositoryData::from($snapshotFile->snapshot?->repository),
+                'contents' => highlight_string($snapshotFile->sourceFile->contents ?? '', true),
+                'analysis' => $snapshotFile->sourceFile?->analysis,
             ]
         );
     }

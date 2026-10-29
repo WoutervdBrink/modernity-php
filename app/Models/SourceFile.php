@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 #[Table(key: 'sha256', keyType: 'string', incrementing: false)]
 final class SourceFile extends Model
 {
+    protected $casts = [
+        'size' => 'integer',
+        'analysis' => TurboDocument::class,
+    ];
+
     public static function record(RepositoryFile $fileContents, TurboDocument $analysis): self
     {
         $sourceFile = new self;
@@ -34,13 +39,5 @@ final class SourceFile extends Model
     {
         $this->analysis = $analysis;
         $this->save();
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'size' => 'integer',
-            'analysis' => TurboDocument::class,
-        ];
     }
 }
