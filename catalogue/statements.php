@@ -7,6 +7,29 @@ use App\Language\Quirks;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 
+function determineMaxVersionBasedOnClassLikeName(?string $name): ?PhpVersion
+{
+    return match ($name) {
+        // As of PHP 7.0, it is not allowed to use 'bool', 'int', 'float', 'string', 'null', 'true' or 'false' as a
+        // trait, class or interface name.
+        'bool', 'int', 'float', 'string', 'null', 'true', 'false' => PhpVersion::PHP_5_6,
+
+        // Idem for PHP 7.1 and 'void' or 'iterable'.
+        'void', 'iterable' => PhpVersion::PHP_7_0,
+
+        // Idem for PHP 7.2 and 'object'.
+        'object' => PhpVersion::PHP_7_1,
+
+        // Idem for PHP 8.0 and 'match'.
+        'match' => PhpVersion::PHP_7_4,
+
+        // Idem for PHP 8.1 and 'never' or 'readonly',
+        'never', 'readonly' => PhpVersion::PHP_8_0,
+
+        default => null,
+    };
+}
+
 Feature::for(Node\Stmt\Block::class);
 Feature::for(Node\Stmt\Break_::class)->untilWhen(function (Node\Stmt\Break_ $node): ?PhpVersion {
     // As of PHP 7.0, break statements no longer allow their argument to be a constant.
@@ -133,25 +156,7 @@ Feature::for(Node\Stmt\Class_::class)
 
         return null;
     })
-    ->untilWhen(fn (Node\Stmt\Class_ $node): ?PhpVersion => match ($node->name?->toString() ?? null) {
-        // As of PHP 7.0, it is not allowed to use 'bool', 'int', 'float', 'string', 'null', 'true' or 'false' as a
-        // class name.
-        'bool', 'int', 'float', 'string', 'null', 'true', 'false' => PhpVersion::PHP_5_6,
-
-        // Idem for PHP 7.1 and 'void' or 'iterable'.
-        'void', 'iterable' => PhpVersion::PHP_7_0,
-
-        // Idem for PHP 7.2 and 'object'.
-        'object' => PhpVersion::PHP_7_1,
-
-        // Idem for PHP 8.0 and 'match'.
-        'match' => PhpVersion::PHP_7_4,
-
-        // Idem for PHP 8.1 and 'never' or 'readonly',
-        'never', 'readonly' => PhpVersion::PHP_8_0,
-
-        default => null,
-    });
+    ->untilWhen(fn (Node\Stmt\Class_ $node): ?PhpVersion => determineMaxVersionBasedOnClassLikeName($node->name?->toString() ?? null));
 Feature::for(Node\Stmt\Const_::class)->sinceWhen(function (Node\Stmt\Const_ $node): ?PhpVersion {
     if (! empty($node->attrGroups)) {
         return PhpVersion::PHP_8_5;
@@ -216,25 +221,7 @@ Feature::for(Node\Stmt\HaltCompiler::class);
 Feature::for(Node\Stmt\If_::class);
 Feature::for(Node\Stmt\InlineHTML::class);
 Feature::for(Node\Stmt\Interface_::class)
-    ->untilWhen(fn (Node\Stmt\Interface_ $node): ?PhpVersion => match ($node->name?->toString() ?? null) {
-        // As of PHP 7.0, it is not allowed to use 'bool', 'int', 'float', 'string', 'null', 'true' or 'false' as an
-        // interface name.
-        'bool', 'int', 'float', 'string', 'null', 'true', 'false' => PhpVersion::PHP_5_6,
-
-        // Idem for PHP 7.1 and 'void' or 'iterable'.
-        'void', 'iterable' => PhpVersion::PHP_7_0,
-
-        // Idem for PHP 7.2 and 'object'.
-        'object' => PhpVersion::PHP_7_1,
-
-        // Idem for PHP 8.0 and 'match'.
-        'match' => PhpVersion::PHP_7_4,
-
-        // Idem for PHP 8.1 and 'never' or 'readonly',
-        'never', 'readonly' => PhpVersion::PHP_8_0,
-
-        default => null,
-    });
+    ->untilWhen(fn (Node\Stmt\Interface_ $node): ?PhpVersion => determineMaxVersionBasedOnClassLikeName($node->name?->toString() ?? null));
 Feature::for(Node\Stmt\Label::class)->since(PhpVersion::PHP_5_3);
 Feature::for(Node\Stmt\Namespace_::class)->since(PhpVersion::PHP_5_3);
 Feature::for(Node\Stmt\Nop::class);
@@ -294,25 +281,7 @@ Feature::for(Node\Stmt\Switch_::class)->untilWhen(function (Node\Stmt\Switch_ $n
 Feature::for(Node\Stmt\TraitUse::class)->since(PhpVersion::PHP_5_4);
 Feature::for(Node\Stmt\Trait_::class)
     ->since(PhpVersion::PHP_5_4)
-    ->untilWhen(fn (Node\Stmt\Trait_ $node): ?PhpVersion => match ($node->name?->toString() ?? null) {
-        // As of PHP 7.0, it is not allowed to use 'bool', 'int', 'float', 'string', 'null', 'true' or 'false' as a
-        // trait name.
-        'bool', 'int', 'float', 'string', 'null', 'true', 'false' => PhpVersion::PHP_5_6,
-
-        // Idem for PHP 7.1 and 'void' or 'iterable'.
-        'void', 'iterable' => PhpVersion::PHP_7_0,
-
-        // Idem for PHP 7.2 and 'object'.
-        'object' => PhpVersion::PHP_7_1,
-
-        // Idem for PHP 8.0 and 'match'.
-        'match' => PhpVersion::PHP_7_4,
-
-        // Idem for PHP 8.1 and 'never' or 'readonly',
-        'never', 'readonly' => PhpVersion::PHP_8_0,
-
-        default => null,
-    });
+    ->untilWhen(fn (Node\Stmt\Trait_ $node): ?PhpVersion => determineMaxVersionBasedOnClassLikeName($node->name?->toString() ?? null));
 Feature::for(Node\Stmt\TryCatch::class);
 Feature::for(Node\Stmt\Unset_::class);
 Feature::for(Node\Stmt\Use_::class)->sinceWhen(function (Node\Stmt\Use_ $node): PhpVersion {
