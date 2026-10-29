@@ -142,7 +142,7 @@ Feature::for(Node\Expr\ClassConstFetch::class)
                 : PhpVersion::PHP_8_0;
         }
 
-        if ($node->name instanceof Node\Expr\Variable) {
+        if (! $node->name instanceof Node\Identifier) {
             // As of PHP 8.3, class constants can be fetched dynamically, e.g. Foo::{$bar}.
             return PhpVersion::PHP_8_3;
         }
