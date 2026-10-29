@@ -10,13 +10,23 @@ use App\Services\Git\LocalRepositoryStorage;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\PaginatedDataCollection;
+use Spatie\QueryBuilder\QueryBuilder;
 
 final class SearchController extends Controller
 {
     public function index(): Response
     {
+        $searches = QueryBuilder::for(Search::query())
+            ->allowedSorts(
+                'created_at',
+            )
+            ->defaultSort('created_at')
+            ->paginate()
+            ->withQueryString();
+
         return Inertia::render('Search/Index', [
-            'searches' => SearchData::collect(Search::query()->orderByDesc('created_at')->get()),
+            'searches' => SearchData::collect($searches, PaginatedDataCollection::class),
         ]);
     }
 
