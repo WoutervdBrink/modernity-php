@@ -17,6 +17,11 @@ final readonly class FunctionCall
     public ?int $amountOfArguments;
 
     /**
+     * @var bool <code>true</code> when one or more of the arguments are named.
+     */
+    public bool $hasNamedArguments;
+
+    /**
      * @param  ?string  $functionName  Name of the function that is being called. If set to <code>null</code>, the name
      *                                 of the called function could not be determined.
      * @param  ?class-string  $className  Name of the class if the function is a static method.
@@ -27,16 +32,22 @@ final readonly class FunctionCall
         public ?string $className,
         public array $arguments,
     ) {
+        $amountOfArguments = count($arguments);
+        $hasNamedArguments = false;
+
         foreach ($this->arguments as $argument) {
             if ($argument instanceof Arg) {
                 if ($argument->unpack) {
-                    $this->amountOfArguments = null;
+                    $amountOfArguments = null;
+                }
 
-                    return;
+                if ($argument->name !== null) {
+                    $hasNamedArguments = true;
                 }
             }
         }
 
-        $this->amountOfArguments = count($arguments);
+        $this->amountOfArguments = $amountOfArguments;
+        $this->hasNamedArguments = $hasNamedArguments;
     }
 }
