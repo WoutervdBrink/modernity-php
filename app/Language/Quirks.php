@@ -103,7 +103,7 @@ final class Quirks
 
     public static function isSemiReservedKeyword(string $keyword): bool
     {
-        return in_array($keyword, self::SEMI_RESERVED_KEYWORDS);
+        return in_array(mb_strtolower($keyword), self::SEMI_RESERVED_KEYWORDS, true);
     }
 
     public static function isSuperglobal(string $name): bool
