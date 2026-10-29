@@ -2,7 +2,7 @@
 
 namespace Tests\Fixtures;
 
-use App\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersion;
 use InvalidArgumentException;
 use PhpParser\PhpVersion as ParserVersion;
 

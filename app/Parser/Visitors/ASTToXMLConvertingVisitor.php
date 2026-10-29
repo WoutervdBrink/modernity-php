@@ -2,7 +2,7 @@
 
 namespace App\Parser\Visitors;
 
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use DOMDocument;
 use DOMException;
 use DOMNode;
@@ -34,24 +34,6 @@ final class ASTToXMLConvertingVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    private static function convertAttributeValueToString(mixed $value): string
-    {
-        if ($value === null) {
-            return 'null';
-        }
-        if (is_scalar($value)) {
-            return (string) $value;
-        }
-        if (is_array($value)) {
-            return '['.implode(', ', array_map(self::convertAttributeValueToString(...), $value)).']';
-        }
-        if (is_object($value) && method_exists($value, '__toString')) {
-            return $value->__toString();
-        }
-
-        return '__not_a_string__';
-    }
-
     /**
      * @throws DOMException
      */
@@ -79,6 +61,24 @@ final class ASTToXMLConvertingVisitor extends NodeVisitorAbstract
         $this->cursor = $child;
 
         return null;
+    }
+
+    private static function convertAttributeValueToString(mixed $value): string
+    {
+        if ($value === null) {
+            return 'null';
+        }
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+        if (is_array($value)) {
+            return '['.implode(', ', array_map(self::convertAttributeValueToString(...), $value)).']';
+        }
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return $value->__toString();
+        }
+
+        return '__not_a_string__';
     }
 
     #[Override]

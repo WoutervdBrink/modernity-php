@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Catalogue;
+namespace App\Services\Analysis\Php\Catalogue;
 
 /**
  * Registration of version information for a certain constant.

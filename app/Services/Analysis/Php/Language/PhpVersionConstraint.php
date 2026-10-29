@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Language;
+namespace App\Services\Analysis\Php\Language;
 
 use InvalidArgumentException;
 
@@ -30,16 +30,6 @@ final readonly class PhpVersionConstraint
     }
 
     /**
-     * Create a version constraint without bounds.
-     */
-    public static function open(): self
-    {
-        static $empty;
-
-        return $empty ??= new self;
-    }
-
-    /**
      * Create a version constraint bound by a lower version (inclusive).
      *
      * @param  PhpVersion|null  $version  Minimum required version.
@@ -53,6 +43,16 @@ final readonly class PhpVersionConstraint
         static $cache = [];
 
         return $cache[$version->value] ??= new self($version, null);
+    }
+
+    /**
+     * Create a version constraint without bounds.
+     */
+    public static function open(): self
+    {
+        static $empty;
+
+        return $empty ??= new self;
     }
 
     /**

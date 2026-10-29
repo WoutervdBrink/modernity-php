@@ -2,7 +2,7 @@
 
 namespace App\Parser\Visitors;
 
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use Override;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

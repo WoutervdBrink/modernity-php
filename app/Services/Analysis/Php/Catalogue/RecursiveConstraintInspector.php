@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Catalogue;
+namespace App\Services\Analysis\Php\Catalogue;
 
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use PhpParser\Node;
 
 final class RecursiveConstraintInspector

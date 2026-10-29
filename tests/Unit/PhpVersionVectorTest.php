@@ -1,7 +1,7 @@
 <?php
 
-use App\Language\PhpVersion;
-use App\Language\PhpVersionVector;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersionVector;
 
 dataset('min', [
     // values, min

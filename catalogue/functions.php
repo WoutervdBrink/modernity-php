@@ -1,10 +1,10 @@
 <?php
 
-use App\Catalogue\Feature;
-use App\Catalogue\Func;
-use App\Catalogue\FunctionCall;
-use App\Language\PhpVersion;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Catalogue\Feature;
+use App\Services\Analysis\Php\Catalogue\Func;
+use App\Services\Analysis\Php\Catalogue\FunctionCall;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;

@@ -5,7 +5,7 @@ namespace App\Services\Analysis\Php;
 use App\Data\Analysis\Turbo\TurboDocument;
 use App\Data\Analysis\Turbo\TurboNode;
 use App\Data\Analysis\Turbo\TurboRange;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use Ds\Map;
 use LogicException;
 use Override;

@@ -2,7 +2,7 @@
 
 namespace App\Services\Analysis\Php;
 
-use App\Language\PhpVersion as AppPhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersion as AppPhpVersion;
 use PhpParser\Error;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser;

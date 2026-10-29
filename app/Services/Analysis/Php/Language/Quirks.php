@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Language;
+namespace App\Services\Analysis\Php\Language;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar;

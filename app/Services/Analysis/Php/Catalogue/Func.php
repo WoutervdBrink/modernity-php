@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Catalogue;
+namespace App\Services\Analysis\Php\Catalogue;
 
-use App\Language\PhpVersion;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;

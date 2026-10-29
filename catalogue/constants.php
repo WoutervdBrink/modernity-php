@@ -1,8 +1,8 @@
 <?php
 
-use App\Catalogue\Constant;
-use App\Catalogue\Feature;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Catalogue\Constant;
+use App\Services\Analysis\Php\Catalogue\Feature;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;

@@ -1,8 +1,8 @@
 <?php
 
-use App\Catalogue\Attribute as AttributeCatalogue;
-use App\Catalogue\Feature;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Catalogue\Attribute as AttributeCatalogue;
+use App\Services\Analysis\Php\Catalogue\Feature;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use PhpParser\Node\Attribute as AttributeNode;
 
 AttributeCatalogue::loadFromCatalogue('attributes');

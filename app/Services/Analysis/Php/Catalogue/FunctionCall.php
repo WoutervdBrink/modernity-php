@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Catalogue;
+namespace App\Services\Analysis\Php\Catalogue;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArgPlaceholder;

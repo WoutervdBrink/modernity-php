@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Catalogue;
+namespace App\Services\Analysis\Php\Catalogue;
 
-use App\Language\PhpVersion;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Error;
 

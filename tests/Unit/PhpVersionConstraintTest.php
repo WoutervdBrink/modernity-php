@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Language\PhpVersion;
-use App\Language\PhpVersionConstraint;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersionConstraint;
 use InvalidArgumentException;
 
 dataset('version sets', [

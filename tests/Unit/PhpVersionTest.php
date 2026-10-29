@@ -1,6 +1,6 @@
 <?php
 
-use App\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersion;
 
 dataset('ordered doubles', [
     // A > B

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Catalogue\Feature;
 use App\Console\Commands\Support\FeatureCatalogueStatusReport;
+use App\Services\Analysis\Php\Catalogue\Feature;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Console\Command;

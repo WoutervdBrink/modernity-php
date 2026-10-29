@@ -11,8 +11,8 @@
 |
 */
 
-use App\Language\PhpVersion;
-use App\Language\PhpVersionVector;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\PhpVersionVector;
 use Tests\TestCase;
 
 pest()->extend(TestCase::class)->in('Feature');

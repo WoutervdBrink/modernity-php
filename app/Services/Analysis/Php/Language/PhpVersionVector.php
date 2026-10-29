@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Language;
+namespace App\Services\Analysis\Php\Language;
 
 use ArrayAccess;
 use BadMethodCallException;

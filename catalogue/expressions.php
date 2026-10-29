@@ -1,9 +1,9 @@
 <?php
 
-use App\Catalogue\Feature;
-use App\Catalogue\FunctionOrMethodInspector;
-use App\Language\PhpVersion;
-use App\Language\Quirks;
+use App\Services\Analysis\Php\Catalogue\Feature;
+use App\Services\Analysis\Php\Catalogue\FunctionOrMethodInspector;
+use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Analysis\Php\Language\Quirks;
 use PhpParser\Node;
 use PhpParser\Node\Expr\List_;
 
