@@ -18,10 +18,6 @@ Clazz::loadFromCatalogue('classes');
 Feature::for(ClassLike::class)->rule(function (ClassLike $node): PhpVersionConstraint {
     $constraint = PhpVersionConstraint::open();
 
-    if (! empty($node->name)) {
-        $constraint = $constraint->merge(Clazz::constraintFor($node->name->name));
-    }
-
     if ($node instanceof Class_ || $node instanceof Interface_) {
         if (! empty($node->extends)) {
             $extends = is_array($node->extends) ? $node->extends : [$node->extends];
