@@ -11,6 +11,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 
 Clazz::loadFromCatalogue('classes');
@@ -27,7 +28,7 @@ Feature::for(ClassLike::class)->rule(function (ClassLike $node): PhpVersionConst
         }
     }
 
-    if ($node instanceof Class_) {
+    if ($node instanceof Class_ || $node instanceof Enum_) {
         foreach ($node->implements as $implement) {
             $constraint = $constraint->merge(Clazz::constraintFor($implement->name));
         }
