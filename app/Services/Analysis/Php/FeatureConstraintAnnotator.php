@@ -5,6 +5,7 @@ namespace App\Services\Analysis\Php;
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 
 final readonly class FeatureConstraintAnnotator
 {
@@ -13,6 +14,7 @@ final readonly class FeatureConstraintAnnotator
     public function __construct()
     {
         $this->traverser = new NodeTraverser;
+        $this->traverser->addVisitor(new NameResolver);
         $this->traverser->addVisitor(new NodeFeatureConstraintDetectingVisitor);
     }
 
