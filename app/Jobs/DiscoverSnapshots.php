@@ -38,7 +38,7 @@ final class DiscoverSnapshots implements ShouldBeUnique, ShouldQueue
      */
     public function handle(RepositoryStorage $storage): void
     {
-        $this->repository->startSnapshotDiscovery();
+        $this->repository->setProcessRunning();
 
         $storage->fetch($this->repository);
 
@@ -49,7 +49,7 @@ final class DiscoverSnapshots implements ShouldBeUnique, ShouldQueue
                 $this->repository->recordSnapshot($tag);
             });
 
-            $this->repository->markSnapshotsDiscovered();
+            $this->repository->setProcessCompleted();
         });
     }
 
@@ -61,6 +61,6 @@ final class DiscoverSnapshots implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        $repository->failSnapshotDiscovery();
+        $repository->setProcessFailed();
     }
 }

@@ -4,16 +4,22 @@ namespace App\Models;
 
 use App\Data\Git\GitTag;
 use App\Data\GitHub\GitHubRepository;
-use App\Models\Enums\RepositorySnapshotDiscoveryStatus;
+use App\Models\Concerns\HasProcessStatus;
+use App\Models\Enums\ProcessStatus;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use LogicException;
 
 final class Repository extends Model
 {
+    use HasProcessStatus;
+
+    public static string $processStatusColumn = 'snapshot_discovery_status';
+
+    public static string $processCompletedAtColumn = 'snapshots_discovered_at';
+
     protected $fillable = [
         'github_id',
         'name',
@@ -24,7 +30,7 @@ final class Repository extends Model
         'github_id' => 'integer',
         'snapshots_discovered_at' => 'immutable_datetime',
         'fetched_at' => 'immutable_datetime',
-        'snapshot_discovery_status' => RepositorySnapshotDiscoveryStatus::class,
+        'snapshot_discovery_status' => ProcessStatus::class,
     ];
 
     public static function fromGitHubRepository(GitHubRepository $repository): Repository
@@ -36,22 +42,6 @@ final class Repository extends Model
                 'description' => $repository->description,
             ]
         );
-    }
-
-    public function markSnapshotsDiscovered(): void
-    {
-        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::COMPLETED);
-        $this->snapshots_discovered_at = now()->toImmutable();
-        $this->save();
-    }
-
-    private function setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus $to): void
-    {
-        if (! $this->snapshot_discovery_status->isTransitionAllowed($to)) {
-            throw new LogicException('Transitioning from status '.$this->snapshot_discovery_status->name.' to '.$to->name.' is not allowed.');
-        }
-
-        $this->snapshot_discovery_status = $to;
     }
 
     public function markFetched(): void
@@ -87,24 +77,6 @@ final class Repository extends Model
     public function snapshots(): HasMany
     {
         return $this->hasMany(Snapshot::class);
-    }
-
-    public function queueSnapshotDiscovery(): void
-    {
-        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::QUEUED);
-        $this->save();
-    }
-
-    public function startSnapshotDiscovery(): void
-    {
-        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::RUNNING);
-        $this->save();
-    }
-
-    public function failSnapshotDiscovery(): void
-    {
-        $this->setSnapshotDiscoveryStatus(RepositorySnapshotDiscoveryStatus::FAILED);
-        $this->save();
     }
 
     /**

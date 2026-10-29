@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { SearchData, SearchResultData } from '@/generated/types/App/Data/Search';
-import SearchStatusBadge from '@/components/SearchStatusBadge.vue';
 import { onMounted, ref, watch } from 'vue';
 import { usePoll } from '@inertiajs/vue3';
 import type { SearchStatus } from '@/generated/types/App/Models/Enums';
@@ -70,7 +69,7 @@ onMounted(() => {
             <BTr>
                 <BTh>Status</BTh>
                 <BTd>
-                    <SearchStatusBadge :status="search.status" />
+                    <StatusBadge :status="search.status" />
                 </BTd>
             </BTr>
         </BTbody>

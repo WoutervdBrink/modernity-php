@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import type { SearchStatus } from '@/generated/types/App/Models/Enums';
+import type { ProcessStatus, SearchStatus } from '@/generated/types/App/Models/Enums';
 import { computed } from 'vue';
 import type { ColorVariant } from 'bootstrap-vue-next';
 
 const props = defineProps<{
-    status: SearchStatus;
+    status: ProcessStatus | SearchStatus;
 }>();
 
 const variant = computed<ColorVariant>(() => {
     switch (props.status) {
         case 'pending':
             return 'secondary';
+        case 'queued':
+            return 'info';
         case 'running':
             return 'primary';
-        case 'paused':
-            return 'warning';
         case 'completed':
             return 'success';
         case 'failed':

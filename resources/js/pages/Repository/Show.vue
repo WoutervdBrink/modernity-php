@@ -21,24 +21,21 @@ const columns = [
         sortable: true,
     },
     {
-        key: 'commit_sha',
-        label: 'Commit SHA',
-        sortable: true,
-    },
-    {
         key: 'semver',
         label: 'Semver',
         sortable: true,
         nullLabel: 'Not detected',
     },
     {
-        key: 'downloaded_at',
-        label: 'Downloaded',
+        key: 'commit_sha',
+        label: 'Commit SHA',
+        sortable: true,
     },
     {
-        key: 'created_at',
-        label: 'First discovered at',
-        format: 'datetime',
+        key: 'analysis_status',
+        label: 'Analysis status',
+        format: 'status',
+        sortable: true,
     },
 ] satisfies Column<SnapshotData>[];
 
@@ -72,10 +69,10 @@ function discoverSnapshots(): void {
             {{ repository.description }}
         </Detail>
         <Detail label="Accepted">
-            <RepositoryAcceptedBadge :repository="repository" />
+            <BooleanBadge :value="repository.is_accepted" />
         </Detail>
         <Detail label="Snapshot discovery status">
-            <RepositorySnapshotDiscoveryStatusBadge :status="repository.snapshot_discovery_status" />
+            <StatusBadge :status="repository.snapshot_discovery_status" />
         </Detail>
         <Detail label="Last fetched">
             <Timestamp :timestamp="repository.fetched_at" />

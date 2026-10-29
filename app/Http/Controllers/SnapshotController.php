@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Snapshot\QueueSnapshotAnalysis;
 use App\Data\Repository\RepositoryData;
 use App\Data\Snapshot\SnapshotData;
 use App\Data\SnapshotFile\SnapshotFileData;
-use App\Jobs\AnalyzeSnapshot;
 use App\Models\Snapshot;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -43,9 +43,9 @@ final class SnapshotController extends Controller
         );
     }
 
-    public function analyze(Snapshot $snapshot): RedirectResponse
+    public function analyze(Snapshot $snapshot, QueueSnapshotAnalysis $queueSnapshotAnalysis): RedirectResponse
     {
-        AnalyzeSnapshot::dispatch($snapshot);
+        $queueSnapshotAnalysis($snapshot);
 
         return redirect()
             ->route('snapshots.show', $snapshot);

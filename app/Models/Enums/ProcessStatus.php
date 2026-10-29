@@ -2,7 +2,7 @@
 
 namespace App\Models\Enums;
 
-enum RepositorySnapshotDiscoveryStatus: string
+enum ProcessStatus: string
 {
     case PENDING = 'pending';
     case QUEUED = 'queued';

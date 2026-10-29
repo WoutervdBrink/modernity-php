@@ -11,6 +11,7 @@ import { computed, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import type { BTableSortBy, TableField, TableFieldRaw } from 'bootstrap-vue-next';
 import { formatValue } from '@/components/Datatable/formatters.ts';
 import { router } from '@inertiajs/vue3';
+import type { ProcessStatus } from '@/generated/types/App/Models/Enums';
 
 const props = withDefaults(
     defineProps<{
@@ -70,7 +71,10 @@ const fields = computed(() => {
         tdClass: `td-${col.format}`,
         thStyle: col.width
             ? { width: col.width, maxWidth: col.width }
-            : col.format?.startsWith('date') || col.format === 'boolean'
+            : col.format?.startsWith('date') ||
+                col.format === 'boolean' ||
+                col.format === 'has-happened' ||
+                col.format === 'status'
               ? { width: '1%' }
               : undefined,
     }));
@@ -239,6 +243,30 @@ function sortDirection(key: string): 'asc' | 'desc' | null {
                 :relative="col.format === 'datetime-relative'"
                 :timestamp="timestampValue(col, asRow(item))"
             />
+        </template>
+
+        <template
+            v-for="col in columnsWithFormat(['has-happened'])"
+            :key="`has-happened-${col.key}`"
+            #[`cell(${col.key})`]="{ item }"
+        >
+            <BooleanBadge :value="cellValue(col, asRow(item)) !== null" />
+        </template>
+
+        <template
+            v-for="col in columnsWithFormat(['status'])"
+            :key="`status--${col.key}`"
+            #[`cell(${col.key})`]="{ item }"
+        >
+            <StatusBadge :status="cellValue(col, asRow(item)) as ProcessStatus" />
+        </template>
+
+        <template
+            v-for="col in columnsWithFormat(['boolean'])"
+            :key="`boolean-${col.key}`"
+            #[`cell(${col.key})`]="{ item }"
+        >
+            <BooleanBadge :value="cellValue(col, asRow(item)) as boolean" />
         </template>
 
         <template

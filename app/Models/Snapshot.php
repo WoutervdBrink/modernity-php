@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasProcessStatus;
+use App\Models\Enums\ProcessStatus;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +13,17 @@ use LogicException;
 
 final class Snapshot extends Model
 {
+    use HasProcessStatus;
+
+    private static string $processCompletedAtColumn = 'analyzed_at';
+
+    private static string $processStatusColumn = 'analysis_status';
+
+    protected $casts = [
+        'analyzed_at' => 'datetime',
+        'analysis_status' => ProcessStatus::class,
+    ];
+
     /**
      * @return BelongsTo<Repository, $this>
      */
@@ -56,12 +69,6 @@ final class Snapshot extends Model
         return $this->hasMany(SnapshotFile::class);
     }
 
-    public function markAnalyzed(): void
-    {
-        $this->indexed_at = now();
-        $this->save();
-    }
-
     /**
      * @param  Builder<Snapshot>  $query
      * @return Builder<Snapshot>
@@ -85,10 +92,4 @@ final class Snapshot extends Model
             return $query->whereNull('downloaded_at');
         }
     }
-
-    protected $casts = [
-        'committed_at' => 'datetime',
-        'downloaded_at' => 'datetime',
-        'indexed_at' => 'datetime',
-    ];
 }

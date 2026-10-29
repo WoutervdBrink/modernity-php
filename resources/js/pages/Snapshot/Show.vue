@@ -59,7 +59,7 @@ function analyze(): void {
         </BButton>
     </Toolbar>
 
-    <DetailList>
+    <DetailList class="mb-3">
         <Detail label="Repository">
             <Link :href="RepositoryController.show(repository)">
                 {{ repository.name }}
@@ -72,14 +72,20 @@ function analyze(): void {
                 <i-fa6-solid-up-right-from-square />
             </a>
         </Detail>
-        <Detail label="Commit SHA">
-            <code>{{ snapshot.commit_sha }}</code>
-        </Detail>
         <Detail label="Semantic version">
             <code v-if="snapshot.semver !== null">
                 {{ snapshot.semver }}
             </code>
             <i v-else class="text-secondary">None detected</i>
+        </Detail>
+        <Detail label="Commit SHA">
+            <code>{{ snapshot.commit_sha }}</code>
+        </Detail>
+        <Detail label="Analysis status">
+            <StatusBadge :status="snapshot.analysis_status" />
+        </Detail>
+        <Detail label="Analyzed">
+            <Timestamp :timestamp="snapshot.analyzed_at" />
         </Detail>
     </DetailList>
 

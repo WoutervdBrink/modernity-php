@@ -28,6 +28,8 @@ final class AnalyzeSnapshot implements ShouldBeUnique, ShouldQueue
      */
     public function handle(RepositoryStorage $storage, AnalyzeSourceFile $analyze): void
     {
+        $this->snapshot->setProcessRunning();
+
         /** @var Repository $repository */
         $repository = $this->snapshot->repository;
 
@@ -41,10 +43,21 @@ final class AnalyzeSnapshot implements ShouldBeUnique, ShouldQueue
                     $this->snapshot->recordFile($file->path, $sourceFile);
                 }
 
-                $this->snapshot->markAnalyzed();
+                $this->snapshot->setProcessCompleted();
             });
         } finally {
             $archive->destroy();
         }
+    }
+
+    public function failed(?Throwable $exception): void
+    {
+        $snapshot = Snapshot::find($this->snapshot->id);
+
+        if ($snapshot === null) {
+            return;
+        }
+
+        $snapshot->setProcessFailed();
     }
 }

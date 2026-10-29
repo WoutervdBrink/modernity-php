@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { SearchData } from '@/generated/types/App/Data/Search';
-import SearchStatusBadge from '@/components/SearchStatusBadge.vue';
 import SearchController from '@/actions/App/Http/Controllers/SearchController.ts';
 import { Link } from '@inertiajs/vue3';
 import type { LengthAwarePaginator } from '@/generated/types/Illuminate';
@@ -67,7 +66,7 @@ const actions: RowActions<SearchData> = {
             <SearchParameters :parameters="item.parameters" />
         </template>
         <template #cell(status)="{ item }">
-            <SearchStatusBadge :status="item.status" />
+            <StatusBadge :status="item.status" />
         </template>
     </Datatable>
 </template>

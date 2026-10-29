@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Enums\RepositorySnapshotDiscoveryStatus;
+use App\Models\Enums\ProcessStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::table('repositories', function (Blueprint $table): void {
             $table->string('snapshot_discovery_status')
-                ->default(RepositorySnapshotDiscoveryStatus::PENDING);
+                ->default(ProcessStatus::PENDING);
         });
     }
 

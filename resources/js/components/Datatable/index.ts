@@ -11,7 +11,16 @@ export type PaginatedRows<T> = {
 };
 
 export type DatatableFormat =
-    'text' | 'text-overflow' | 'date' | 'date-relative' | 'datetime' | 'datetime-relative' | 'number' | 'boolean';
+    | 'text'
+    | 'text-overflow'
+    | 'date'
+    | 'date-relative'
+    | 'datetime'
+    | 'datetime-relative'
+    | 'number'
+    | 'boolean'
+    | 'has-happened'
+    | 'status';
 
 export type Column<T> = {
     key: Extract<keyof T, string | (string & {})>;

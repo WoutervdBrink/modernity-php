@@ -3,7 +3,6 @@ import type { RepositoryData } from '@/generated/types/App/Data/Repository';
 import type { LengthAwarePaginator } from '@/generated/types/Illuminate';
 import type { Column, FilterDefinition, RowActions } from '@/components/Datatable';
 import RepositoryController from '@/actions/App/Http/Controllers/RepositoryController.ts';
-import RepositoryAcceptedBadge from '@/components/Repository/RepositoryAcceptedBadge.vue';
 
 defineOptions({
     layout: {
@@ -55,11 +54,8 @@ const actions: RowActions<RepositoryData> = {
         <template #cell(name)="{ item }">
             <GitHubLink :repository="item" />
         </template>
-        <template #cell(is_accepted)="{ item }">
-            <RepositoryAcceptedBadge :repository="item" />
-        </template>
         <template #cell(snapshot_discovery_status)="{ item }">
-            <RepositorySnapshotDiscoveryStatusBadge :status="item.snapshot_discovery_status" />
+            <StatusBadge :status="item.snapshot_discovery_status" />
         </template>
     </Datatable>
 </template>

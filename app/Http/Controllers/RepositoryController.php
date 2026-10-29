@@ -75,9 +75,9 @@ final class RepositoryController extends Controller
             )
             ->allowedSorts(
                 'tag',
+                'semver',
                 'commit_sha',
-                'committed_at',
-                'semver'
+                'analysis_status',
             )
             ->defaultSort('tag')
             ->when($search !== '', function (Builder $query) use ($search): void {

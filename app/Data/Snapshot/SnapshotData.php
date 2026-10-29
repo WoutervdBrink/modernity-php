@@ -2,6 +2,7 @@
 
 namespace App\Data\Snapshot;
 
+use App\Models\Enums\ProcessStatus;
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Data;
 
@@ -12,9 +13,8 @@ final class SnapshotData extends Data
         public string $tag,
         public string $commit_sha,
         public ?string $semver,
-        public ?CarbonImmutable $commited_at,
-        public ?CarbonImmutable $downloaded_at,
-        public ?CarbonImmutable $indexed_at,
+        public ProcessStatus $analysis_status,
+        public ?CarbonImmutable $analyzed_at,
         public ?CarbonImmutable $created_at,
         public ?CarbonImmutable $updated_at,
     ) {}

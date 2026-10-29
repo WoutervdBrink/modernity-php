@@ -10,8 +10,6 @@ export function formatValue(value: unknown, format?: DatatableFormat): string {
     }
 
     switch (format) {
-        case 'boolean':
-            return value === true ? 'Yes' : value === false ? 'No' : String(value);
         case 'number':
             return typeof value === 'number' ? new Intl.NumberFormat('en-US').format(value) : String(value);
         case 'datetime':
