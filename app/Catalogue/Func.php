@@ -184,6 +184,10 @@ final class Func extends IdentifierWithParentClassCatalogue
         ?PhpVersion $untilOtherwise = null,
     ): self {
         $check = function (FunctionCall $call) use ($optionsArgumentIndex, $option): bool {
+            if ($call->amountOfArguments === null) {
+                return false;
+            }
+
             if ($call->amountOfArguments < ($optionsArgumentIndex + 1)) {
                 return false;
             }
