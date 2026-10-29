@@ -209,6 +209,7 @@ function sortDirection(key: string): 'asc' | 'desc' | null {
         show-empty
         sort-icon-left
         striped
+        tbodyTrClass="align-middle"
     >
         <template #head()="{ label, field }">
             <span class="d-inline-flex align-items-center gap-2">
