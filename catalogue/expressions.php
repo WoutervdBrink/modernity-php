@@ -1,7 +1,7 @@
 <?php
 
 use App\Catalogue\Feature;
-use App\Inspectors\FunctionOrMethodInspector;
+use App\Catalogue\FunctionOrMethodInspector;
 use App\Language\PhpVersion;
 use App\Language\Quirks;
 use PhpParser\Node;
@@ -36,7 +36,7 @@ Feature::for(Node\Expr\Array_::class)
         return null;
     });
 Feature::for(Node\Expr\ArrowFunction::class)
-    ->inspector(FunctionOrMethodInspector::class)
+    ->rule(FunctionOrMethodInspector::inspect(...))
     ->since(PhpVersion::PHP_7_4);
 
 /**
@@ -151,7 +151,7 @@ Feature::for(Node\Expr\ClassConstFetch::class)
     });
 Feature::for(Node\Expr\Clone_::class);
 Feature::for(Node\Expr\Closure::class)
-    ->inspector(FunctionOrMethodInspector::class)
+    ->rule(FunctionOrMethodInspector::inspect(...))
     ->untilWhen(function (Node\Expr\Closure $node): ?PhpVersion {
         // Lexically bound variables cannot reuse names as of PHP 7.1.
 

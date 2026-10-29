@@ -21,7 +21,7 @@ final class SnapshotController extends Controller
     {
         $search = $request->string('search');
 
-        $files = QueryBuilder::for($snapshot->files()->with('sourceFile'))
+        $files = QueryBuilder::for($snapshot->files()->with('sourceFile')->getQuery())
             ->allowedSorts('path', 'sha256')
             ->defaultSort('path')
             ->when($search->isNotEmpty(), function (Builder $query) use ($search): void {

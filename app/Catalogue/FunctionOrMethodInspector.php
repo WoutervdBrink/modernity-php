@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Inspectors;
+namespace App\Catalogue;
 
 use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Error;
 
-final class FunctionOrMethodInspector implements Inspector
+final class FunctionOrMethodInspector
 {
     /**
-     * @template T of Node\Stmt\Function_|Node\Stmt\ClassMethod|Node\Expr\Closure|Node\Expr\ArrowFunction
-     *
-     * @param  T  $node
+     * @param  Node\Stmt\Function_|Node\Stmt\ClassMethod|Node\Expr\Closure|Node\Expr\ArrowFunction  $node
      */
-    #[Override]
-    public static function inspect(Node $node): PhpVersionConstraint
+    public static function inspect(mixed $node): PhpVersionConstraint
     {
         /** @var ?PhpVersion $since */
         $since = null;

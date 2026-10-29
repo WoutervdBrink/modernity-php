@@ -52,9 +52,9 @@ abstract class IdentifierCatalogue
             throw new RuntimeException('Unable to open identifier catalogue file '.$catalogue.'.');
         }
 
-        fgetcsv($fp);
+        fgetcsv($fp, escape: '\\');
 
-        while (($row = fgetcsv($fp)) !== false) {
+        while (($row = fgetcsv($fp, escape: '\\')) !== false) {
             /** @var string[] $row */
             static::processFromCatalogue($row);
         }

@@ -2,7 +2,6 @@
 
 namespace App\Catalogue;
 
-use App\Inspectors\Inspector;
 use App\Language\PhpVersion;
 use App\Language\PhpVersionConstraint;
 use Closure;
@@ -100,7 +99,10 @@ final class Feature
      */
     public function sinceWhen(callable $rule): self
     {
-        return $this->rule(static fn (Node $n): PhpVersionConstraint => PhpVersionConstraint::since($rule($n)));
+        return $this->rule(static function (Node $node) use ($rule): PhpVersionConstraint {
+            /** @var T $node */
+            return PhpVersionConstraint::since($rule($node));
+        });
     }
 
     /**
@@ -139,12 +141,12 @@ final class Feature
 
         $param = $rf->getParameters()[0]->getType();
 
-        if (! $param instanceof ReflectionNamedType || $param->isBuiltin()) {
+        if (! $param instanceof ReflectionNamedType || ($param->isBuiltin() && $param->getName() !== 'mixed')) {
             throw new InvalidArgumentException('Callback parameter must be a class type.');
         }
 
         $expectedParam = $param->getName();
-        if (! is_a($this->nodeClass, $expectedParam, true)) {
+        if ($expectedParam !== 'mixed' && ! is_a($this->nodeClass, $expectedParam, true)) {
             throw new InvalidArgumentException(sprintf('Callback parameter %s must accept %s', $expectedParam, $this->nodeClass));
         }
 
@@ -153,22 +155,19 @@ final class Feature
             throw new InvalidArgumentException('Callback must return a PhpVersionConstraint');
         }
 
-        return static function (Node $n) use ($closure): PhpVersionConstraint {
-            return $closure($n);
-        };
-    }
+        $nodeClass = $this->nodeClass;
 
-    /**
-     * @psalm-suppress UnusedReturnValue, UnusedMethod
-     *
-     * @template I of Inspector
-     *
-     * @param  class-string<I>  $inspectorClass
-     * @return $this
-     */
-    public function inspector(string $inspectorClass): self
-    {
-        return $this->rule($inspectorClass::inspect(...));
+        return static function (Node $node) use ($closure, $nodeClass): PhpVersionConstraint {
+            if (! $node instanceof $nodeClass) {
+                throw new InvalidArgumentException(sprintf('Expected node of type %s, got %s.',
+                    $nodeClass,
+                    $node::class
+                ));
+            }
+
+            /** @var T $node */
+            return $closure($node);
+        };
     }
 
     /**
@@ -189,7 +188,10 @@ final class Feature
      */
     public function untilWhen(callable $rule): self
     {
-        return $this->rule(static fn (Node $n): PhpVersionConstraint => PhpVersionConstraint::until($rule($n)));
+        return $this->rule(static function (Node $node) use ($rule): PhpVersionConstraint {
+            /** @var T $node */
+            return PhpVersionConstraint::until($rule($node));
+        });
     }
 
     /**

@@ -117,10 +117,6 @@ describe('array access', function (): void {
 
         $keys = [];
 
-        /**
-         * @var PhpVersion $key
-         * @var float $value
-         */
         foreach ($vector as $key => $value) {
             $keys[] = $key;
         }

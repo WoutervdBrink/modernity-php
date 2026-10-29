@@ -68,7 +68,7 @@ final class RepositoryController extends Controller
     {
         $search = trim($request->string('search')->toString());
 
-        $snapshots = QueryBuilder::for($repository->snapshots())
+        $snapshots = QueryBuilder::for($repository->snapshots()->getQuery())
             ->allowedFilters(
                 AllowedFilter::scope('downloaded'),
                 AllowedFilter::scope('semver_detected')

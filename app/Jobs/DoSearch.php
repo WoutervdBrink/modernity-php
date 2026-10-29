@@ -95,10 +95,13 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
     private function determineRejectionReason(Client $client, GitHubRepository $candidate): ?string
     {
         $name = explode('/', $candidate->full_name, 2);
+        /** @var array<string, int> $languageInfo */
         $languageInfo = $client->repos()->languages($name[0], $name[1]);
-        $candidate->phpShare = (($languageInfo['PHP'] ?? 0) / array_sum($languageInfo)) * 100;
+        $phpBytes = (float) ($languageInfo['PHP'] ?? 0);
+        $totalBytes = (float) array_sum($languageInfo);
+        $candidate->phpShare = (float) ($phpBytes / $totalBytes * 100.0);
         if ($candidate->phpShare < $this->search->parameters->php) {
-            return 'PHP share is '.round($candidate->phpShare, 2).'%; minimum is '.$this->search->parameters->php.'%';
+            return sprintf('PHP share is %.2f%%; minimum is %d%%', $candidate->phpShare, $this->search->parameters->php);
         }
 
         return null;

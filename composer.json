@@ -41,6 +41,7 @@
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^5.2",
         "phpstan/phpstan": "^2.2",
+        "psalm/plugin-laravel": "^3",
         "vimeo/psalm": "^6.18"
     },
     "autoload": {

@@ -1,7 +1,7 @@
 <?php
 
 use App\Catalogue\Feature;
-use App\Inspectors\FunctionOrMethodInspector;
+use App\Catalogue\FunctionOrMethodInspector;
 use App\Language\PhpVersion;
 use App\Language\Quirks;
 use PhpParser\Modifiers;
@@ -76,7 +76,7 @@ Feature::for(Node\Stmt\ClassConst::class)->sinceWhen(function (Node\Stmt\ClassCo
     return null;
 });
 Feature::for(Node\Stmt\ClassMethod::class)
-    ->inspector(FunctionOrMethodInspector::class)
+    ->rule(FunctionOrMethodInspector::inspect(...))
     // https://www.php.net/manual/en/language.oop5.changelog.php
     ->sinceWhen(function (Node\Stmt\ClassMethod $node): ?PhpVersion {
         $name = $node->name->toString();
@@ -207,7 +207,7 @@ Feature::for(Node\Stmt\Foreach_::class)->sinceWhen(function (Node\Stmt\Foreach_ 
 
     return null;
 });
-Feature::for(Node\Stmt\Function_::class)->inspector(FunctionOrMethodInspector::class);
+Feature::for(Node\Stmt\Function_::class)->rule(FunctionOrMethodInspector::inspect(...));
 Feature::for(Node\Stmt\Global_::class)->untilWhen(function (Node\Stmt\Global_ $node) {
     if (array_any($node->vars, fn ($var) => $var instanceof Node\Expr\Variable && $var->name === 'this')) {
         return PhpVersion::PHP_7_0;

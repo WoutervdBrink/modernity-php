@@ -116,7 +116,7 @@ final class PhpVersionVector implements ArrayAccess, Countable, Iterator
         $vector = $this->subFactor($min);
 
         if ($range !== 0.0) {
-            $vector = $vector->scale(1 / $range);
+            $vector = $vector->scale((float) 1 / $range);
         }
 
         return $vector;
