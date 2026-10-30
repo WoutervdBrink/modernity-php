@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FailedJobsController;
+use App\Http\Controllers\PlaygroundController;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SnapshotController;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/queuePendingProcesses', [DashboardController::class, 'queuePendingProcesses'])->name('queuePendingProcesses');
 Route::post('/queueFailedProcesses', [DashboardController::class, 'queueFailedProcesses'])->name('queueFailedProcesses');
+
+Route::get('/playground', [PlaygroundController::class, 'index'])->name('playground');
+Route::post('/playground/analyze', [PlaygroundController::class, 'analyze'])->name('playground.analyze');
 
 Route::get('/failedJobs', [FailedJobsController::class, 'index'])->name('failedJobs');
 

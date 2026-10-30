@@ -15,6 +15,7 @@ final class FailedJobsController extends Controller
             DB::table('failed_jobs')
                 ->select('*')
                 ->orderByDesc('failed_at')
+                ->limit(10)
                 ->get()
         );
 

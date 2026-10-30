@@ -13,7 +13,6 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\DeleteWhenMissingModels;
 use Illuminate\Queue\Attributes\Timeout;
 use Illuminate\Queue\Attributes\Tries;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 #[Tries(1)]
@@ -43,15 +42,13 @@ final class AnalyzeSnapshot implements ShouldBeUnique, ShouldQueue
         $archive = $storage->archive($repository, $this->snapshot->commit_sha);
 
         try {
-            DB::transaction(function () use ($archive, $analyze): void {
-                foreach ($archive->phpFiles() as $file) {
-                    $sourceFile = $analyze($file);
+            foreach ($archive->phpFiles() as $file) {
+                $sourceFile = $analyze($file);
 
-                    $this->snapshot->recordFile($file->path, $sourceFile);
-                }
+                $this->snapshot->recordFile($file->path, $sourceFile);
+            }
 
-                $this->snapshot->setProcessCompleted();
-            });
+            $this->snapshot->setProcessCompleted();
         } finally {
             $archive->destroy();
         }

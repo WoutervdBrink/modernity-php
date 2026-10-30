@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Data\Analysis\RepositoryFile;
 use App\Data\Analysis\Turbo\TurboDocument;
+use App\Services\Analysis\Php\SourceCannotBeParsedException;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,17 +16,30 @@ final class SourceFile extends Model
         'analysis' => TurboDocument::class,
     ];
 
-    public static function record(RepositoryFile $fileContents, TurboDocument $analysis): self
+    /**
+     * @param  callable(): TurboDocument  $analyze
+     */
+    public static function record(RepositoryFile $file, callable $analyze): self
     {
-        $sourceFile = new self;
+        self::query()->insertOrIgnore([
+            'sha256' => $file->sha256,
+            'size' => $file->size,
+            'contents' => $file->contents,
+            'analysis' => null,
+        ]);
 
-        $sourceFile->sha256 = $fileContents->sha256;
-        $sourceFile->size = $fileContents->size;
-        $sourceFile->contents = $fileContents->contents;
+        $sourceFile = self::query()
+            ->lockForUpdate()
+            ->findOrFail($file->sha256);
 
-        $sourceFile->analysis = $analysis;
-
-        $sourceFile->save();
+        if ($sourceFile->analysis === null) {
+            try {
+                $sourceFile->analysis = $analyze();
+                $sourceFile->save();
+            } catch (SourceCannotBeParsedException) {
+                //
+            }
+        }
 
         return $sourceFile;
     }

@@ -193,6 +193,87 @@ queueFailedProcessesForm.post = (options?: RouteQueryOptions): RouteFormDefiniti
 queueFailedProcesses.form = queueFailedProcessesForm
 
 /**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+export const playground = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: playground.url(options),
+    method: 'get',
+})
+
+playground.definition = {
+    methods: ["get","head"],
+    url: '/playground',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+playground.url = (options?: RouteQueryOptions) => {
+    return playground.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+playground.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: playground.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+playground.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: playground.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+const playgroundForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: playground.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+playgroundForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: playground.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\PlaygroundController::playground
+* @see app/Http/Controllers/PlaygroundController.php:10
+* @route '/playground'
+*/
+playgroundForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: playground.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+playground.form = playgroundForm
+
+/**
 * @see \App\Http\Controllers\FailedJobsController::failedJobs
 * @see app/Http/Controllers/FailedJobsController.php:12
 * @route '/failedJobs'
