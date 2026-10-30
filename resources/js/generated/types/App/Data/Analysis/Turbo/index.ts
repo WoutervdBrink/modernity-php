@@ -7,7 +7,7 @@ export type TurboDocument = {
 };
 export type TurboNode = {
     type: number;
-    ranges: TurboRange[];
+    ranges: [number | null, number | null][];
     children: TurboNode[];
 };
 export type TurboRange = {

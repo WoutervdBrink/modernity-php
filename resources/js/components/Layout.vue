@@ -6,10 +6,12 @@ withDefaults(
     defineProps<{
         title?: string;
         width?: 'narrow' | 'wide';
+        fluid?: boolean;
     }>(),
     {
         title: '',
         width: 'wide',
+        fluid: false,
     },
 );
 
@@ -24,9 +26,9 @@ const applicationCommit = computed(() => ({
     <Head :title="title" />
     <div class="h-100 d-flex flex-column">
         <BApp>
-            <Navbar />
+            <Navbar :fluid />
             <main class="flex-shrink-0">
-                <BContainer class="mt-3">
+                <BContainer :fluid class="mt-3">
                     <template v-if="width === 'narrow'">
                         <BRow>
                             <BCol class="mx-auto" lg="6">

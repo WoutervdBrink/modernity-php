@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\PlaygroundController::analyze
-* @see app/Http/Controllers/PlaygroundController.php:15
+* @see app/Http/Controllers/PlaygroundController.php:19
 * @route '/playground/analyze'
 */
 export const analyze = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ analyze.definition = {
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::analyze
-* @see app/Http/Controllers/PlaygroundController.php:15
+* @see app/Http/Controllers/PlaygroundController.php:19
 * @route '/playground/analyze'
 */
 analyze.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ analyze.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::analyze
-* @see app/Http/Controllers/PlaygroundController.php:15
+* @see app/Http/Controllers/PlaygroundController.php:19
 * @route '/playground/analyze'
 */
 analyze.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ analyze.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::analyze
-* @see app/Http/Controllers/PlaygroundController.php:15
+* @see app/Http/Controllers/PlaygroundController.php:19
 * @route '/playground/analyze'
 */
 const analyzeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const analyzeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::analyze
-* @see app/Http/Controllers/PlaygroundController.php:15
+* @see app/Http/Controllers/PlaygroundController.php:19
 * @route '/playground/analyze'
 */
 analyzeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

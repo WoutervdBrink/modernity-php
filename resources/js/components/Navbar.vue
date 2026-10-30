@@ -7,6 +7,8 @@ import FailedJobsController from '@/actions/App/Http/Controllers/FailedJobsContr
 
 const page = usePage();
 
+defineProps<{ fluid: boolean }>();
+
 const isActive = computed(() => (item: MenuItem): boolean => {
     const root = page.component.includes('/') ? page.component.split('/')[0] : page.component;
 
@@ -21,7 +23,7 @@ const failedJobs: MenuItem = {
 </script>
 
 <template>
-    <BNavbar v-b-color-mode="'dark'" container="lg" sticky="top" toggleable="md" variant="dark">
+    <BNavbar v-b-color-mode="'dark'" :container="fluid ? 'fluid' : 'lg'" sticky="top" toggleable="md" variant="dark">
         <Link :href="DashboardController.index.url()" class="navbar-brand">PHP Modernity</Link>
         <BNavbarToggle target="nav-collapse" />
         <BCollapse id="nav-collapse" is-nav>

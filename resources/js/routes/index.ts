@@ -194,7 +194,7 @@ queueFailedProcesses.form = queueFailedProcessesForm
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 export const playground = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -209,7 +209,7 @@ playground.definition = {
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 playground.url = (options?: RouteQueryOptions) => {
@@ -218,7 +218,7 @@ playground.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 playground.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -228,7 +228,7 @@ playground.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 playground.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -238,7 +238,7 @@ playground.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 const playgroundForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -248,7 +248,7 @@ const playgroundForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 playgroundForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -258,7 +258,7 @@ playgroundForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 
 /**
 * @see \App\Http\Controllers\PlaygroundController::playground
-* @see app/Http/Controllers/PlaygroundController.php:10
+* @see app/Http/Controllers/PlaygroundController.php:14
 * @route '/playground'
 */
 playgroundForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
