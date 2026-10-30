@@ -4,14 +4,19 @@ namespace App\Jobs;
 
 use App\Actions\Analysis\AnalyzeSourceFile;
 use App\Contracts\Git\RepositoryStorage;
+use App\Models\Enums\ProcessStatus;
 use App\Models\Repository;
 use App\Models\Snapshot;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Attributes\DeleteWhenMissingModels;
+use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
+#[Tries(1)]
+#[DeleteWhenMissingModels]
 final class AnalyzeSnapshot implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
@@ -50,14 +55,15 @@ final class AnalyzeSnapshot implements ShouldBeUnique, ShouldQueue
         }
     }
 
-    public function failed(?Throwable $exception): void
+    public function failed(): void
     {
-        $snapshot = Snapshot::find($this->snapshot->id);
-
-        if ($snapshot === null) {
-            return;
+        if ($this->snapshot->exists() && $this->snapshot->analysis_status === ProcessStatus::RUNNING) {
+            $this->snapshot->setProcessFailed();
         }
+    }
 
-        $snapshot->setProcessFailed();
+    public function uniqueId(): string
+    {
+        return (string) $this->snapshot->id;
     }
 }

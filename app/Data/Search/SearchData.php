@@ -2,7 +2,7 @@
 
 namespace App\Data\Search;
 
-use App\Models\Enums\SearchStatus;
+use App\Models\Enums\ProcessStatus;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\AutoWhenLoadedLazy;
@@ -17,7 +17,7 @@ final class SearchData extends Data
     public function __construct(
         public int $id,
         public SearchParameters $parameters,
-        public SearchStatus $status,
+        public ProcessStatus $status,
         public string $application_commit,
         public ?CarbonImmutable $started_at,
         public ?CarbonImmutable $finished_at,

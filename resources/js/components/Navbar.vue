@@ -22,7 +22,7 @@ const failedJobs: MenuItem = {
 
 <template>
     <BNavbar v-b-color-mode="'dark'" container="lg" sticky="top" toggleable="md" variant="dark">
-        <Link :href="DashboardController.url()" class="navbar-brand">PHP Modernity</Link>
+        <Link :href="DashboardController.index.url()" class="navbar-brand">PHP Modernity</Link>
         <BNavbarToggle target="nav-collapse" />
         <BCollapse id="nav-collapse" is-nav>
             <BNavbarNav class="me-auto">

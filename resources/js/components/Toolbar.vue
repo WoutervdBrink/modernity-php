@@ -7,6 +7,8 @@ defineProps<{
 <template>
     <div class="d-flex mb-3 justify-content-between align-items-center">
         <h1>{{ title }}</h1>
-        <slot />
+        <div class="d-flex gap-2 align-items-center">
+            <slot />
+        </div>
     </div>
 </template>

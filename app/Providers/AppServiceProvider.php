@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Analysis\ModernityAnalyzer;
+use App\Contracts\Git\ApplicationCommitSource;
 use App\Contracts\Git\RepositoryStorage;
 use App\Services\Analysis\PhpModernityAnalyzer;
 use App\Services\Git\LocalRepositoryStorage;
@@ -27,6 +28,11 @@ final class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             RepositoryStorage::class,
+            LocalRepositoryStorage::class
+        );
+
+        $this->app->bind(
+            ApplicationCommitSource::class,
             LocalRepositoryStorage::class
         );
 

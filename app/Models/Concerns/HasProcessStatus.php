@@ -2,11 +2,24 @@
 
 namespace App\Models\Concerns;
 
+use App\Data\ProcessStatusCounts;
 use App\Models\Enums\ProcessStatus;
+use Illuminate\Database\Query\Builder;
 use LogicException;
 
 trait HasProcessStatus
 {
+    public static function getProcessStatusCounts(?Builder $query = null): ProcessStatusCounts
+    {
+        return ProcessStatusCounts::from(($query ?? static::query()->toBase())
+            ->selectRaw('count(id) as total, '.static::$processStatusColumn)
+            ->groupBy(static::$processStatusColumn)
+            ->orderBy(static::$processStatusColumn)
+            ->get()
+            ->pluck('total', static::$processStatusColumn)
+            ->map(fn ($total): int => (int) $total));
+    }
+
     public function setProcessPending(): void
     {
         $this->setProcessStatus(ProcessStatus::PENDING);

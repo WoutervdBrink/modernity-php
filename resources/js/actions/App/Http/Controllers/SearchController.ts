@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::index
-* @see app/Http/Controllers/SearchController.php:18
+* @see app/Http/Controllers/SearchController.php:21
 * @route '/searches'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::create
-* @see app/Http/Controllers/SearchController.php:41
+* @see app/Http/Controllers/SearchController.php:49
 * @route '/searches/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -163,7 +163,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\SearchController::store
-* @see app/Http/Controllers/SearchController.php:33
+* @see app/Http/Controllers/SearchController.php:39
 * @route '/searches'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -178,7 +178,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\SearchController::store
-* @see app/Http/Controllers/SearchController.php:33
+* @see app/Http/Controllers/SearchController.php:39
 * @route '/searches'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -187,7 +187,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\SearchController::store
-* @see app/Http/Controllers/SearchController.php:33
+* @see app/Http/Controllers/SearchController.php:39
 * @route '/searches'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -197,7 +197,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\SearchController::store
-* @see app/Http/Controllers/SearchController.php:33
+* @see app/Http/Controllers/SearchController.php:39
 * @route '/searches'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -207,7 +207,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\SearchController::store
-* @see app/Http/Controllers/SearchController.php:33
+* @see app/Http/Controllers/SearchController.php:39
 * @route '/searches'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -219,7 +219,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 export const show = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 show.url = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -267,7 +267,7 @@ show.url = (args: { search: number | { id: number } } | [search: number | { id: 
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 show.get = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -277,7 +277,7 @@ show.get = (args: { search: number | { id: number } } | [search: number | { id: 
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 show.head = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -287,7 +287,7 @@ show.head = (args: { search: number | { id: number } } | [search: number | { id:
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 const showForm = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -297,7 +297,7 @@ const showForm = (args: { search: number | { id: number } } | [search: number | 
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 showForm.get = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -307,7 +307,7 @@ showForm.get = (args: { search: number | { id: number } } | [search: number | { 
 
 /**
 * @see \App\Http\Controllers\SearchController::show
-* @see app/Http/Controllers/SearchController.php:46
+* @see app/Http/Controllers/SearchController.php:54
 * @route '/searches/{search}'
 */
 showForm.head = (args: { search: number | { id: number } } | [search: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

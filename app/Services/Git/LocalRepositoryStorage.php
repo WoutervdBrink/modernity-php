@@ -2,6 +2,7 @@
 
 namespace App\Services\Git;
 
+use App\Contracts\Git\ApplicationCommitSource;
 use App\Contracts\Git\RepositoryArchive;
 use App\Contracts\Git\RepositoryStorage;
 use App\Data\Git\GitTag;
@@ -13,7 +14,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-final class LocalRepositoryStorage implements RepositoryStorage
+final class LocalRepositoryStorage implements ApplicationCommitSource, RepositoryStorage
 {
     private Filesystem $disk;
 
@@ -22,26 +23,13 @@ final class LocalRepositoryStorage implements RepositoryStorage
         $this->disk = Storage::disk('repositories');
     }
 
-    public static function getCurrentApplicationCommitHash(): ?string
+    public function getApplicationCommit(): string
     {
-        $dotGit = base_path('.git/');
-
-        if (! is_dir($dotGit)) {
-            return null;
+        try {
+            return $this->git->open(base_path())->getLastCommitId();
+        } catch (GitException) {
+            return str_pad('unknown_', 40, '0');
         }
-
-        $head = file_get_contents($dotGit.'HEAD');
-        if ($head === false) {
-            return null;
-        }
-        $head = trim(substr($head, 4));
-
-        $hash = file_get_contents($dotGit.$head);
-        if ($hash === false) {
-            return null;
-        }
-
-        return trim($hash);
     }
 
     /**

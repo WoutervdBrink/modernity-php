@@ -17,9 +17,11 @@ withDefaults(
     <BListGroupItem>
         <div class="row">
             <div :class="`col-lg-${labelSize}`">
-                <slot name="label">
-                    <strong>{{ label }}</strong>
-                </slot>
+                <strong
+                    ><slot name="label">
+                        {{ label }}
+                    </slot></strong
+                >
             </div>
             <div :class="`col-lg-${detailSize}`">
                 <slot />

@@ -8,7 +8,7 @@ use PhpParser\Node;
 final class RecursiveConstraintInspector
 {
     /**
-     * @param  Node|Node[]  $value
+     * @param  Node|Node[]|mixed  $value
      * @param  callable(Node): ?PhpVersionConstraint  $callback
      */
     public static function inspect(
@@ -29,10 +29,12 @@ final class RecursiveConstraintInspector
 
         $constraint = PhpVersionConstraint::open();
 
-        foreach ($value as $item) {
-            $constraint = $constraint->merge(
-                self::inspect($item, $callback),
-            );
+        if (is_array($value)) {
+            foreach ($value as $item) {
+                $constraint = $constraint->merge(
+                    self::inspect($item, $callback),
+                );
+            }
         }
 
         return $constraint;

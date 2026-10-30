@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../wayfinder'
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 export const dashboard = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -15,8 +15,8 @@ dashboard.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 dashboard.url = (options?: RouteQueryOptions) => {
@@ -24,8 +24,8 @@ dashboard.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,8 +34,8 @@ dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,8 +44,8 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -54,8 +54,8 @@ const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 })
 
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -64,8 +64,8 @@ dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 })
 
 /**
-* @see \App\Http\Controllers\DashboardController::__invoke
-* @see app/Http/Controllers/DashboardController.php:10
+* @see \App\Http\Controllers\DashboardController::dashboard
+* @see app/Http/Controllers/DashboardController.php:19
 * @route '/'
 */
 dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -79,6 +79,118 @@ dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 })
 
 dashboard.form = dashboardForm
+
+/**
+* @see \App\Http\Controllers\DashboardController::queuePendingProcesses
+* @see app/Http/Controllers/DashboardController.php:48
+* @route '/queuePendingProcesses'
+*/
+export const queuePendingProcesses = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: queuePendingProcesses.url(options),
+    method: 'post',
+})
+
+queuePendingProcesses.definition = {
+    methods: ["post"],
+    url: '/queuePendingProcesses',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\DashboardController::queuePendingProcesses
+* @see app/Http/Controllers/DashboardController.php:48
+* @route '/queuePendingProcesses'
+*/
+queuePendingProcesses.url = (options?: RouteQueryOptions) => {
+    return queuePendingProcesses.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\DashboardController::queuePendingProcesses
+* @see app/Http/Controllers/DashboardController.php:48
+* @route '/queuePendingProcesses'
+*/
+queuePendingProcesses.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: queuePendingProcesses.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\DashboardController::queuePendingProcesses
+* @see app/Http/Controllers/DashboardController.php:48
+* @route '/queuePendingProcesses'
+*/
+const queuePendingProcessesForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: queuePendingProcesses.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\DashboardController::queuePendingProcesses
+* @see app/Http/Controllers/DashboardController.php:48
+* @route '/queuePendingProcesses'
+*/
+queuePendingProcessesForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: queuePendingProcesses.url(options),
+    method: 'post',
+})
+
+queuePendingProcesses.form = queuePendingProcessesForm
+
+/**
+* @see \App\Http\Controllers\DashboardController::queueFailedProcesses
+* @see app/Http/Controllers/DashboardController.php:56
+* @route '/queueFailedProcesses'
+*/
+export const queueFailedProcesses = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: queueFailedProcesses.url(options),
+    method: 'post',
+})
+
+queueFailedProcesses.definition = {
+    methods: ["post"],
+    url: '/queueFailedProcesses',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\DashboardController::queueFailedProcesses
+* @see app/Http/Controllers/DashboardController.php:56
+* @route '/queueFailedProcesses'
+*/
+queueFailedProcesses.url = (options?: RouteQueryOptions) => {
+    return queueFailedProcesses.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\DashboardController::queueFailedProcesses
+* @see app/Http/Controllers/DashboardController.php:56
+* @route '/queueFailedProcesses'
+*/
+queueFailedProcesses.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: queueFailedProcesses.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\DashboardController::queueFailedProcesses
+* @see app/Http/Controllers/DashboardController.php:56
+* @route '/queueFailedProcesses'
+*/
+const queueFailedProcessesForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: queueFailedProcesses.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\DashboardController::queueFailedProcesses
+* @see app/Http/Controllers/DashboardController.php:56
+* @route '/queueFailedProcesses'
+*/
+queueFailedProcessesForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: queueFailedProcesses.url(options),
+    method: 'post',
+})
+
+queueFailedProcesses.form = queueFailedProcessesForm
 
 /**
 * @see \App\Http\Controllers\FailedJobsController::failedJobs

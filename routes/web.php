@@ -8,7 +8,9 @@ use App\Http\Controllers\SnapshotController;
 use App\Http\Controllers\SnapshotFileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', DashboardController::class)->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::post('/queuePendingProcesses', [DashboardController::class, 'queuePendingProcesses'])->name('queuePendingProcesses');
+Route::post('/queueFailedProcesses', [DashboardController::class, 'queueFailedProcesses'])->name('queueFailedProcesses');
 
 Route::get('/failedJobs', [FailedJobsController::class, 'index'])->name('failedJobs');
 

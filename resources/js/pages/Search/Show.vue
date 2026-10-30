@@ -2,7 +2,7 @@
 import type { SearchData, SearchResultData } from '@/generated/types/App/Data/Search';
 import { onMounted, ref, watch } from 'vue';
 import { usePoll } from '@inertiajs/vue3';
-import type { SearchStatus } from '@/generated/types/App/Models/Enums';
+import type { ProcessStatus } from '@/generated/types/App/Models/Enums';
 
 const props = defineProps<{
     current_commit: string;
@@ -19,7 +19,7 @@ const poll = usePoll(1000, { only: ['search'] }, { autoStart: false });
 
 watch(
     () => props.search.status,
-    (status: SearchStatus) => {
+    (status: ProcessStatus) => {
         if (status === 'completed' || status === 'failed') {
             poll.stop();
         } else {

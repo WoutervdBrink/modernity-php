@@ -7,3 +7,11 @@ export type FailedJobData = {
     exception: string;
     failed_at: string;
 };
+export type ProcessStatusCounts = {
+    total: number;
+    pending: number;
+    queued: number;
+    running: number;
+    completed: number;
+    failed: number;
+};

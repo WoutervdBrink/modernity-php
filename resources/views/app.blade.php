@@ -8,8 +8,13 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     @vite('resources/js/app.js')
     <x-inertia::head/>
+    <style>
+        #app {
+            height: 100vh;
+        }
+    </style>
 </head>
-<body>
+<body class="h-100">
 <x-inertia::app/>
 </body>
 </html>

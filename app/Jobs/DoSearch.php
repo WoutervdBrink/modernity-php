@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\Repository\QueueSnapshotDiscovery;
 use App\Data\GitHub\GitHubRepository;
-use App\Models\Enums\SearchStatus;
+use App\Models\Enums\ProcessStatus;
 use App\Models\Repository;
 use App\Models\Search;
 use App\Models\SearchResult;
@@ -29,17 +29,15 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(public Search $search) {}
 
-    public function uniqueId(): string
-    {
-        return (string) $this->search->id;
-    }
-
     /**
      * Execute the job.
+     *
+     * @throws Throwable
      */
     public function handle(GitHubManager $gh, QueueSnapshotDiscovery $queueSnapshotDiscovery): void
     {
-        $this->search->start();
+        $this->search->started_at = now()->toImmutable();
+        $this->search->setProcessRunning();
 
         $client = $gh->connection();
         $pager = new ResultPager($client, 100);
@@ -70,7 +68,7 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
             }
         }
 
-        $this->search->complete();
+        $this->search->setProcessCompleted();
     }
 
     private function buildSearchQuery(): string
@@ -99,7 +97,7 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
         $languageInfo = $client->repos()->languages($name[0], $name[1]);
         $phpBytes = (float) ($languageInfo['PHP'] ?? 0);
         $totalBytes = (float) array_sum($languageInfo);
-        $candidate->phpShare = (float) ($phpBytes / $totalBytes * 100.0);
+        $candidate->phpShare = $phpBytes / $totalBytes * 100.0;
         if ($candidate->phpShare < $this->search->parameters->php) {
             return sprintf('PHP share is %.2f%%; minimum is %d%%', $candidate->phpShare, $this->search->parameters->php);
         }
@@ -107,12 +105,15 @@ final class DoSearch implements ShouldBeUnique, ShouldQueue
         return null;
     }
 
-    public function failed(?Throwable $exception): void
+    public function failed(): void
     {
-        $search = Search::whereKey($this->search->getKey())->first();
-
-        if ($search !== null && $search->status === SearchStatus::RUNNING) {
-            $search->fail();
+        if ($this->search->exists() && $this->search->status === ProcessStatus::RUNNING) {
+            $this->search->setProcessFailed();
         }
+    }
+
+    public function uniqueId(): string
+    {
+        return (string) $this->search->id;
     }
 }

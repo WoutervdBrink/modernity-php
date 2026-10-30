@@ -1,4 +1,4 @@
-import { SearchStatus } from '../../Models/Enums';
+import { ProcessStatus } from '../../Models/Enums';
 import { RepositoryData } from '../Repository';
 import { GitHubRepository } from '../GitHub';
 export type CreateSearchRequestData = {
@@ -7,7 +7,7 @@ export type CreateSearchRequestData = {
 export type SearchData = {
     id: number;
     parameters: SearchParameters;
-    status: SearchStatus;
+    status: ProcessStatus;
     application_commit: string;
     started_at: string | null;
     finished_at: string | null;

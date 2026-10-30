@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Search\CreateSearch;
+use App\Actions\Search\QueueSearch;
+use App\Contracts\Git\ApplicationCommitSource;
 use App\Data\Search\CreateSearchRequestData;
 use App\Data\Search\SearchData;
 use App\Models\Search;
-use App\Services\Git\LocalRepositoryStorage;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 final class SearchController extends Controller
 {
+    public function __construct(private ApplicationCommitSource $commitSource) {}
+
     public function index(): Response
     {
         $searches = QueryBuilder::for(Search::query())
@@ -30,9 +33,14 @@ final class SearchController extends Controller
         ]);
     }
 
-    public function store(CreateSearchRequestData $data, CreateSearch $createSearch): RedirectResponse
+    /**
+     * @throws Throwable
+     */
+    public function store(CreateSearchRequestData $data, QueueSearch $queueSearch): RedirectResponse
     {
-        $search = $createSearch($data->parameters);
+        $search = Search::create($data->parameters, $this->commitSource->getApplicationCommit());
+
+        $queueSearch($search);
 
         return redirect()
             ->route('searches.show', $search);
@@ -48,7 +56,7 @@ final class SearchController extends Controller
         $search->load('results', 'results.repository')->loadCount('results', 'acceptedResults');
 
         return Inertia::render('Search/Show', [
-            'current_commit' => LocalRepositoryStorage::getCurrentApplicationCommitHash(),
+            'current_commit' => $this->commitSource->getApplicationCommit(),
             'search' => SearchData::from($search),
         ]);
     }

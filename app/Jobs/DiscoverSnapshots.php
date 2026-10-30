@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Contracts\Git\RepositoryStorage;
 use App\Data\Git\GitTag;
+use App\Models\Enums\ProcessStatus;
 use App\Models\Repository;
 use CzProject\GitPhp\GitException;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -24,11 +25,6 @@ final class DiscoverSnapshots implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(public Repository $repository) {}
-
-    public function uniqueId(): string
-    {
-        return (string) $this->repository->id;
-    }
 
     /**
      * Execute the job.
@@ -53,14 +49,15 @@ final class DiscoverSnapshots implements ShouldBeUnique, ShouldQueue
         });
     }
 
-    public function failed(?Throwable $exception): void
+    public function failed(): void
     {
-        $repository = Repository::find($this->repository->id);
-
-        if ($repository === null) {
-            return;
+        if ($this->repository->exists() && $this->repository->snapshot_discovery_status === ProcessStatus::RUNNING) {
+            $this->repository->setProcessFailed();
         }
+    }
 
-        $repository->setProcessFailed();
+    public function uniqueId(): string
+    {
+        return (string) $this->repository->id;
     }
 }
