@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
-import type { Lookup } from '@/components/Turbo/index.ts';
+import { computed, type ComputedRef, inject } from 'vue';
+import { type Lookup, nodeTypeLookupKey } from '@/components/Turbo/index.ts';
 import type { TurboNode } from '@/generated/types/App/Data/Analysis/Turbo';
 
 const props = defineProps<{
     node: TurboNode;
-    nodeTypeLookup: Lookup;
-    versionLookup: Lookup;
 }>();
+
+const nodeTypeLookup = inject(nodeTypeLookupKey) as ComputedRef<Lookup>;
 
 const nodeType = computed<
     | {
@@ -15,37 +15,27 @@ const nodeType = computed<
           backgroundColor: CSSStyleDeclaration['backgroundColor'];
       }
     | undefined
->(() => props.nodeTypeLookup(props.node.type));
+>(() => nodeTypeLookup.value(props.node.type));
 </script>
 
 <template>
-    <BCard>
-        <template #header>
+    <div class="d-flex align-items-center gap-2">
+        <span :class="node.ranges.length === 0 ? 'text-secondary' : 'text-primary'">
             {{ nodeType?.name }}
-        </template>
-        <ul v-if="node.ranges.length > 0">
-            <li v-for="(range, i) in node.ranges" :key="i">
-                <BBadge
-                    v-if="range[0]"
-                    :style="{ backgroundColor: versionLookup(range[0])?.backgroundColor }"
-                    class="text-dark"
-                >
-                    {{ versionLookup(range[0])?.name }}
-                </BBadge>
-                <BBadge v-else>none</BBadge>
+        </span>
 
-                &ndash;
+        <TurboRange v-for="(range, i) in node.ranges" :key="i" :range />
+    </div>
 
-                <BBadge
-                    v-if="range[1]"
-                    :style="{ backgroundColor: versionLookup(range[1])?.backgroundColor }"
-                    class="text-dark"
-                >
-                    {{ versionLookup(range[1])?.name }}
-                </BBadge>
-                <BBadge v-else>none</BBadge>
-            </li>
-        </ul>
-        <TurboNode v-for="(n, i) in node.children" :key="i" :node="n" :nodeTypeLookup :versionLookup />
-    </BCard>
+    <ul v-if="node.children.length" class="border-start ms-3 ps-3">
+        <li v-for="(n, i) in node.children" :key="i">
+            <TurboNode :node="n" />
+        </li>
+    </ul>
 </template>
+
+<style scoped>
+li {
+    list-style: none;
+}
+</style>

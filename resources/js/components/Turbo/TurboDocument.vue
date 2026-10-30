@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { TurboDocument } from '@/generated/types/App/Data/Analysis/Turbo';
-import { computed } from 'vue';
-import { type Lookup, makeLookup } from '@/components/Turbo/index.ts';
+import { computed, provide } from 'vue';
+import { type Lookup, makeLookup, nodeTypeLookupKey, versionLookupKey } from '@/components/Turbo/index.ts';
 
 const props = defineProps<{
     document: TurboDocument;
@@ -9,6 +9,9 @@ const props = defineProps<{
 
 const nodeTypeLookup = computed<Lookup>(() => makeLookup(props.document.nodeTypes));
 const versionLookup = computed<Lookup>(() => makeLookup(props.document.versions));
+
+provide(nodeTypeLookupKey, nodeTypeLookup);
+provide(versionLookupKey, versionLookup);
 </script>
 
 <template>
@@ -44,7 +47,7 @@ const versionLookup = computed<Lookup>(() => makeLookup(props.document.versions)
             </div>
         </Detail>
         <Detail label="AST">
-            <TurboNode v-for="(node, i) in document.roots" :key="i" :node :nodeTypeLookup :versionLookup />
+            <TurboNode v-for="(node, i) in document.roots" :key="i" :node />
         </Detail>
     </DetailList>
 </template>

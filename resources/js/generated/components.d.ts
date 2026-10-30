@@ -163,6 +163,7 @@ declare module 'vue' {
     Toolbar: typeof import('./../components/Toolbar.vue')['default']
     TurboDocument: typeof import('./../components/Turbo/TurboDocument.vue')['default']
     TurboNode: typeof import('./../components/Turbo/TurboNode.vue')['default']
+    TurboRange: typeof import('./../components/Turbo/TurboRange.vue')['default']
     YesNoBadge: typeof import('./../components/YesNoBadge.vue')['default']
   }
   export interface GlobalDirectives {

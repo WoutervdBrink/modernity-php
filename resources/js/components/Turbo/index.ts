@@ -1,3 +1,5 @@
+import type { ComputedRef, InjectionKey } from 'vue';
+
 export type Lookup = (nodeIdx: number) =>
     | {
           name: string;
@@ -13,3 +15,6 @@ export function makeLookup(source: string[]): Lookup {
         };
     };
 }
+
+export const nodeTypeLookupKey = Symbol() as InjectionKey<ComputedRef<Lookup>>;
+export const versionLookupKey = Symbol() as InjectionKey<ComputedRef<Lookup>>;
