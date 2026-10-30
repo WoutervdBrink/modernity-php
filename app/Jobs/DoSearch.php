@@ -15,11 +15,13 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\DeleteWhenMissingModels;
+use Illuminate\Queue\Attributes\Timeout;
 use Illuminate\Queue\Attributes\Tries;
 use Throwable;
 
 #[Tries(1)]
 #[DeleteWhenMissingModels]
+#[Timeout(3600)]
 final class DoSearch implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
