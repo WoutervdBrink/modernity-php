@@ -26,6 +26,7 @@ final class SourceFile extends Model
             'size' => $file->size,
             'contents' => $file->contents,
             'analysis' => null,
+            'created_at' => now()->toImmutable(),
         ]);
 
         $sourceFile = self::query()
