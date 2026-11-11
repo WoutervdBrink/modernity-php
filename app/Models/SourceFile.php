@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Data\Analysis\RepositoryFile;
 use App\Data\Analysis\Turbo\TurboDocument;
-use App\Services\Analysis\Php\SourceCannotBeParsedException;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
+use Throwable;
 
 #[Table(key: 'sha256', keyType: 'string', incrementing: false)]
 final class SourceFile extends Model
@@ -29,6 +29,7 @@ final class SourceFile extends Model
             'created_at' => now()->toImmutable(),
         ]);
 
+        /** @var SourceFile $sourceFile */
         $sourceFile = self::query()
             ->lockForUpdate()
             ->findOrFail($file->sha256);
@@ -37,22 +38,13 @@ final class SourceFile extends Model
             try {
                 $sourceFile->analysis = $analyze();
                 $sourceFile->save();
-            } catch (SourceCannotBeParsedException) {
-                //
+            } catch (Throwable $e) {
+                $sourceFile->analysis = null;
+                $sourceFile->exception = $e->__toString();
+                $sourceFile->save();
             }
         }
 
         return $sourceFile;
-    }
-
-    public function hasAnalysis(): bool
-    {
-        return $this->analysis !== null;
-    }
-
-    public function recordAnalysis(TurboDocument $analysis): void
-    {
-        $this->analysis = $analysis;
-        $this->save();
     }
 }

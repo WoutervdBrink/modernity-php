@@ -10,6 +10,7 @@ final class SourceFileData extends Data
     public function __construct(
         public string $sha256,
         public int $size,
+        public ?string $exception,
         public CarbonImmutable $created_at,
         public CarbonImmutable $updated_at,
     ) {}

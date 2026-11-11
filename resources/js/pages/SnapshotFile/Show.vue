@@ -24,12 +24,18 @@ defineOptions({
 <template>
     <Toolbar :title="`File in ${repository.name}/${snapshot.tag}`"> </Toolbar>
 
-    <DetailList>
+    <DetailList class="mb-3">
         <Detail label="Path">{{ snapshotFile.path }}</Detail>
-        <Detail label="SHA256 hash"
-            ><code>{{ snapshotFile.sha256 }}</code></Detail
-        >
+        <Detail label="SHA256 hash">
+            <code>{{ snapshotFile.sha256 }}</code>
+        </Detail>
         <Detail label="Size">{{ snapshotFile.sourceFile.size }}</Detail>
+        <Detail label="Exception">
+            <em v-if="snapshotFile.sourceFile.exception === null" class="text-secondary">None</em>
+            <div v-else class="overflow-scroll bg-light border p-3 rounded mb-3">
+                <pre class="m-0"><code>{{ snapshotFile.sourceFile.exception }}</code></pre>
+            </div>
+        </Detail>
     </DetailList>
 
     <h2>File contents</h2>
