@@ -123,6 +123,7 @@ declare module 'vue' {
     BToast: typeof import('bootstrap-vue-next/components')['BToast']
     BTooltip: typeof import('bootstrap-vue-next/components')['BTooltip']
     BTr: typeof import('bootstrap-vue-next/components')['BTr']
+    CodeBlock: typeof import('./../components/CodeBlock.vue')['default']
     Create: typeof import('./../pages/Search/Create.vue')['default']
     Dashboard: typeof import('./../pages/Dashboard.vue')['default']
     Datatable: typeof import('./../components/Datatable/Datatable.vue')['default']

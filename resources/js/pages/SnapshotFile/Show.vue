@@ -32,21 +32,13 @@ defineOptions({
         <Detail label="Size">{{ snapshotFile.sourceFile.size }}</Detail>
         <Detail label="Exception">
             <em v-if="snapshotFile.sourceFile.exception === null" class="text-secondary">None</em>
-            <div v-else class="overflow-scroll bg-light border p-3 rounded mb-3">
-                <pre class="m-0"><code>{{ snapshotFile.sourceFile.exception }}</code></pre>
-            </div>
+            <CodeBlock v-else>{{ snapshotFile.sourceFile.exception }}</CodeBlock>
         </Detail>
     </DetailList>
 
     <h2>File contents</h2>
-    <div class="overflow-scroll bg-light border p-3 rounded mb-3" v-html="contents"></div>
+    <CodeBlock :includeTags="false"><div v-html="contents"></div></CodeBlock>
 
     <h2>Analysis</h2>
     <TurboDocument v-if="analysis" :document="analysis" />
 </template>
-
-<style scoped>
-.overflow-scroll {
-    max-height: 30rem;
-}
-</style>

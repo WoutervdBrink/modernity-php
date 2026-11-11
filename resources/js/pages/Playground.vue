@@ -55,9 +55,13 @@ async function analyze(code: string): Promise<void> {
         );
 
         if (currentGeneration === generation) {
-            const resAnalysis = (res.data as AnalyzePlaygroundSourceResponseData).analysis;
-            if (resAnalysis) {
-                analysis.value = resAnalysis;
+            const data = res.data as AnalyzePlaygroundSourceResponseData;
+
+            if (data.analysis) {
+                analysis.value = data.analysis;
+            }
+            if (data.error) {
+                error.value = data.error;
             }
         }
     } catch (e) {
@@ -105,10 +109,10 @@ onBeforeUnmount(() => {
                 Analysis
                 <BSpinner v-if="analyzing" small />
             </h2>
-            <BAlert v-if="error" variant="danger">
+            <BAlert :model-value="error !== undefined" variant="danger">
                 <h4 class="alert-heading">An error occurred</h4>
                 <p>Something went wrong while analyzing your code:</p>
-                <pre><code>{{ error }}</code></pre>
+                <CodeBlock variant="none">{{ error }}</CodeBlock>
             </BAlert>
             <TurboDocument v-if="analysis" :document="analysis" />
         </BCol>
@@ -124,10 +128,10 @@ onBeforeUnmount(() => {
             Analysis
             <BSpinner v-if="analyzing" small />
         </h2>
-        <BAlert v-if="error" variant="danger">
+        <BAlert :model-value="error !== undefined" variant="danger">
             <h4 class="alert-heading">An error occurred</h4>
             <p>Something went wrong while analyzing your code:</p>
-            <pre><code>{{ error }}</code></pre>
+            <CodeBlock variant="none">{{ error }}</CodeBlock>
         </BAlert>
         <TurboDocument v-if="analysis" :document="analysis" />
     </template>

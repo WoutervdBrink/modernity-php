@@ -26,7 +26,7 @@ final class PlaygroundController extends Controller
             ]);
         } catch (Throwable $e) {
             return AnalyzePlaygroundSourceResponseData::from([
-                'error' => $e->getMessage().PHP_EOL.$e->getTraceAsString(),
+                'error' => $e->__toString(),
             ]);
         }
     }

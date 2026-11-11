@@ -4,6 +4,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import Layout from '@/components/Layout.vue';
+import './style.css';
 
 const appName = 'PHP Modernity';
 

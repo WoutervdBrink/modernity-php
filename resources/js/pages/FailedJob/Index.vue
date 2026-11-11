@@ -29,10 +29,10 @@ const payload = computed<(payload: string) => string>(() => (payload: string) =>
                 <Detail label="Connection">{{ job.connection }} </Detail>
                 <Detail label="Queue">{{ job.queue }}</Detail>
                 <Detail label="Exception">
-                    <pre class="bg-light p-3 border rounded"><code>{{ job.exception }}</code></pre>
+                    <CodeBlock>{{ job.exception }}</CodeBlock>
                 </Detail>
                 <Detail label="Payload">
-                    <pre class="bg-light p-3 border rounded"><code>{{ payload(job.payload) }}</code></pre>
+                    <CodeBlock>{{ payload(job.payload) }}</CodeBlock>
                 </Detail>
             </DetailList>
         </BAccordionItem>
