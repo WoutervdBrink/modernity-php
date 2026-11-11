@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 export const show = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 show.url = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions) => {
@@ -130,7 +130,7 @@ show.url = (args: { sourceFile: string | { sha256: string } } | [sourceFile: str
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 show.get = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -140,7 +140,7 @@ show.get = (args: { sourceFile: string | { sha256: string } } | [sourceFile: str
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 show.head = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -150,7 +150,7 @@ show.head = (args: { sourceFile: string | { sha256: string } } | [sourceFile: st
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 const showForm = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -160,7 +160,7 @@ const showForm = (args: { sourceFile: string | { sha256: string } } | [sourceFil
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 showForm.get = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -170,7 +170,7 @@ showForm.get = (args: { sourceFile: string | { sha256: string } } | [sourceFile:
 
 /**
 * @see \App\Http\Controllers\SourceFileController::show
-* @see app/Http/Controllers/SourceFileController.php:66
+* @see app/Http/Controllers/SourceFileController.php:67
 * @route '/sourceFiles/{sourceFile}'
 */
 showForm.head = (args: { sourceFile: string | { sha256: string } } | [sourceFile: string | { sha256: string } ] | string | { sha256: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

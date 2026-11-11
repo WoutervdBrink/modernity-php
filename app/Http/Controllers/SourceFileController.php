@@ -6,7 +6,7 @@ use App\Data\SnapshotFile\SnapshotFileData;
 use App\Data\SourceFile\SourceFileData;
 use App\Models\Enums\ContentEncoding;
 use App\Models\SourceFile;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,7 +33,8 @@ final class SourceFileController extends Controller
             ->defaultSort('sha256')
             ->when($search !== '', function (Builder $query) use ($search): void {
                 $query->where(function (Builder $query) use ($search): void {
-                    $query->where('sha256', 'like', '%'.$search.'%');
+                    $query->where('sha256', 'like', '%'.$search.'%')
+                        ->orWhere('exception', 'like', '%'.$search.'%');
                 });
             })
             ->paginate()
