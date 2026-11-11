@@ -39,7 +39,11 @@ final class DashboardController extends Controller
                 ],
                 'files' => [
                     'snapshot' => SnapshotFile::count(),
-                    'source' => SourceFile::count(),
+                    'source' => [
+                        'total' => SourceFile::count(),
+                        'analyzed' => SourceFile::whereNotNull('analysis')->count(),
+                        'exception' => SourceFile::whereNotnull('exception')->count(),
+                    ],
                 ],
             ],
         ]);

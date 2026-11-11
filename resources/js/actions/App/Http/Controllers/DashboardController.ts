@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\DashboardController::queuePendingProcesses
-* @see app/Http/Controllers/DashboardController.php:48
+* @see app/Http/Controllers/DashboardController.php:52
 * @route '/queuePendingProcesses'
 */
 export const queuePendingProcesses = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -97,7 +97,7 @@ queuePendingProcesses.definition = {
 
 /**
 * @see \App\Http\Controllers\DashboardController::queuePendingProcesses
-* @see app/Http/Controllers/DashboardController.php:48
+* @see app/Http/Controllers/DashboardController.php:52
 * @route '/queuePendingProcesses'
 */
 queuePendingProcesses.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ queuePendingProcesses.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\DashboardController::queuePendingProcesses
-* @see app/Http/Controllers/DashboardController.php:48
+* @see app/Http/Controllers/DashboardController.php:52
 * @route '/queuePendingProcesses'
 */
 queuePendingProcesses.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -116,7 +116,7 @@ queuePendingProcesses.post = (options?: RouteQueryOptions): RouteDefinition<'pos
 
 /**
 * @see \App\Http\Controllers\DashboardController::queuePendingProcesses
-* @see app/Http/Controllers/DashboardController.php:48
+* @see app/Http/Controllers/DashboardController.php:52
 * @route '/queuePendingProcesses'
 */
 const queuePendingProcessesForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -126,7 +126,7 @@ const queuePendingProcessesForm = (options?: RouteQueryOptions): RouteFormDefini
 
 /**
 * @see \App\Http\Controllers\DashboardController::queuePendingProcesses
-* @see app/Http/Controllers/DashboardController.php:48
+* @see app/Http/Controllers/DashboardController.php:52
 * @route '/queuePendingProcesses'
 */
 queuePendingProcessesForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -138,7 +138,7 @@ queuePendingProcesses.form = queuePendingProcessesForm
 
 /**
 * @see \App\Http\Controllers\DashboardController::queueFailedProcesses
-* @see app/Http/Controllers/DashboardController.php:56
+* @see app/Http/Controllers/DashboardController.php:60
 * @route '/queueFailedProcesses'
 */
 export const queueFailedProcesses = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -153,7 +153,7 @@ queueFailedProcesses.definition = {
 
 /**
 * @see \App\Http\Controllers\DashboardController::queueFailedProcesses
-* @see app/Http/Controllers/DashboardController.php:56
+* @see app/Http/Controllers/DashboardController.php:60
 * @route '/queueFailedProcesses'
 */
 queueFailedProcesses.url = (options?: RouteQueryOptions) => {
@@ -162,7 +162,7 @@ queueFailedProcesses.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\DashboardController::queueFailedProcesses
-* @see app/Http/Controllers/DashboardController.php:56
+* @see app/Http/Controllers/DashboardController.php:60
 * @route '/queueFailedProcesses'
 */
 queueFailedProcesses.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -172,7 +172,7 @@ queueFailedProcesses.post = (options?: RouteQueryOptions): RouteDefinition<'post
 
 /**
 * @see \App\Http\Controllers\DashboardController::queueFailedProcesses
-* @see app/Http/Controllers/DashboardController.php:56
+* @see app/Http/Controllers/DashboardController.php:60
 * @route '/queueFailedProcesses'
 */
 const queueFailedProcessesForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -182,7 +182,7 @@ const queueFailedProcessesForm = (options?: RouteQueryOptions): RouteFormDefinit
 
 /**
 * @see \App\Http\Controllers\DashboardController::queueFailedProcesses
-* @see app/Http/Controllers/DashboardController.php:56
+* @see app/Http/Controllers/DashboardController.php:60
 * @route '/queueFailedProcesses'
 */
 queueFailedProcessesForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

@@ -34,7 +34,11 @@ const props = defineProps<{
         };
         files: {
             snapshot: number;
-            source: number;
+            source: {
+                total: number;
+                analyzed: number;
+                exception: number;
+            };
         };
     };
 }>();
@@ -121,14 +125,15 @@ onMounted(() => {
         </BButton>
     </Toolbar>
 
-    <DetailList :label-size="3">
-        <Detail>
-            <template #label> Searches ({{ numberFormatter.format(statistics.searches.total) }}) </template>
-            <ProcessStatusCountBar :counts="statistics.searches.byStatus" />
-        </Detail>
-        <Detail>
-            <template #label> Repositories ({{ numberFormatter.format(statistics.repositories.total) }}) </template>
-            Acceptance count:
+    <BRow>
+        <BCol md="4">
+            <h5 class="text-center">Searches ({{ numberFormatter.format(statistics.searches.total) }})</h5>
+
+            <ProcessStatusPieChart :counts="statistics.searches.byStatus" />
+        </BCol>
+        <BCol md="4">
+            <h5 class="text-center">Repositories ({{ numberFormatter.format(statistics.repositories.total) }})</h5>
+            <ProcessStatusPieChart :counts="statistics.repositories.byStatus" class="mb-3" />
             <BinaryStatusCountBar
                 :no="statistics.repositories.rejected"
                 :yes="statistics.repositories.accepted"
@@ -136,13 +141,12 @@ onMounted(() => {
                 noLabel="Rejected"
                 yesLabel="Accepted"
             />
+        </BCol>
+        <BCol md="4">
+            <h5 class="text-center">Snapshots ({{ numberFormatter.format(statistics.snapshots.total) }})</h5>
 
-            Discovery status:
-            <ProcessStatusCountBar :counts="statistics.repositories.byStatus" />
-        </Detail>
-        <Detail>
-            <template #label> Snapshots ({{ numberFormatter.format(statistics.snapshots.total) }}) </template>
-            Acceptance count:
+            <ProcessStatusPieChart :counts="statistics.snapshots.byStatus" class="mb-3" />
+
             <BinaryStatusCountBar
                 :no="statistics.snapshots.withoutSemver"
                 :yes="statistics.snapshots.withSemver"
@@ -150,15 +154,15 @@ onMounted(() => {
                 noLabel="Without SemVer"
                 yesLabel="With SemVer"
             />
+        </BCol>
+    </BRow>
 
-            Analysis status:
-            <ProcessStatusCountBar :counts="statistics.snapshots.byStatus" />
-        </Detail>
-        <Detail label="Files">
-            <strong>{{ numberFormatter.format(statistics.files.snapshot) }}</strong> snapshot files;
-            <strong>{{ numberFormatter.format(statistics.files.source) }}</strong> unique source files ({{
-                ((statistics.files.source / statistics.files.snapshot) * 100).toFixed(2)
-            }}%)
-        </Detail>
-    </DetailList>
+    <p class="text-center mb-3">
+        <strong>{{ numberFormatter.format(statistics.files.snapshot) }}</strong> discovered snapshot files;
+        <strong>{{ numberFormatter.format(statistics.files.source.total) }}</strong> unique source files ({{
+            ((statistics.files.source.total / statistics.files.snapshot) * 100).toFixed(2)
+        }}%), of which <strong>{{ numberFormatter.format(statistics.files.source.analyzed) }}</strong> have an analysis,
+        and <strong>{{ numberFormatter.format(statistics.files.source.exception) }}</strong> could not be analyzed due
+        to an exception.
+    </p>
 </template>

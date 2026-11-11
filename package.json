@@ -38,9 +38,11 @@
         "@inertiajs/vue3": "^3.7.1",
         "axios": "^1.21.0",
         "bootstrap-vue-next": "^1.2.2",
+        "chart.js": "^4.6.1",
         "codemirror": "^6.0.2",
         "highlight.js": "^11.12.0",
         "vue": "^3.5.43",
+        "vue-chartjs": "^5.3.4",
         "vue-codemirror": "^6.1.1"
     }
 }

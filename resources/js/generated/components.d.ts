@@ -153,6 +153,7 @@ declare module 'vue' {
     Navbar: typeof import('./../components/Navbar.vue')['default']
     ProcessStatusBadge: typeof import('./../components/ProcessStatusBadge.vue')['default']
     ProcessStatusCountBar: typeof import('./../components/ProcessStatusCountBar.vue')['default']
+    ProcessStatusPieChart: typeof import('./../components/ProcessStatusPieChart.vue')['default']
     RepositoryAcceptedBadge: typeof import('./../components/Repository/RepositoryAcceptedBadge.vue')['default']
     RepositorySnapshotDiscoveryStatusBadge: typeof import('./../components/Repository/RepositorySnapshotDiscoveryStatusBadge.vue')['default']
     SearchParameters: typeof import('./../components/Search/SearchParameters.vue')['default']
