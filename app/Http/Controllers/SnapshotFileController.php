@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Data\Repository\RepositoryData;
 use App\Data\Snapshot\SnapshotData;
 use App\Data\SnapshotFile\SnapshotFileData;
+use App\Models\Enums\ContentEncoding;
 use App\Models\SnapshotFile;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,7 +22,10 @@ final class SnapshotFileController extends Controller
                 'snapshotFile' => SnapshotFileData::from($snapshotFile),
                 'snapshot' => SnapshotData::from($snapshotFile->snapshot),
                 'repository' => RepositoryData::from($snapshotFile->snapshot?->repository),
-                'contents' => highlight_string($snapshotFile->sourceFile->contents ?? '', true),
+                'contents' => [
+                    'encoding' => $snapshotFile->sourceFile?->content_encoding ?? ContentEncoding::PLAIN,
+                    'contents' => $snapshotFile->sourceFile?->contents ?? '',
+                ],
                 'analysis' => $snapshotFile->sourceFile?->analysis,
             ]
         );

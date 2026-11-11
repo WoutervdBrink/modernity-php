@@ -10,7 +10,7 @@
     "types\/App\/Data\/Snapshot\/index.ts": "d60a902594cf65af1bf257317aefdd99",
     "types\/App\/Data\/SnapshotFile\/index.ts": "d3d4299b26207b833f4914488bbe6f36",
     "types\/App\/Data\/SourceFile\/index.ts": "19d221658208b07723d63bc8872a62b7",
-    "types\/App\/Models\/Enums\/index.ts": "b0bfffd8307e9008de54a37104de5385",
+    "types\/App\/Models\/Enums\/index.ts": "10477b1bbbcd26a35d47a49141e22021",
     "types\/Illuminate\/index.ts": "c49cb82ab295a835fb8553e262cc508a",
     "types\/Spatie\/LaravelData\/index.ts": "101e5c5ea9c44b7f18ad04a3c0b31fdb"
 }

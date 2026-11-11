@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 export const show = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 show.url = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ show.url = (args: { snapshotFile: number | { id: number } } | [snapshotFile: num
 
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 show.get = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ show.get = (args: { snapshotFile: number | { id: number } } | [snapshotFile: num
 
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 show.head = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -69,7 +69,7 @@ show.head = (args: { snapshotFile: number | { id: number } } | [snapshotFile: nu
 
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 const showForm = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -79,7 +79,7 @@ const showForm = (args: { snapshotFile: number | { id: number } } | [snapshotFil
 
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 showForm.get = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -89,7 +89,7 @@ showForm.get = (args: { snapshotFile: number | { id: number } } | [snapshotFile:
 
 /**
 * @see \App\Http\Controllers\SnapshotFileController::show
-* @see app/Http/Controllers/SnapshotFileController.php:14
+* @see app/Http/Controllers/SnapshotFileController.php:15
 * @route '/snapshotFiles/{snapshotFile}'
 */
 showForm.head = (args: { snapshotFile: number | { id: number } } | [snapshotFile: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

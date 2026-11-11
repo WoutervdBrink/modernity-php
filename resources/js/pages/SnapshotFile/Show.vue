@@ -3,22 +3,37 @@ import type { SnapshotFileData } from '@/generated/types/App/Data/SnapshotFile';
 import type { TurboDocument } from '@/generated/types/App/Data/Analysis/Turbo';
 import type { RepositoryData } from '@/generated/types/App/Data/Repository';
 import type { SnapshotData } from '@/generated/types/App/Data/Snapshot';
+import { computed, nextTick, ref } from 'vue';
+import type { ContentEncoding } from '@/generated/types/App/Models/Enums';
 
 type PageProps = {
     repository: RepositoryData;
     snapshot: SnapshotData;
     snapshotFile: SnapshotFileData;
-    contents: string;
+    contents: {
+        encoding: ContentEncoding;
+        contents: string;
+    };
     analysis: TurboDocument | null;
 };
 
-defineProps<PageProps>();
+const props = defineProps<PageProps>();
 
 defineOptions({
     layout: (props: PageProps) => ({
         title: `${props.repository.name}/${props.snapshot.tag}/${props.snapshotFile.path}`,
     }),
 });
+
+const actualContents = computed<string>(() =>
+    props.contents.encoding === 'base64' ? window.atob(props.contents.contents) : props.contents.contents,
+);
+
+const showAnalysis = ref<boolean>(props.snapshotFile.sourceFile.size < 10 * 1024);
+
+async function doShowAnalysis(): Promise<void> {
+    nextTick(() => (showAnalysis.value = true));
+}
 </script>
 
 <template>
@@ -36,9 +51,20 @@ defineOptions({
         </Detail>
     </DetailList>
 
-    <h2>File contents</h2>
-    <CodeBlock :includeTags="false"><div v-html="contents"></div></CodeBlock>
+    <BAlert :model-value="!showAnalysis" variant="warning">
+        <h4 class="alert-heading">Warning: large file</h4>
+        <p>
+            This size of this file is {{ (snapshotFile.sourceFile.size / 1024).toFixed(2) }} KiB. Displaying its
+            contents and analysis might seriously slow down your browser.
+        </p>
+        <BButton variant="danger" @click="doShowAnalysis"> I understand, continue </BButton>
+    </BAlert>
 
-    <h2>Analysis</h2>
-    <TurboDocument v-if="analysis" :document="analysis" />
+    <template v-if="showAnalysis">
+        <h2>File contents</h2>
+        <CodeBlock>{{ actualContents }}</CodeBlock>
+
+        <h2>Analysis</h2>
+        <TurboDocument v-if="analysis" :document="analysis" />
+    </template>
 </template>
