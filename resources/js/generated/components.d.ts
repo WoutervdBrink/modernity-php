@@ -130,6 +130,7 @@ declare module 'vue' {
     DefinitionList: typeof import('./../components/DefinitionList.vue')['default']
     Detail: typeof import('./../components/DetailList/Detail.vue')['default']
     DetailList: typeof import('./../components/DetailList/DetailList.vue')['default']
+    FileDetails: typeof import('./../components/FileDetails.vue')['default']
     GitHubLink: typeof import('./../components/Repository/GitHubLink.vue')['default']
     GitHubRepository: typeof import('./../components/Repository/GitHubRepository.vue')['default']
     IFa6SolidBars: typeof import('~icons/fa6-solid/bars')['default']

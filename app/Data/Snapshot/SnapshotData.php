@@ -2,9 +2,11 @@
 
 namespace App\Data\Snapshot;
 
+use App\Data\Repository\RepositoryData;
 use App\Models\Enums\ProcessStatus;
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
 final class SnapshotData extends Data
 {
@@ -17,5 +19,6 @@ final class SnapshotData extends Data
         public ?CarbonImmutable $analyzed_at,
         public ?CarbonImmutable $created_at,
         public ?CarbonImmutable $updated_at,
+        public Optional|RepositoryData $repository,
     ) {}
 }

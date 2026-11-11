@@ -23,7 +23,7 @@ export type DatatableFormat =
     | 'status';
 
 export type Column<T> = {
-    key: Extract<keyof T, string | (string & {})>;
+    key: Extract<keyof T, string> | string;
     width?: CSSStyleDeclaration['width'];
     label?: string;
     sortable?: boolean;

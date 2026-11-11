@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, ref, shallowRef, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
 import { Codemirror } from 'vue-codemirror';
 import { php } from '@codemirror/lang-php';
 import type { TurboDocument } from '@/generated/types/App/Data/Analysis/Turbo';
@@ -9,6 +9,7 @@ import type {
     AnalyzePlaygroundSourceRequestData,
     AnalyzePlaygroundSourceResponseData,
 } from '@/generated/types/App/Data/Playground';
+import type { SourceFileContentsData } from '@/generated/types/App/Data/SourceFile';
 
 defineOptions({
     layout: {
@@ -17,10 +18,20 @@ defineOptions({
     },
 });
 
+const props = defineProps<{
+    contents: SourceFileContentsData | null;
+}>();
+
 const extensions = [php()];
 
 const layout = ref<'vertical' | 'horizontal'>('horizontal');
-const source = ref<string>('');
+const source = ref<string>(
+    props.contents
+        ? props.contents.content_encoding === 'base64'
+            ? window.atob(props.contents.contents)
+            : props.contents.contents
+        : '',
+);
 const analysis = shallowRef<TurboDocument | undefined>(undefined);
 const error = ref<string | undefined>(undefined);
 const analyzing = ref<boolean>(false);
@@ -79,6 +90,12 @@ async function analyze(code: string): Promise<void> {
         }
     }
 }
+
+onMounted(() => {
+    if (props.contents) {
+        analyze(source.value);
+    }
+});
 
 onBeforeUnmount(() => {
     clearTimeout(debounce);

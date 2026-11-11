@@ -36,7 +36,7 @@ const columns = [
     },
     {
         key: 'sourceFile',
-        accessor: (snapshot) => snapshot.sourceFile.size,
+        accessor: (snapshot) => snapshot,
         label: 'Size',
     },
 ] satisfies Column<SnapshotFileData>[];

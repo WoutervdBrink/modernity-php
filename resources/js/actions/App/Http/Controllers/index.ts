@@ -5,6 +5,7 @@ import SearchController from './SearchController'
 import RepositoryController from './RepositoryController'
 import SnapshotController from './SnapshotController'
 import SnapshotFileController from './SnapshotFileController'
+import SourceFileController from './SourceFileController'
 
 const Controllers = {
     DashboardController: Object.assign(DashboardController, DashboardController),
@@ -14,6 +15,7 @@ const Controllers = {
     RepositoryController: Object.assign(RepositoryController, RepositoryController),
     SnapshotController: Object.assign(SnapshotController, SnapshotController),
     SnapshotFileController: Object.assign(SnapshotFileController, SnapshotFileController),
+    SourceFileController: Object.assign(SourceFileController, SourceFileController),
 }
 
 export default Controllers

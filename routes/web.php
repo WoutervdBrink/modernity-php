@@ -7,6 +7,7 @@ use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SnapshotController;
 use App\Http\Controllers\SnapshotFileController;
+use App\Http\Controllers\SourceFileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -31,3 +32,6 @@ Route::get('/snapshots/{snapshot}', [SnapshotController::class, 'show'])->name('
 Route::post('/snapshots/{snapshot}/analyze', [SnapshotController::class, 'analyze'])->name('snapshots.analyze');
 
 Route::get('/snapshotFiles/{snapshotFile}', [SnapshotFileController::class, 'show'])->name('snapshotFiles.show');
+
+Route::get('/sourceFiles', [SourceFileController::class, 'index'])->name('sourceFiles.index');
+Route::get('/sourceFiles/{sourceFile}', [SourceFileController::class, 'show'])->name('sourceFiles.show');
