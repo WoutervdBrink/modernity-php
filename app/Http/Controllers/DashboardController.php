@@ -11,6 +11,7 @@ use App\Models\Snapshot;
 use App\Models\SnapshotFile;
 use App\Models\SourceFile;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,6 +22,10 @@ final class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'application_commit' => $commitSource->getApplicationCommit(),
             'statistics' => [
+                'jobs' => [
+                    'queued' => DB::table('jobs')->count(),
+                    'failed' => DB::table('failed_jobs')->count(),
+                ],
                 'searches' => [
                     'total' => Search::count(),
                     'byStatus' => Search::getProcessStatusCounts(),

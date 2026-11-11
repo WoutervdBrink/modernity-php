@@ -16,6 +16,10 @@ defineOptions({
 const props = defineProps<{
     application_commit: string;
     statistics: {
+        jobs: {
+            queued: number;
+            failed: number;
+        };
         searches: {
             total: number;
             byStatus: ProcessStatusCounts;
@@ -112,7 +116,9 @@ onMounted(() => {
     <Toolbar title="Dashboard">
         <div v-if="systemIsBusy">
             <BSpinner class="me-2" small type="border" />
-            <span class="text-secondary">Processes are running...</span>
+            <span class="text-secondary">
+                Processes are running... ({{ numberFormatter.format(statistics.jobs.queued) }} queued job(s))
+            </span>
         </div>
 
         <BButton :disabled="!pendingTasksAvailable" size="sm" variant="primary" @click="queuePendingProcesses">
@@ -124,6 +130,10 @@ onMounted(() => {
             Queue all failed processes
         </BButton>
     </Toolbar>
+
+    <BAlert :model-value="statistics.jobs.queued === 0 && systemIsBusy" variant="warning">
+        According to the database, certain processes are either queued and/or running, but zero jobs are queued.
+    </BAlert>
 
     <BRow>
         <BCol md="4">
