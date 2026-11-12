@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Services\Analysis;
+namespace App\Services\Modernity\Php;
 
-use App\Contracts\Analysis\ModernityAnalyzer;
+use App\Contracts\Modernity\ModernityAnalyzer;
 use App\Data\Analysis\Turbo\TurboDocument;
-use App\Services\Analysis\Php\DeterministicPhpParser;
-use App\Services\Analysis\Php\FeatureConstraintAnnotator;
-use App\Services\Analysis\Php\TurboDocumentWriter;
 
 final class PhpModernityAnalyzer implements ModernityAnalyzer
 {

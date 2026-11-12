@@ -2,7 +2,7 @@
 
 namespace App\Actions\Analysis;
 
-use App\Contracts\Analysis\ModernityAnalyzer;
+use App\Contracts\Modernity\ModernityAnalyzer;
 use App\Data\Analysis\RepositoryFile;
 use App\Data\Analysis\Turbo\TurboDocument;
 use App\Models\SourceFile;

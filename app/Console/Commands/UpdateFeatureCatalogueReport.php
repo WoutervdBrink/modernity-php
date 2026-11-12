@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Support\FeatureCatalogueStatusReport;
-use App\Services\Analysis\Php\Catalogue\Feature;
+use App\Services\Modernity\Php\Catalogue\Feature;
 use Exception;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Console\Command;

@@ -2,7 +2,7 @@
 
 namespace App\Parser\Visitors;
 
-use App\Services\Analysis\Php\Language\PhpVersionConstraint;
+use App\Services\Modernity\Php\Language\PhpVersionConstraint;
 use DOMDocument;
 use DOMException;
 use DOMNode;

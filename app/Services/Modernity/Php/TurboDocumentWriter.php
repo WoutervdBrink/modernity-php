@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Analysis\Php;
+namespace App\Services\Modernity\Php;
 
 use App\Data\Analysis\Turbo\TurboDocument;
 use PhpParser\Node;

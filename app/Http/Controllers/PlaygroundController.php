@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Analysis\ModernityAnalyzer;
+use App\Contracts\Modernity\ModernityAnalyzer;
 use App\Data\Playground\AnalyzePlaygroundSourceRequestData;
 use App\Data\Playground\AnalyzePlaygroundSourceResponseData;
 use App\Data\SourceFile\SourceFileContentsData;

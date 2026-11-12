@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Contracts\Analysis\ModernityAnalyzer;
 use App\Contracts\Git\ApplicationCommitSource;
 use App\Contracts\Git\RepositoryStorage;
-use App\Services\Analysis\PhpModernityAnalyzer;
+use App\Contracts\Modernity\ModernityAnalyzer;
 use App\Services\Git\LocalRepositoryStorage;
+use App\Services\Modernity\Php\PhpModernityAnalyzer;
 use Illuminate\Support\ServiceProvider;
 use Override;
 

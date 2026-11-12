@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Analysis;
+namespace App\Contracts\Modernity;
 
 use App\Data\Analysis\Turbo\TurboDocument;
 

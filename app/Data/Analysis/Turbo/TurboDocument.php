@@ -2,7 +2,7 @@
 
 namespace App\Data\Analysis\Turbo;
 
-use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Modernity\Php\Language\PhpVersion;
 use Spatie\LaravelData\Data;
 
 final class TurboDocument extends Data

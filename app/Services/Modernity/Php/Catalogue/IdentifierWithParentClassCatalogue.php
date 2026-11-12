@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Analysis\Php\Catalogue;
+namespace App\Services\Modernity\Php\Catalogue;
 
-use App\Services\Analysis\Php\Language\PhpVersion;
-use App\Services\Analysis\Php\Language\PhpVersionConstraint;
+use App\Services\Modernity\Php\Language\PhpVersion;
+use App\Services\Modernity\Php\Language\PhpVersionConstraint;
 use Override;
 use UnexpectedValueException;
 

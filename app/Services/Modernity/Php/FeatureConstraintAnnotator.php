@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Analysis\Php;
+namespace App\Services\Modernity\Php;
 
 use App\Parser\Visitors\NodeFeatureConstraintDetectingVisitor;
 use PhpParser\Node;

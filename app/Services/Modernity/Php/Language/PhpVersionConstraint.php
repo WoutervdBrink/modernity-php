@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Analysis\Php\Language;
+namespace App\Services\Modernity\Php\Language;
 
 use InvalidArgumentException;
 

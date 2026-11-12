@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Analysis\Php;
+namespace App\Services\Modernity\Php;
 
-use App\Services\Analysis\Php\Language\PhpVersion as AppPhpVersion;
+use App\Services\Modernity\Php\Language\PhpVersion as AppPhpVersion;
 use PhpParser\Error;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser;

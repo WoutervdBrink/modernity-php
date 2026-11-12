@@ -1,10 +1,10 @@
 <?php
 
-use App\Services\Analysis\Php\Catalogue\Feature;
-use App\Services\Analysis\Php\Catalogue\RecursiveConstraintInspector;
-use App\Services\Analysis\Php\Language\PhpVersion;
-use App\Services\Analysis\Php\Language\PhpVersionConstraint;
-use App\Services\Analysis\Php\Language\Quirks;
+use App\Services\Modernity\Php\Catalogue\Feature;
+use App\Services\Modernity\Php\Catalogue\RecursiveConstraintInspector;
+use App\Services\Modernity\Php\Language\PhpVersion;
+use App\Services\Modernity\Php\Language\PhpVersionConstraint;
+use App\Services\Modernity\Php\Language\Quirks;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 

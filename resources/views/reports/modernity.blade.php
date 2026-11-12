@@ -1,4 +1,4 @@
-@php use App\Services\Analysis\Php\Language\PhpVersionConstraint; @endphp
+@php use App\Services\Modernity\Php\Language\PhpVersionConstraint; @endphp
 @php @endphp
 @extends('layouts.report')
 

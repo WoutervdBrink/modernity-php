@@ -1,8 +1,8 @@
 <?php
 
-use App\Services\Analysis\Php\Catalogue\Clazz;
-use App\Services\Analysis\Php\Catalogue\Feature;
-use App\Services\Analysis\Php\Language\PhpVersionConstraint;
+use App\Services\Modernity\Php\Catalogue\Clazz;
+use App\Services\Modernity\Php\Catalogue\Feature;
+use App\Services\Modernity\Php\Language\PhpVersionConstraint;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;

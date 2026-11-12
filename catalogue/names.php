@@ -1,7 +1,7 @@
 <?php
 
-use App\Services\Analysis\Php\Catalogue\Feature;
-use App\Services\Analysis\Php\Language\PhpVersion;
+use App\Services\Modernity\Php\Catalogue\Feature;
+use App\Services\Modernity\Php\Language\PhpVersion;
 use PhpParser\Node;
 
 Feature::for(Node\Name\FullyQualified::class)->since(PhpVersion::PHP_5_3);
