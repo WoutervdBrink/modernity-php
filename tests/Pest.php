@@ -11,8 +11,7 @@
 |
 */
 
-use App\Services\Analysis\Php\Language\PhpVersion;
-use App\Services\Analysis\Php\Language\PhpVersionVector;
+use App\Data\Analysis\ModernityVector;
 use Tests\TestCase;
 
 pest()->extend(TestCase::class)->in('Feature');
@@ -28,24 +27,11 @@ pest()->extend(TestCase::class)->in('Feature');
 |
 */
 
-expect()->extend('toHaveSameValues', function (array $expected) {
-    $a = is_array($this->value) ? $this->value : [];
-    $b = $expected;
-
-    sort($a);
-    sort($b);
-
-    return expect($this->value)->toBeArray()
-        ->and($a)->toEqual($b);
-});
-
 expect()->extend('toBeVersionVector', function (float ...$values): void {
-    expect($this->value)->toBeInstanceOf(PhpVersionVector::class);
-
-    $versions = PhpVersion::orderedCases();
+    expect($this->value)->toBeInstanceOf(ModernityVector::class);
 
     foreach ($values as $key => $value) {
-        expect($this->value[$versions[$key]])->toBe($value);
+        expect($this->value->at($key))->toBe($value);
     }
 });
 
@@ -59,57 +45,3 @@ expect()->extend('toBeVersionVector', function (float ...$values): void {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
-
-/**
- * Pad a given list of floats with zeroes so it is accepted by {@link PhpVersionVector::of}.
- *
- * The {@link PhpVersionVector::of} method only accepts arrays with entries for every available PHP
- * version. Not only would that be quite cumbersome for every test on version vectors; it would also result in
- * regressions whenever a new version is added to the {@link PhpVersion} enumeration.
- *
- * Thus, this function takes a generally incomplete list of float values, and pads zeroes to the end until its length is
- * equal to the amount of {@link PhpVersion} cases.
- *
- * @return float[]
- */
-function padVersionFloats(float ...$values): array
-{
-    $ordered = PhpVersion::orderedCases();
-
-    $out = array_fill(0, PhpVersion::count(), 0.0);
-
-    foreach ($ordered as $key => $version) {
-        if (isset($values[$key])) {
-            $out[$key] = $values[$key];
-        }
-    }
-
-    return $out;
-}
-
-/**
- * Pad a given list of floats with a value so it is accepted by {@link PhpVersionVector::of}.
- *
- * The {@link PhpVersionVector::of} method only accepts arrays with entries for every available PHP
- * version. Not only would that be quite cumbersome for every test on version vectors; it would also result in
- * regressions whenever a new version is added to the {@link PhpVersion} enumeration.
- *
- * Thus, this function takes a generally incomplete list of float values, and pads the value of <code>$with</code> to
- * the end until its length is equal to the amount of {@link PhpVersion} cases.
- *
- * @return float[]
- */
-function padVersionFloatsWith(float $with, float ...$values): array
-{
-    $ordered = PhpVersion::orderedCases();
-
-    $out = array_fill(0, PhpVersion::count(), $with);
-
-    foreach ($ordered as $key => $version) {
-        if (isset($values[$key])) {
-            $out[$key] = $values[$key];
-        }
-    }
-
-    return $out;
-}

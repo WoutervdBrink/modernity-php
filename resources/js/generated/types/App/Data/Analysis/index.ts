@@ -4,3 +4,6 @@ export type RepositoryFile = {
     path: string;
     contents: string;
 };
+export type VersionAxis = {
+    readonly versions: string[];
+};
