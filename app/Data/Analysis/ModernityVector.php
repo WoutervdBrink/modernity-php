@@ -36,6 +36,22 @@ final class ModernityVector
         }
     }
 
+    /**
+     * @return array<string>
+     */
+    public function keys(): array
+    {
+        return array_keys($this->versions->versions);
+    }
+
+    /**
+     * @return array<float>
+     */
+    public function values(): array
+    {
+        return $this->values->toArray();
+    }
+
     public function add(self $other): self
     {
         if (! $other->versions->equals($this->versions)) {
@@ -85,5 +101,21 @@ final class ModernityVector
         $new->values = $this->values->map(fn (float $value): float => $value * (float) $factor);
 
         return $new;
+    }
+
+    /**
+     * @param  callable(float $val): float  $callback
+     */
+    public function map(callable $callback): self
+    {
+        return $this->butWithValues(array_map($callback, $this->values));
+    }
+
+    /**
+     * @param  Vector<float>|array<float>  $values
+     */
+    public function butWithValues(Vector|array $values): self
+    {
+        return new self($this->versions, $values);
     }
 }
