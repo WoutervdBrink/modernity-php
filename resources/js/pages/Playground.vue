@@ -24,7 +24,6 @@ const props = defineProps<{
 
 const extensions = [php()];
 
-const layout = ref<'vertical' | 'horizontal'>('horizontal');
 const source = ref<string>(
     props.contents
         ? props.contents.content_encoding === 'base64'
@@ -70,9 +69,10 @@ async function analyze(code: string): Promise<void> {
 
             if (data.analysis) {
                 analysis.value = data.analysis;
-            }
-            if (data.error) {
+            } else if (data.error) {
                 error.value = data.error;
+            } else {
+                error.value = 'An unknown error occurred.';
             }
         }
     } catch (e) {
@@ -82,7 +82,10 @@ async function analyze(code: string): Promise<void> {
 
         if (currentGeneration === generation) {
             analysis.value = undefined;
-            error.value = 'Analysis failed.';
+            error.value = 'Analysis failed due to an unknown error.';
+            if (e instanceof Error) {
+                error.value = `${e.name}: ${e.message}\n${e.stack ?? ''}\n${e.cause ?? ''}`;
+            }
         }
     } finally {
         if (currentGeneration === generation) {
@@ -104,19 +107,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Toolbar title="Playground">
-        <BButton variant="primary" @click="layout = layout === 'horizontal' ? 'vertical' : 'horizontal'">
-            <template v-if="layout === 'vertical'">
-                <i-fa6-solid-table-columns />
-                Side by side
-            </template>
-            <template v-else>
-                <i-fa6-solid-bars />
-                Vertical layout
-            </template>
-        </BButton>
-    </Toolbar>
-    <BRow v-if="layout === 'horizontal'">
+    <Toolbar title="Playground" />
+    <BRow>
         <BCol md="6">
             <h2>Source code</h2>
             <Codemirror v-model="source" :autofocus="true" :extensions :indent-with-tab="true" :tab-size="4" />
@@ -134,22 +126,4 @@ onBeforeUnmount(() => {
             <TurboDocument v-if="analysis" :document="analysis" />
         </BCol>
     </BRow>
-
-    <template v-else>
-        <h2>Source code</h2>
-        <div class="mb-3">
-            <Codemirror v-model="source" :autofocus="true" :extensions :indent-with-tab="true" :tab-size="4" />
-        </div>
-
-        <h2>
-            Analysis
-            <BSpinner v-if="analyzing" small />
-        </h2>
-        <BAlert :model-value="error !== undefined" variant="danger">
-            <h4 class="alert-heading">An error occurred</h4>
-            <p>Something went wrong while analyzing your code:</p>
-            <CodeBlock variant="none">{{ error }}</CodeBlock>
-        </BAlert>
-        <TurboDocument v-if="analysis" :document="analysis" />
-    </template>
 </template>
