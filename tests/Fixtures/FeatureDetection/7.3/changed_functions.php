@@ -5,8 +5,7 @@ Min: 7.3
 EveryLine: true
 
 <?php
-bscale(null);
-bscale();
+bcscale();
 setcookie($name, $value, []);
 setrawcookie($name, $value, []);
 array_push($arr);

@@ -168,6 +168,19 @@ Func::for('strrchr')->arguments(fn (int $args): bool => $args >= 3, since: PhpVe
 
 // Changed functions in PHP 8.5.
 Func::for('clone')->arguments(fn (int $args): bool => $args >= 2, since: PhpVersion::PHP_8_5);
+Func::for('define')->sinceWhen(function (FunctionCall $call): ?PhpVersion {
+    if (count($call->arguments) < 2) {
+        return null;
+    }
+
+    $firstArgValue = $call->arguments[1]->value;
+
+    if ($firstArgValue instanceof FuncCall && $firstArgValue->isFirstClassCallable()) {
+        return PhpVersion::PHP_8_5;
+    }
+
+    return null;
+});
 Func::for('grapheme_strpos')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_5);
 Func::for('grapheme_stripos')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_5);
 Func::for('grapheme_strrpos')->arguments(fn (int $args): bool => $args >= 4, since: PhpVersion::PHP_8_5);

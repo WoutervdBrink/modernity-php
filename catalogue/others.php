@@ -164,20 +164,44 @@ Feature::for(Node\StaticVar::class)
             return PhpVersionConstraint::open();
         }
 
+        $constraint = PhpVersionConstraint::open();
+
         if ($node->default instanceof Node\Expr\New_) {
-            return PhpVersionConstraint::since(
+            $constraint = $constraint->merge(PhpVersionConstraint::since(
                 PhpVersion::PHP_8_1,
-            );
+            ));
+        } elseif (! Quirks::isScalarExpression($node->default)) {
+            $constraint = $constraint->merge(PhpVersionConstraint::since(
+                PhpVersion::PHP_8_3,
+            ));
         }
 
-        if (Quirks::isScalarExpression($node->default)) {
-            return PhpVersionConstraint::since(
-                PhpVersion::PHP_5_6,
-            );
-        }
+        return $constraint->merge(
+            RecursiveConstraintInspector::inspect(
+                $node->default,
+                function (Node $node): ?PhpVersionConstraint {
+                    if (
+                        $node instanceof Node\Expr\CallLike
+                        && $node->isFirstClassCallable()
+                    ) {
+                        return PhpVersionConstraint::since(
+                            PhpVersion::PHP_8_5,
+                        );
+                    }
 
-        return PhpVersionConstraint::since(
-            PhpVersion::PHP_8_3,
+                    if (
+                        $node instanceof Node\Expr\Closure
+                        && $node->static
+                        && $node->uses === []
+                    ) {
+                        return PhpVersionConstraint::since(
+                            PhpVersion::PHP_8_5,
+                        );
+                    }
+
+                    return null;
+                },
+            )
         );
     });
 Feature::for(Node\UnionType::class)->sinceWhen(function (Node\UnionType $node): PhpVersion {

@@ -3,11 +3,11 @@
 use App\Services\Analysis\Php\Catalogue\Attribute as AttributeCatalogue;
 use App\Services\Analysis\Php\Catalogue\Feature;
 use App\Services\Analysis\Php\Language\PhpVersionConstraint;
-use PhpParser\Node\Attribute as AttributeNode;
+use PhpParser\Node\Attribute;
 
 AttributeCatalogue::loadFromCatalogue('attributes');
 
-Feature::for(AttributeNode::class)->rule(function (AttributeNode $node): PhpVersionConstraint {
+Feature::for(Attribute::class)->rule(function (Attribute $node): PhpVersionConstraint {
     $name = $node->name->name;
 
     if ($name[0] === '\\') {

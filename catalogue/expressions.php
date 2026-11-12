@@ -58,14 +58,39 @@ function hasReferenceAssignment(List_ $node): bool
     return false;
 }
 
+function hasKeyAssignment(List_ $node): bool
+{
+    foreach ($node->items as $item) {
+        if ($item !== null) {
+            if ($item->key !== null) {
+                return true;
+            }
+            if ($item->value instanceof List_) {
+                return hasKeyAssignment($item->value);
+            }
+        }
+    }
+
+    return false;
+}
+
 Feature::for(Node\Expr\Assign::class)
     ->sinceWhen(function (Node\Expr\Assign $node): ?PhpVersion {
-        // Symmetric array destructuring ([$foo, $bar] = $baz) was introduced in PHP 7.1.
-        if ($node->var instanceof List_ && $node->var->getAttribute('kind', List_::KIND_LIST) === List_::KIND_ARRAY) {
-            return hasReferenceAssignment($node->var) ? PhpVersion::PHP_7_3 : PhpVersion::PHP_7_1;
+        $since = null;
+
+        if ($node->var instanceof List_) {
+            if ($node->var->getAttribute('kind', List_::KIND_LIST) === List_::KIND_ARRAY) {
+                // Symmetric array destructuring ([$foo, $bar] = $baz) was introduced in PHP 7.1.
+                $since = PhpVersion::max($since, PhpVersion::PHP_7_1);
+            }
+
+            // Using references [&$foo] = $baz) was introduced in PHP 7.1.
+            if (hasReferenceAssignment($node->var)) {
+                $since = PhpVersion::max($since, PhpVersion::PHP_7_3);
+            }
         }
 
-        return null;
+        return $since;
     })
     ->untilWhen(function (Node\Expr\Assign $node): ?PhpVersion {
         if ($node->var instanceof Node\Expr\Variable && $node->var->name === 'this') {
@@ -222,21 +247,13 @@ Feature::for(List_::class)
     ->sinceWhen(function (List_ $node): ?PhpVersion {
         $since = null;
 
-        foreach ($node->items as $item) {
-            // In PHP 7.3, new syntax was introduced, allowing reference assignment using list().
-            // https://wiki.php.net/rfc/list_reference_assignment
-            if ($item?->byRef) {
-                $since = PhpVersion::max($since, PhpVersion::PHP_7_3);
-            }
-
-            // As of PHP 7.1, keys can be specified in list().
-            // https://wiki.php.net/rfc/list_keys
-            if ($item?->key) {
-                $since = PhpVersion::max($since, PhpVersion::PHP_7_1);
-            }
+        // As of PHP 7.1, keys can be specified in list().
+        // https://wiki.php.net/rfc/list_keys
+        if (hasKeyAssignment($node)) {
+            $since = PhpVersion::PHP_7_1;
         }
 
-        return null;
+        return $since;
     })
     ->untilWhen(function (List_ $node): ?PhpVersion {
         // As of PHP 7.0, list() constructs can no longer be empty.

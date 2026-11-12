@@ -136,6 +136,7 @@ abstract class IdentifierCatalogue
     public static function constraintFor(string $name): PhpVersionConstraint
     {
         $catalogue = static::class;
+        $name = static::normalizeName($name);
 
         $min = self::$min[$catalogue][$name] ?? null;
         $max = self::$max[$catalogue][$name] ?? null;

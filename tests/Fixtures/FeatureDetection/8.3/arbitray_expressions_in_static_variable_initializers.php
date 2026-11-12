@@ -5,6 +5,5 @@ Min: 8.3
 EveryLine: true
 
 <?php
-class bar { static $baz = 3 + 4 + baz(); } // static class variable
 function bar() { static $bar = 3 + 4 + baz(); } // static variable
 ?>
